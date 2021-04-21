@@ -113,8 +113,8 @@ void LoadResource() {
 
 	LPDIRECT3DTEXTURE9 texNakiri = textures->Get(ID_NAKIRI);
 	//stand
-	sprites->Add(10000, 2, 2, 17, 20, texNakiri);
-	sprites->Add(10001, 22, 2, 37, 20, texNakiri);
+	sprites->Add(10000, 2, 2, 18, 21, texNakiri);
+	sprites->Add(10001, 22, 2, 38, 21, texNakiri);
 
 	//walk
 	CAnimations* animations = CAnimations::GetInstance();
