@@ -125,6 +125,7 @@ void LoadResource() {
 	//walk
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
+
 	for (int j = 0; j < 23; j++) {
 		for (int i = 0; i < 14; i++) {
 			ani = new CAnimation(100);
@@ -132,7 +133,67 @@ void LoadResource() {
 			animations->Add(j * 14 + i, ani);
 		}
 	}
+	ani = new CAnimation(100);
+	ani->Add(1132);
+	ani->Add(1133);
+	ani->Add(1134);
+	ani->Add(1135);
+	animations->Add(135, ani);
 
+	ani = new CAnimation(100);
+	ani->Add(1156);
+	ani->Add(1155);
+	ani->Add(1154);
+	ani->Add(1157);
+	animations->Add(156, ani);
+	animations->Add(155, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(1140);
+	ani->Add(1141);
+	ani->Add(1142);
+	ani->Add(1143);
+	animations->Add(141, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(1168);
+	ani->Add(1170);
+	ani->Add(1196);
+	ani->Add(1198);
+	animations->Add(168, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(1169);
+	ani->Add(1171);
+	ani->Add(1197);
+	ani->Add(1199);
+	animations->Add(169, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(1182);
+	ani->Add(1184);
+	ani->Add(1210);
+	ani->Add(1212);
+	animations->Add(182, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(1183);
+	ani->Add(1185);
+	ani->Add(1211);
+	ani->Add(1213);
+	animations->Add(183, ani);
+
+
+	//	thac nuoc
+
+
+	//	banh rang nho
+	ani = new CAnimation(100);
+	ani->Add(1172);
+	ani->Add(1186);
+	ani->Add(1200);
+	ani->Add(1214);
+	animations->Add(172, ani);
 
 	ani = new CAnimation(500);
 	ani->Add(10000);
