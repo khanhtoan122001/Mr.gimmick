@@ -31,7 +31,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		nakiri->SetState(NAKIRI_STATE_JUMP);
+		//nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
 	}
 }
@@ -47,6 +47,12 @@ void CSampleKeyHander::KeyState(BYTE* states)
 	if (nakiri->GetState() == NAKIRI_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_RIGHT);
+
+	else if (game->IsKeyDown(DIK_UP))
+		nakiri->SetState(NAKIRI_STATE_UP);
+	else if (game->IsKeyDown(DIK_DOWN))
+		nakiri->SetState(NAKIRI_STATE_DOWN);
+
 	else if (game->IsKeyDown(DIK_LEFT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_LEFT);
 	else
@@ -148,13 +154,27 @@ void LoadMap(string MapFile) {
 
 	int w = jsonfile["layers"][0]["width"], h = jsonfile["layers"][0]["height"];
 	for (int i = 0; i < r_map[0].size(); i++) {
-		if (lineMap.size() != w - 1)
+		 {
+			if (r_map[0][i] - 1 > 321)
+				r_map[0][i] = 0;
 			lineMap.push_back(r_map[0][i] - 1);
-		else {
-			Map.push_back(lineMap);
-			lineMap.clear();
+			if (lineMap.size() == w) {
+				Map.push_back(lineMap);
+				lineMap.clear();
+			}
 		}
 	}
+
+	//for (int i = 0; i < Map.size(); i++) {
+	//	for (int j = 0; j < Map[i].size(); j++) {
+	//		Brick* brick = new Brick();
+	//		if (Map[i][j] != -1) {
+	//			brick->SetPosition(BRICK_HEIGHT * (j), BRICK_WIDTH * (i));
+	//			brick->AddAnimation(Map[i][j]);
+	//			objects.push_back(brick);
+	//		}
+	//	}
+	//}
 
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Brick* brick = new Brick();
@@ -162,32 +182,6 @@ void LoadMap(string MapFile) {
 		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"] - 16);
 		objects.push_back(brick);
 	}
-
-}
-
-void LoadMap(LPCWSTR fileMap) {
-	Map = vector<vector<int>>();
-	ifstream f;
-
-	f.open(fileMap);
-	char str[1024];
-	while (f.getline(str, 1024))
-	{
-		string num = "", line(str);
-		vector<int> l;
-		bool flag = true;
-		for (int i = 0; i < line.length(); i++) {
-			if (line[i] == '\t') {
-				if (flag) {
-					l.push_back(stoi(num));
-					num = "";
-				}
-			}
-			else num += line[i];
-		}
-		Map.push_back(l);
-	}
-	f.close();
 
 }
 
@@ -236,12 +230,18 @@ void Update(DWORD dt) {
 }
 
 void Render_Map() {
-	for (int i = 0; i < Map.size(); i++) {
-		for (int j = 0; j < Map[i].size(); j++) {
+
+	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
+
+	int stx = int(cx / 16), sty = int(cy / 16);
+	if (stx < 0) stx = 0;
+	if (sty < 0) sty = 0;
+	for (int y = sty; y < int(cy / 16) + 12 && y < Map.size(); y++) {
+		for (int x = stx; x < int(cx /16) + 16 && x < Map[y].size(); x++) {
 			LPANIMATION ani;
-			if (Map[i][j] != -1) {
-				ani = CAnimations::GetInstance()->Get(Map[i][j]);
-				ani->Render(BRICK_HEIGHT * (j)+nakiri->x - (int)(nakiri->x), BRICK_WIDTH * (i)+nakiri->y - (int)(nakiri->y));
+			if (Map[y][x] != -1) {
+				ani = CAnimations::GetInstance()->Get(Map[y][x]);
+				ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
 			}
 		}
 	}
@@ -348,7 +348,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	lx = ly = 0;
 
 	LoadResource();
-	LoadMap("map1.json");
+	LoadMap("Maps\\map1.json");
 
 	Run();
 	return 0;

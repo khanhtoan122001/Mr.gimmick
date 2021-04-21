@@ -2,12 +2,11 @@
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(13,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message : see previous definition of 'DIRECTINPUT_VERSION'
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(150,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(159,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(162,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(179,21): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(228,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(239,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(240,21): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(156,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(179,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(182,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(222,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(239,47): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(240,47): warning C4018: '<': signed/unsigned mismatch
 D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(248,20): warning C4018: '<': signed/unsigned mismatch
   Mr.Gimmick.vcxproj -> D:\Github\Mr.gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe

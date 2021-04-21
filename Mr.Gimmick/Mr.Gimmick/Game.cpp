@@ -239,7 +239,8 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
 CGame* CGame::GetInstance()
 {
-	if (__instance == NULL) __instance = new CGame();
+	if (__instance == NULL) 
+		__instance = new CGame();
 	return __instance;
 }
 

@@ -19,15 +19,15 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	// simple fall down
-	vy += NAKIRI_GRAVITY;
-	if (y > 288)
+	//vy += NAKIRI_GRAVITY;
+	/*if (y > 288)
 	{
 		vy = 0; y = 288;
-	}
+	}*/
 
 	// simple screen edge collision!!!
-	if (vx > 0 && x > 16 * 65) x = 32;
-	if (vx < 0 && x < 0) x = 32;
+	/*if (vx > 0 && x > 16 * 65) x = 32;
+	if (vx < 0 && x < 0) x = 32;*/
 }
 void Nakiri::Render()
 {
@@ -61,8 +61,17 @@ void Nakiri::SetState(int state)
 		if (y == 288.f)
 			vy = -NAKIRI_JUMP_SPEED;
 		break;
+
+	case NAKIRI_STATE_DOWN:
+		vy = NAKIRI_WALKING_SPEED;
+		break;
+	case NAKIRI_STATE_UP:
+		vy = -NAKIRI_WALKING_SPEED;
+		break;
+
 	case NAKIRI_STATE_STAND:
 		vx = 0;
+		vy = 0;
 		break;
 	}
 }

@@ -7,7 +7,7 @@
 #include <d3dx9.h>
 
 #include <dinput.h>
-#include "Nakiri.h"
+//#include "Nakiri.h"
 //#include <Scence.h>
 
 #define DIRECTINPUT_VERSION 0x0800
@@ -45,7 +45,7 @@ class CGame
 	LPKEYEVENTHANDLER keyHandler;
 
 	float cam_x = 0 * 16.0f;
-	float cam_y = 12 * 16.0f;
+	float cam_y = 0 * 16.0f;
 
 	int screen_width;
 	int screen_height;
