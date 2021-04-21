@@ -4,7 +4,9 @@
 
 void Brick::Render()
 {
-	animations[0]->Render(x, y);
+	float _x = CGame::GetInstance()->GetCamPos_x();
+	float _y = CGame::GetInstance()->GetCamPos_y();
+	animations[0]->Render(x + _x - int(_x), y + _y - int(_y));
 	//RenderBoundingBox();
 }
 

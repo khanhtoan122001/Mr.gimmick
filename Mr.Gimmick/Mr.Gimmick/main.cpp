@@ -83,40 +83,6 @@ int lx, ly;
 using json = nlohmann::json;
 using namespace std;
 
-//class CSampleKeyHander : public CKeyEventHandler
-//{
-//	virtual void KeyState(BYTE* states);
-//	virtual void OnKeyDown(int KeyCode);
-//	virtual void OnKeyUp(int KeyCode);
-//};
-//
-//CSampleKeyHander* keyHandler;
-//
-//void CSampleKeyHander::OnKeyDown(int KeyCode)
-//{
-//	switch (KeyCode)
-//	{
-//	case DIK_SPACE:
-//		nakiri->SetState(NAKIRI_STATE_JUMP);
-//		break;
-//
-//	}
-//}
-//
-//void CSampleKeyHander::OnKeyUp(int KeyCode)
-//{
-//
-//}
-//
-//void CSampleKeyHander::KeyState(BYTE* states)
-//{
-//	if (game->IsKeyDown(DIK_RIGHT))
-//		nakiri->SetState(NAKIRI_STATE_WALKING_RIGHT);
-//	else if (game->IsKeyDown(DIK_LEFT))
-//		nakiri->SetState(NAKIRI_STATE_WALKING_LEFT);
-//	else nakiri->SetState(NAKIRI_STATE_STAND);
-//}
-
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -259,6 +225,10 @@ void Update(DWORD dt) {
 
 	nakiri->Update(dt);
 
+	for (int i = 0; i < objects.size(); i++) {
+		objects[i]->Update(dt);
+	}
+
 	nakiri->GetPosition(cx, cy);
 
 	CGame::GetInstance()->SetCamPos(cx - 32, cy - 16 * 5);
@@ -275,9 +245,7 @@ void Render_Map() {
 			}
 		}
 	}
-	//	(0,0)			(x * 16 + 12*16)
 	for (int i = 0; i < objects.size(); i++) {
-		//if (objects[i]->x >= x * 16 && objects[i]->y >= y * 16 && objects[i]->x < (x + 16) * 16 && objects[i]->y < (y + 12) * 16)
 		objects[i]->Render();
 	}
 }
