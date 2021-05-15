@@ -36,6 +36,22 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	}
 }
 
+struct Point {
+	int x;
+	int y;
+	Point() {
+		x = y = 0;
+	}
+	Point(int _x, int _y) {
+		x = _x; 
+		y = _y;
+	}
+	void operator= (Point a) {
+		x = a.x;
+		y = a.y;
+	}
+};
+
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
@@ -59,16 +75,23 @@ void CSampleKeyHander::KeyState(BYTE* states)
 		nakiri->SetState(NAKIRI_STATE_STAND);
 }
 
-vector<vector<int>> Map;
+vector<vector<int>> MapTile, MapObj;
 vector<LPGAMEOBJECT> objects;
 LPDIRECT3DTEXTURE9 texMap1;
 int lx, ly;
+int Stage;
+Point tf, br;
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
 #define ID_NAKIRI 15
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"Gimmick"
+#define STARTPOS_STAGE_1_X 32
+#define STARTPOS_STAGE_1_Y 80
+
+#define STAGE_1_MAP_TF Point(0,0)
+#define STAGE_1_MAP_BR Point(65,24)
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 #define SCREEN_WIDTH 256
@@ -76,6 +99,9 @@ int lx, ly;
 
 #define BRICK_WIDTH 16
 #define BRICK_HEIGHT 16
+
+#define GAME_PLAY_WIDTH 16
+#define GAME_PLAY_HEIGHT 12
 
 #define SPRITE_WIDTH 16
 #define SPRITE_HEIGHT 16
@@ -210,22 +236,23 @@ void LoadMap(string MapFile) {
 
 
 	vector<vector<int>> r_map;
-	vector<int> lineMap;
+	vector<int> lineMapTile, lineMapObj;
 	r_map.push_back(jsonfile["layers"][0]["data"]);
 
 	int w = jsonfile["layers"][0]["width"], h = jsonfile["layers"][0]["height"];
 	for (int i = 0; i < r_map[0].size(); i++) {
 		 {
-			if (r_map[0][i] - 1 > 321)
-				r_map[0][i] = 0;
-			lineMap.push_back(r_map[0][i] - 1);
-			if (lineMap.size() == w) {
-				Map.push_back(lineMap);
-				lineMap.clear();
+			lineMapTile.push_back(r_map[0][i] - 1);
+			lineMapObj.push_back(-1);
+			if (lineMapTile.size() == w) {
+				MapTile.push_back(lineMapTile);
+				lineMapTile.clear();
+				MapObj.push_back(lineMapObj);
+				lineMapObj.clear();
 			}
 		}
 	}
-
+	
 	//for (int i = 0; i < Map.size(); i++) {
 	//	for (int j = 0; j < Map[i].size(); j++) {
 	//		Brick* brick = new Brick();
@@ -241,7 +268,14 @@ void LoadMap(string MapFile) {
 		Brick* brick = new Brick();
 		brick->AddAnimation(jsonfile["layers"][1]["objects"][i]["gid"] - 1);
 		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"] - 16);
+		int x, y;
+
+		x = (int)(brick->x / BRICK_HEIGHT);
+		y = (int)(brick->y / BRICK_WIDTH);
+
 		objects.push_back(brick);
+		if (MapObj[y][x] != NULL)
+			MapObj[y][x] = objects.size() - 1;
 	}
 
 }
@@ -252,6 +286,7 @@ void Render()
 	LPDIRECT3DDEVICE9 d3ddv = game->GetDirect3DDevice();
 	LPDIRECT3DSURFACE9 bb = game->GetBackBuffer();
 	LPD3DXSPRITE spriteHandler = game->GetSpriteHandler();
+	
 
 	if (d3ddv->BeginScene())
 	{
@@ -275,6 +310,22 @@ void Render()
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
+void setCam(float x, float y) {
+
+	int cx, cy;
+
+	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH < tf.x * BRICK_WIDTH)
+		cx = tf.x * BRICK_WIDTH;
+	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x * BRICK_WIDTH)
+		cx = (br.x - GAME_PLAY_WIDTH) * BRICK_WIDTH;
+	else
+		cx = x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH;
+
+	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT) * BRICK_HEIGHT * GAME_PLAY_HEIGHT;
+
+	CGame::GetInstance()->SetCamPos(cx,cy);
+}
+
 void Update(DWORD dt) {
 	float cx, cy;
 
@@ -286,7 +337,7 @@ void Update(DWORD dt) {
 
 	nakiri->GetPosition(cx, cy);
 
-	CGame::GetInstance()->SetCamPos(cx - 32, cy - 16 * 5);
+	setCam(cx, cy);
 
 }
 
@@ -294,21 +345,23 @@ void Render_Map() {
 
 	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
 
-	int stx = int(cx / 16), sty = int(cy / 16);
+	int stx = int(cx / BRICK_HEIGHT), sty = int(cy / BRICK_WIDTH);
 	if (stx < 0) stx = 0;
 	if (sty < 0) sty = 0;
-	for (int y = sty; y < int(cy / 16) + 12 && y < Map.size(); y++) {
-		for (int x = stx; x < int(cx /16) + 16 && x < Map[y].size(); x++) {
+	for (int y = sty; y < int(cy / BRICK_HEIGHT) + GAME_PLAY_HEIGHT && y < MapTile.size(); y++) {
+		for (int x = stx; x < int(cx / BRICK_WIDTH) + GAME_PLAY_WIDTH && x < MapTile[y].size(); x++) {
 			LPANIMATION ani;
-			if (Map[y][x] != -1) {
-				ani = CAnimations::GetInstance()->Get(Map[y][x]);
+			if (MapTile[y][x] != -1) {
+				ani = CAnimations::GetInstance()->Get(MapTile[y][x]);
 				ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
 			}
+			if (MapObj[y][x] != -1)
+				objects[MapObj[y][x]]->Render();
 		}
 	}
-	for (int i = 0; i < objects.size(); i++) {
+	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
-	}
+	}*/
 }
 
 int Run()
@@ -396,7 +449,16 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	return hWnd;
 }
-
+void setLimit(int stage) {
+	switch (stage)
+	{
+	case 1:
+		tf = STAGE_1_MAP_TF;
+		br = STAGE_1_MAP_BR;
+	default:
+		break;
+	}
+}
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -407,6 +469,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard(keyHandler);
 
 	lx = ly = 0;
+
+	Stage = 1;
+
+	setLimit(Stage);
 
 	LoadResource();
 	LoadMap("Maps\\map1.json");
