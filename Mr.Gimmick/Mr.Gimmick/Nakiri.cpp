@@ -41,7 +41,7 @@ void Nakiri::Render()
 		ani = NAKIRI_ANI_STAND;
 	else ani = NAKIRI_ANI_STAND;
 
-	animations[0]->Render(x, y);
+	animations[0]->Render((int)x, (int)y);
 }
 
 void Nakiri::SetState(int state)
