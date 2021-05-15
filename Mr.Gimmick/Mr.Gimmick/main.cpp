@@ -13,6 +13,42 @@
 #include "Nakiri.h"
 #include <unordered_map>
 
+#define ID_MAP_1 120
+#define ID_MAP_7 180
+#define ID_NAKIRI 15
+#define WINDOW_CLASS_NAME L"SampleWindow"
+#define MAIN_WINDOW_TITLE L"Gimmick"
+#define STARTPOS_STAGE_1_X 32
+#define STARTPOS_STAGE_1_Y 80
+
+#define STAGE_1_MAP_TF Point(0,0)
+#define STAGE_1_MAP_BR Point(65,24)
+
+#define STAGE_2_MAP_TF Point(32,24)
+#define STAGE_2_MAP_BR Point(65,36)
+
+#define STAGE_3_MAP_TF Point(32,37)
+#define STAGE_3_MAP_BR Point(82,48)
+
+#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
+#define SCREEN_WIDTH 256
+#define SCREEN_HEIGHT 256
+
+#define BRICK_WIDTH 16
+#define BRICK_HEIGHT 16
+
+#define GAME_PLAY_WIDTH 16
+#define GAME_PLAY_HEIGHT 12
+
+#define SPRITE_WIDTH 16
+#define SPRITE_HEIGHT 16
+
+#define MAX_FRAME_RATE 120
+
+#define ID_TEX_MARIO 0
+#define ID_TEX_ENEMY 10
+#define ID_TEX_MISC 20
+
 CGame* game;
 Nakiri* nakiri;
 
@@ -37,12 +73,12 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 }
 
 struct Point {
-	int x;
-	int y;
+	float x;
+	float y;
 	Point() {
 		x = y = 0;
 	}
-	Point(int _x, int _y) {
+	Point(float _x, float _y) {
 		x = _x; 
 		y = _y;
 	}
@@ -51,7 +87,26 @@ struct Point {
 		y = a.y;
 	}
 };
+struct Rect
+{
+	Point tf, br;
+	Rect(Point _tf, Point _br) {
+		tf = _tf; br = _br;
+	}
+	bool isIn(Point p) {
+		if (p.x < tf.x * BRICK_WIDTH || p.x > br.x * BRICK_HEIGHT)
+			return false;
+		if (p.y < tf.y * BRICK_WIDTH || p.y > br.y * BRICK_HEIGHT)
+			return false;
+		return true;
+	}
+	void operator= (Rect a) {
+		tf = a.tf;
+		br = a.br;
+	}
+};
 
+void updateLimit(int stage);
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
@@ -82,35 +137,7 @@ int lx, ly;
 int Stage;
 Point tf, br;
 
-#define ID_MAP_1 120
-#define ID_MAP_7 180
-#define ID_NAKIRI 15
-#define WINDOW_CLASS_NAME L"SampleWindow"
-#define MAIN_WINDOW_TITLE L"Gimmick"
-#define STARTPOS_STAGE_1_X 32
-#define STARTPOS_STAGE_1_Y 80
 
-#define STAGE_1_MAP_TF Point(0,0)
-#define STAGE_1_MAP_BR Point(65,24)
-
-#define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 256
-
-#define BRICK_WIDTH 16
-#define BRICK_HEIGHT 16
-
-#define GAME_PLAY_WIDTH 16
-#define GAME_PLAY_HEIGHT 12
-
-#define SPRITE_WIDTH 16
-#define SPRITE_HEIGHT 16
-
-#define MAX_FRAME_RATE 120
-
-#define ID_TEX_MARIO 0
-#define ID_TEX_ENEMY 10
-#define ID_TEX_MISC 20
 
 using json = nlohmann::json;
 using namespace std;
@@ -280,6 +307,8 @@ void LoadMap(string MapFile) {
 
 }
 
+void Update(DWORD dt);
+
 void Render_Map();
 void Render()
 {
@@ -310,6 +339,19 @@ void Render()
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
+void updateStage(float x, float y) {
+	Rect rect(STAGE_1_MAP_TF, STAGE_1_MAP_BR);
+	Point p(x, y);
+	if (rect.isIn(p))
+		Stage = 1;
+	rect = Rect(STAGE_2_MAP_TF, STAGE_2_MAP_BR);
+	if (rect.isIn(p))
+		Stage = 2;
+	rect = Rect(STAGE_3_MAP_TF, STAGE_3_MAP_BR);
+	if (rect.isIn(p))
+		Stage = 3;
+}
+
 void setCam(float x, float y) {
 
 	int cx, cy;
@@ -336,6 +378,9 @@ void Update(DWORD dt) {
 	}
 
 	nakiri->GetPosition(cx, cy);
+
+	updateStage(cx,cy);
+	updateLimit(Stage);
 
 	setCam(cx, cy);
 
@@ -449,12 +494,20 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 	return hWnd;
 }
-void setLimit(int stage) {
+void updateLimit(int stage) {
 	switch (stage)
 	{
 	case 1:
 		tf = STAGE_1_MAP_TF;
 		br = STAGE_1_MAP_BR;
+		break;
+	case 2:
+		tf = STAGE_2_MAP_TF;
+		br = STAGE_2_MAP_BR;
+		break;
+	case 3:
+		tf = STAGE_3_MAP_TF;
+		br = STAGE_3_MAP_BR;
 	default:
 		break;
 	}
@@ -469,10 +522,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	game->InitKeyboard(keyHandler);
 
 	lx = ly = 0;
-
-	Stage = 1;
-
-	setLimit(Stage);
 
 	LoadResource();
 	LoadMap("Maps\\map1.json");
