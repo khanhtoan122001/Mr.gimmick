@@ -1,0 +1,132 @@
+#include "Quadtree.h"
+void Quadtree::Clear()
+{
+    // Clear all nodes
+    if (m_nodes)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            m_nodes[i]->Clear();
+            delete m_nodes[i];
+        }
+        delete[] m_nodes;
+    }
+
+    // Clear current Quadtree
+    m_objects_list->clear();
+
+    delete m_objects_list;
+    delete m_region;
+}
+
+bool Quadtree::IsContain(LPGAMEOBJECT entity)
+{
+    Rect* bound = new Rect(entity->GetBoundingBox());
+
+    return !(bound->tf.x + bound->width() < m_region->tf.x ||
+        bound->tf.y + bound->height() < m_region->tf.y ||
+        bound->tf.x > m_region->tf.x + m_region->width() ||
+        bound->tf.y > m_region->tf.y + m_region->height());
+}
+
+void Quadtree::Split()
+{
+    m_nodes = new Quadtree * [4];
+
+    m_nodes[0] = new Quadtree(m_level + 1,
+        new Rect(m_region->tf, m_region->width() / 2, m_region->height() / 2));
+    m_nodes[1] = new Quadtree(m_level + 1,
+        new Rect(Point(m_region->tf.x + m_region->width() / 2, m_region->tf.y), m_region->width() / 2, m_region->height() / 2));
+    m_nodes[2] = new Quadtree(m_level + 1,
+        new Rect(Point(m_region->tf.x, m_region->tf.y + m_region->height() / 2), m_region->width() / 2, m_region->height() / 2));
+    m_nodes[3] = new Quadtree(m_level + 1,
+        new Rect(Point(m_region->tf.x + m_region->width() / 2,
+            m_region->tf.y + m_region->height() / 2), m_region->width() / 2, m_region->height() / 2));
+}
+
+Quadtree::Quadtree(int level, Rect* region)
+{
+    Quadtree::Quadtree();
+    m_level = level;
+    m_region = region;
+    m_objects_list = new vector<LPGAMEOBJECT>();
+}
+
+void Quadtree::Insert(LPGAMEOBJECT entity)
+{
+    // Insert entity into corresponding nodes
+    if (m_nodes)
+    {
+        if (m_nodes[0]->IsContain(entity))
+            m_nodes[0]->Insert(entity);
+        if (m_nodes[1]->IsContain(entity))
+            m_nodes[1]->Insert(entity);
+        if (m_nodes[2]->IsContain(entity))
+            m_nodes[2]->Insert(entity);
+        if (m_nodes[3]->IsContain(entity))
+            m_nodes[3]->Insert(entity);
+
+        return; // Return here to ignore rest.
+    }
+
+    // Insert entity into current quadtree
+    if (this->IsContain(entity))
+        m_objects_list->push_back(entity);
+
+    // Split and move all objects in list into it’s corresponding nodes
+    if (m_objects_list->size() > MAX_OBJECT_IN_REGION && m_level < MAX_LEVEL)
+    {
+        Split();
+
+        while (!m_objects_list->empty())
+        {
+            if (m_nodes[0]->IsContain(m_objects_list->back()))
+                m_nodes[0]->Insert(m_objects_list->back());
+            if (m_nodes[1]->IsContain(m_objects_list->back()))
+                m_nodes[1]->Insert(m_objects_list->back());
+            if (m_nodes[2]->IsContain(m_objects_list->back()))
+                m_nodes[2]->Insert(m_objects_list->back());
+            if (m_nodes[3]->IsContain(m_objects_list->back()))
+                m_nodes[3]->Insert(m_objects_list->back());
+
+            m_objects_list->pop_back();
+        }
+    }
+}
+Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list)
+{
+    // Init base game region for detecting collision
+    Quadtree* quadtree = new Quadtree(1, new Rect(Point(CGame::GetInstance()->getCamPos()), GAME_PLAY_WIDTH * 16, GAME_PLAY_HEIGHT * 16));
+
+    for (auto i = list.begin(); i != list.end(); i++)
+        quadtree->Insert(*i);
+
+    return quadtree;
+}
+void Quadtree::Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT entity)
+{
+    if (m_nodes)
+    {
+        if (m_nodes[0]->IsContain(entity))
+            m_nodes[0]->Retrieve(return_objects_list, entity);
+        if (m_nodes[1]->IsContain(entity))
+            m_nodes[1]->Retrieve(return_objects_list, entity);
+        if (m_nodes[2]->IsContain(entity))
+            m_nodes[2]->Retrieve(return_objects_list, entity);
+        if (m_nodes[3]->IsContain(entity))
+            m_nodes[3]->Retrieve(return_objects_list, entity);
+
+        return; // Return here to ignore rest.
+    }
+
+    // Add all entities in current region into return_objects_list
+    if (this->IsContain(entity))
+    {
+        for (auto i = m_objects_list->begin(); i != m_objects_list->end(); i++)
+        {
+            if (entity != *i)
+                return_objects_list->push_back(*i);
+        }
+    }
+}
+

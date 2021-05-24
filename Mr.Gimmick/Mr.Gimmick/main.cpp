@@ -11,7 +11,10 @@
 #include <iostream>
 #include "Brick.h"
 #include "Nakiri.h"
+#include "Point.h"
 #include <unordered_map>
+#include "Quadtree.h"
+#include "Rect.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
@@ -34,12 +37,6 @@
 #define SCREEN_WIDTH 256
 #define SCREEN_HEIGHT 256
 
-#define BRICK_WIDTH 16
-#define BRICK_HEIGHT 16
-
-#define GAME_PLAY_WIDTH 16
-#define GAME_PLAY_HEIGHT 12
-
 #define SPRITE_WIDTH 16
 #define SPRITE_HEIGHT 16
 
@@ -51,6 +48,7 @@
 
 CGame* game;
 Nakiri* nakiri;
+Quadtree* quadtree;
 
 class CSampleKeyHander : public CKeyEventHandler
 {
@@ -67,44 +65,10 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
-		//nakiri->SetState(NAKIRI_STATE_JUMP);
+		nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
 	}
 }
-
-struct Point {
-	float x;
-	float y;
-	Point() {
-		x = y = 0;
-	}
-	Point(float _x, float _y) {
-		x = _x; 
-		y = _y;
-	}
-	void operator= (Point a) {
-		x = a.x;
-		y = a.y;
-	}
-};
-struct Rect
-{
-	Point tf, br;
-	Rect(Point _tf, Point _br) {
-		tf = _tf; br = _br;
-	}
-	bool isIn(Point p) {
-		if (p.x < tf.x * BRICK_WIDTH || p.x > br.x * BRICK_HEIGHT)
-			return false;
-		if (p.y < tf.y * BRICK_WIDTH || p.y > br.y * BRICK_HEIGHT)
-			return false;
-		return true;
-	}
-	void operator= (Rect a) {
-		tf = a.tf;
-		br = a.br;
-	}
-};
 
 void updateLimit(int stage);
 void CSampleKeyHander::OnKeyUp(int KeyCode)
@@ -119,10 +83,10 @@ void CSampleKeyHander::KeyState(BYTE* states)
 	if (game->IsKeyDown(DIK_RIGHT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_RIGHT);
 
-	else if (game->IsKeyDown(DIK_UP))
+	/*else if (game->IsKeyDown(DIK_UP))
 		nakiri->SetState(NAKIRI_STATE_UP);
 	else if (game->IsKeyDown(DIK_DOWN))
-		nakiri->SetState(NAKIRI_STATE_DOWN);
+		nakiri->SetState(NAKIRI_STATE_DOWN);*/
 
 	else if (game->IsKeyDown(DIK_LEFT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_LEFT);
@@ -131,7 +95,7 @@ void CSampleKeyHander::KeyState(BYTE* states)
 }
 
 vector<vector<int>> MapTile, MapObj;
-vector<LPGAMEOBJECT> objects;
+vector<LPGAMEOBJECT> objects, screenObj;
 LPDIRECT3DTEXTURE9 texMap1;
 int lx, ly;
 int Stage;
@@ -154,6 +118,9 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	return 0;
 }
+
+
+
 void LoadResource() {
 
 	CTextures* textures = CTextures::GetInstance();
@@ -293,6 +260,9 @@ void LoadMap(string MapFile) {
 
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Brick* brick = new Brick();
+
+		brick->style = normal_brick;
+
 		brick->AddAnimation(jsonfile["layers"][1]["objects"][i]["gid"] - 1);
 		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"] - 16);
 		int x, y;
@@ -340,14 +310,14 @@ void Render()
 }
 
 void updateStage(float x, float y) {
-	Rect rect(STAGE_1_MAP_TF, STAGE_1_MAP_BR);
+	Rect rect(STAGE_1_MAP_TF * 16, STAGE_1_MAP_BR * 16);
 	Point p(x, y);
 	if (rect.isIn(p))
 		Stage = 1;
-	rect = Rect(STAGE_2_MAP_TF, STAGE_2_MAP_BR);
+	rect = Rect(STAGE_2_MAP_TF * 16, STAGE_2_MAP_BR * 16);
 	if (rect.isIn(p))
 		Stage = 2;
-	rect = Rect(STAGE_3_MAP_TF, STAGE_3_MAP_BR);
+	rect = Rect(STAGE_3_MAP_TF * 16, STAGE_3_MAP_BR * 16);
 	if (rect.isIn(p))
 		Stage = 3;
 }
@@ -356,25 +326,26 @@ void setCam(float x, float y) {
 
 	int cx, cy;
 
-	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH < tf.x * BRICK_WIDTH)
-		cx = tf.x * BRICK_WIDTH;
-	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x * BRICK_WIDTH)
-		cx = (br.x - GAME_PLAY_WIDTH) * BRICK_WIDTH;
+	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH < tf.x)
+		cx = tf.x;
+	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x)
+		cx = br.x - GAME_PLAY_WIDTH * BRICK_WIDTH;
 	else
 		cx = x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH;
 
 	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT) * BRICK_HEIGHT * GAME_PLAY_HEIGHT;
 
 	CGame::GetInstance()->SetCamPos(cx,cy);
+	
 }
 
 void Update(DWORD dt) {
 	float cx, cy;
 
-	nakiri->Update(dt);
+	nakiri->Update(dt,&objects);
 
 	for (int i = 0; i < objects.size(); i++) {
-		objects[i]->Update(dt);
+		objects.at(i)->Update(dt);
 	}
 
 	nakiri->GetPosition(cx, cy);
@@ -389,7 +360,7 @@ void Update(DWORD dt) {
 void Render_Map() {
 
 	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
-
+	screenObj.clear();
 	int stx = int(cx / BRICK_HEIGHT), sty = int(cy / BRICK_WIDTH);
 	if (stx < 0) stx = 0;
 	if (sty < 0) sty = 0;
@@ -401,9 +372,11 @@ void Render_Map() {
 				ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
 			}
 			if (MapObj[y][x] != -1)
-				objects[MapObj[y][x]]->Render();
+				screenObj.push_back(objects.at(MapObj[y][x]));
 		}
 	}
+	for (int i = 0; i < screenObj.size(); i++)
+		screenObj.at(i)->Render();
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
 	}*/
@@ -511,7 +484,12 @@ void updateLimit(int stage) {
 	default:
 		break;
 	}
+	tf *= BRICK_HEIGHT;
+	br *= BRICK_WIDTH;
 }
+
+
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
 

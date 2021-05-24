@@ -10,10 +10,12 @@ void Brick::Render()
 	//RenderBoundingBox();
 }
 
-void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
+Rect Brick::GetBoundingBox()
 {
-	l = x;
-	t = y;
-	r = x + BRICK_BBOX_WIDTH;
-	b = y + BRICK_BBOX_HEIGHT;
+	return Rect(Point(x, y), BRICK_WIDTH, BRICK_HEIGHT);
+}
+
+string Brick::getType()
+{
+	return string("Brick");
 }

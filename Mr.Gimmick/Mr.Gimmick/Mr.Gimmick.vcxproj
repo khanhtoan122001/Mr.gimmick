@@ -152,6 +152,9 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Nakiri.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Textures.cpp" />
   </ItemGroup>
@@ -160,6 +163,9 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Nakiri.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Rect.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Textures.h" />
   </ItemGroup>

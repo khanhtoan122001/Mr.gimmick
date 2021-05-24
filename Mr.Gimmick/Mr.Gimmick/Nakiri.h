@@ -9,16 +9,18 @@
 #define NAKIRI_STATE_UP 1504
 #define NAKIRI_STATE_DOWN 1505
 
+#define NAKIRI_WIDTH 16
+#define NAKIRI_HEIGHT 19
 
 #define NAKIRI_WALKING_SPEED 0.4
-#define NAKIRI_JUMP_SPEED 0.5
+#define NAKIRI_JUMP_SPEED 0.8f
 
 #define NAKIRI_ANI_STAND 1503
 #define NAKIRI_ANI_WALKING_LEFT 1504
 #define NAKIRI_ANI_WALKING_RIGHT 1505
 #define NAKIRI_ANI_JUMP 1506
 
-#define NAKIRI_GRAVITY 0.1
+#define NAKIRI_GRAVITY 0.02f
 #define NAKIRI_UNTOUCHABLE_TIME 5000
 
 class Nakiri : public GameObject
@@ -33,6 +35,7 @@ public:
 	Nakiri(float x = 32, float y = 160);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
+	virtual string getType();
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
@@ -40,6 +43,7 @@ public:
 
 	void Reset();
 
-	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+	virtual Rect GetBoundingBox();
 };
 
+bool check(Rect r, int vx, int vy, Rect obj);
