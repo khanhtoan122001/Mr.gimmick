@@ -7,11 +7,15 @@
 #include <d3dx9.h>
 
 #include <dinput.h>
+#include "GameObject.h"
 //#include "Nakiri.h"
 //#include <Scence.h>
 
 #define DIRECTINPUT_VERSION 0x0800
 #define KEYBOARD_BUFFER_SIZE 1024
+
+#define GAME_PLAY_WIDTH 16
+#define GAME_PLAY_HEIGHT 12
 
 class CKeyEventHandler
 {
@@ -63,7 +67,7 @@ public:
 	void Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top, int right, int bottom, int alpha = 255);
 
 	LPDIRECT3DTEXTURE9 LoadTexture(LPCWSTR texturePath);
-
+	Point getCamPos() { return Point(cam_x, cam_y); }
 	int IsKeyDown(int KeyCode);
 	void InitKeyboard(LPKEYEVENTHANDLER handler);
 	void ProcessKeyboard();
@@ -98,6 +102,9 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	float GetCamPos_x() { return cam_x; }
 	float GetCamPos_y() { return cam_y; }
+
+
+
 	static CGame* GetInstance();
 
 	~CGame();

@@ -1,12 +1,32 @@
-﻿  main.cpp
+﻿  Nakiri.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(13,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(14,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message : see previous definition of 'DIRECTINPUT_VERSION'
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(271,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(294,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(297,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(337,20): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(354,47): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(355,47): warning C4018: '<': signed/unsigned mismatch
-D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(363,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(24,28): warning C4244: '+=': conversion from 'double' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(80,26): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(80,22): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(83,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(85,18): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(103,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(103,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(117,28): warning C4305: '=': truncation from 'double' to 'float'
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Nakiri.cpp(121,29): warning C4305: '=': truncation from 'double' to 'float'
+  main.cpp
+  C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(14,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message : see previous definition of 'DIRECTINPUT_VERSION'
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(238,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(262,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(268,105): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(331,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(333,13): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(335,10): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(339,37): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(339,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(347,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(352,20): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(373,71): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(374,70): warning C4018: '<': signed/unsigned mismatch
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\main.cpp(384,20): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
   Mr.Gimmick.vcxproj -> D:\Github\Mr.gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe
