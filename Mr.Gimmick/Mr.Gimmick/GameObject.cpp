@@ -44,8 +44,8 @@ void GameObject::AddAnimation(int AniId)
 void GameObject::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	this->dt = dt;
-	x += vx * dt;
-	y += vy * dt;
+	dx += vx * dt;
+	dy += vy * dt;
 }
 
 void GameObject::CalcPotentialCollisions(

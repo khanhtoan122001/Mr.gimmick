@@ -54,6 +54,7 @@ public:
 	float vy;
 
 	int nx;
+	int ny;
 
 	int state;
 
@@ -98,6 +99,6 @@ public:
 	~GameObject();
 
 	void AddAnimation(int AniId);
-	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 };
 

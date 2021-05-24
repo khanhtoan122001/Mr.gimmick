@@ -222,6 +222,7 @@ void LoadResource() {
 
 	nakiri = new Nakiri(32, 288);
 	nakiri->AddAnimation(NAKIRI_ANI_STAND);
+	objects.push_back(nakiri);
 }
 
 void LoadMap(string MapFile) {
@@ -342,10 +343,15 @@ void setCam(float x, float y) {
 void Update(DWORD dt) {
 	float cx, cy;
 
-	nakiri->Update(dt,&objects);
+	vector<LPGAMEOBJECT> coObjects;
+	for (int i = 1; i < objects.size(); i++)
+	{
+		coObjects.push_back(objects[i]);
+	}
 
-	for (int i = 0; i < objects.size(); i++) {
-		objects.at(i)->Update(dt);
+	for (int i = 0; i < objects.size(); i++)
+	{
+		objects[i]->Update(dt, &coObjects);
 	}
 
 	nakiri->GetPosition(cx, cy);
