@@ -20,7 +20,7 @@
 #define NAKIRI_ANI_WALKING_RIGHT 1505
 #define NAKIRI_ANI_JUMP 1506
 
-#define NAKIRI_GRAVITY 0.005f
+#define NAKIRI_GRAVITY 0.005
 #define NAKIRI_UNTOUCHABLE_TIME 5000
 
 class Nakiri : public GameObject

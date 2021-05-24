@@ -37,6 +37,9 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			untouchable = 0;
 		}
 
+		if (vx > 10 || vy > 10)
+			vx = 0;
+
 		coEvents.clear();
 
 		if (state != NAKIRI_STATE_DIE)
@@ -59,6 +62,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			if (nx != 0) vx = 0;
 			if (ny != 0) vy = 0;
 		}
+		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
 			r = return_list->at(i)->GetBoundingBox();
