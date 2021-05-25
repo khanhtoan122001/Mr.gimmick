@@ -311,17 +311,17 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
 	if (t_entry > t_exit) return;
 
-	t = t_entry;
+ 	t = t_entry;
 
 	if (tx_entry > ty_entry)
 	{
-		ny = 0.0f;
-		dx > 0 ? nx = -1.0f : nx = 1.0f;
+		ny = (int)0;
+		dx > 0 ? nx = (int)-1 : nx = (int)1.0;
 	}
 	else
 	{
-		nx = 0.0f;
-		dy > 0 ? ny = -1.0f : ny = 1.0f;
+		nx = (int)0;
+		dy > 0 ? ny = (int)-1 : ny = (int)1.0;
 	}
 }
 

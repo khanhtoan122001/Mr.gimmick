@@ -336,22 +336,22 @@ void setCam(float x, float y) {
 
 	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT) * BRICK_HEIGHT * GAME_PLAY_HEIGHT;
 
-	CGame::GetInstance()->SetCamPos(cx,cy);
+	CGame::GetInstance()->SetCamPos((int)cx,cy);
 	
 }
 
 void Update(DWORD dt) {
 	float cx, cy;
 
-	vector<LPGAMEOBJECT> coObjects;
+	/*vector<LPGAMEOBJECT> coObjects;
 	for (int i = 1; i < objects.size(); i++)
 	{
 		coObjects.push_back(objects[i]);
-	}
+	}*/
 
 	for (int i = 0; i < objects.size(); i++)
 	{
-		objects[i]->Update(dt, &coObjects);
+		objects[i]->Update(dt, &screenObj);
 	}
 
 	nakiri->GetPosition(cx, cy);
@@ -375,7 +375,8 @@ void Render_Map() {
 			LPANIMATION ani;
 			if (MapTile[y][x] != -1) {
 				ani = CAnimations::GetInstance()->Get(MapTile[y][x]);
-				ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
+				if(ani != NULL)
+					ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
 			}
 			if (MapObj[y][x] != -1)
 				screenObj.push_back(objects.at(MapObj[y][x]));
@@ -395,7 +396,7 @@ int Run()
 	DWORD frameStart = GetTickCount();
 	DWORD tickPerFrame = 1000 / MAX_FRAME_RATE;
 
-	while (!done)
+ 	while (!done)
 	{
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{

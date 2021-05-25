@@ -12,19 +12,20 @@
 #define NAKIRI_WIDTH 16
 #define NAKIRI_HEIGHT 19
 
-#define NAKIRI_WALKING_SPEED 0.4
-#define NAKIRI_JUMP_SPEED 0.8f
+#define NAKIRI_WALKING_SPEED 0.2
+#define NAKIRI_JUMP_SPEED 0.5f
 
 #define NAKIRI_ANI_STAND 1503
 #define NAKIRI_ANI_WALKING_LEFT 1504
 #define NAKIRI_ANI_WALKING_RIGHT 1505
 #define NAKIRI_ANI_JUMP 1506
 
-#define NAKIRI_GRAVITY 0.005
+#define NAKIRI_GRAVITY 0.002f
 #define NAKIRI_UNTOUCHABLE_TIME 5000
 
 class Nakiri : public GameObject
 {
+	static Nakiri* __instance;
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
@@ -32,17 +33,20 @@ class Nakiri : public GameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 public:
+	Nakiri* GetInstance();
 	Nakiri(float x = 32, float y = 160);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	virtual string getType();
+
+	Point GetPos() { return Point(x, y); }
 
 	void SetState(int state);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 
 	void Reset();
-
+	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual Rect GetBoundingBox();
 };
 

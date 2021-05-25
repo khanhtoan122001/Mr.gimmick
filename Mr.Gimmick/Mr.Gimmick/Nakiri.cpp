@@ -4,6 +4,14 @@
 #include "Game.h"
 #include "Quadtree.h"
 #include "Brick.h"
+Nakiri* Nakiri::__instance = NULL;
+
+Nakiri* Nakiri::GetInstance()
+{
+	if (__instance == NULL)
+		__instance = new Nakiri();
+	return __instance;
+}
 
 Nakiri::Nakiri(float x, float y)
 {
@@ -62,7 +70,11 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			if (nx != 0) vx = 0;
 			if (ny != 0) vy = 0;
 		}
-		dx = dy = 0;
+
+		x = (int)x + 0.0001f;
+		y = (int)y + 0.0001f;
+
+ 		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
 			r = return_list->at(i)->GetBoundingBox();
@@ -73,6 +85,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				vy = 0;
 			}
 		}*/
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
 }
 
@@ -140,7 +153,15 @@ void Nakiri::Reset()
 {
 }
 
+void Nakiri::GetBoundingBox(float& l, float& t, float& r, float& b)
+{
+	l = x;
+	t = y;
+	r = x + BRICK_BBOX_WIDTH;
+	b = y + BRICK_BBOX_HEIGHT;
+}
+
 Rect Nakiri::GetBoundingBox()
 {
-	return Rect(Point(x, y), NAKIRI_WIDTH, NAKIRI_HEIGHT);
+	return Rect(Point(x, y), NAKIRI_WIDTH - 0.5, NAKIRI_HEIGHT - 0.5);
 }

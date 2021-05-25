@@ -6,7 +6,7 @@
 #include "Sprite.h"
 #include "Rect.h"
 //#include "Animation.h"
-#define ID_TEX_BBOX -100
+#define ID_TEX_BBOX 1303
 #define BRICK_WIDTH 16
 #define BRICK_HEIGHT 16
 
@@ -88,6 +88,7 @@ public:
 	virtual void SetState(int state) { this->state = state; }
 	void RenderBoundingBox();
 	virtual Rect GetBoundingBox() = 0;
+	virtual void GetBoundingBox(float& l, float& t, float& r, float& b) = 0;
 
 	virtual string getType() = 0;
 
