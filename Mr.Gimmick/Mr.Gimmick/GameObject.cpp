@@ -23,18 +23,21 @@ void GameObject::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
-
-	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+	float _x, _y;
+	Rect re = GetBoundingBox();
+	_x = re.tf.x;
+	_y = re.tf.y;
+	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(120);
 
 	float l, t, r, b;
 
 	GetBoundingBox(l, t, r, b);
-	rect.left = 0;
-	rect.top = 0;
+	rect.left = 1;
+	rect.top = 1;
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 82);
+	CGame::GetInstance()->Draw(_x, _y, bbox, rect.left, rect.top, rect.right + 1, rect.bottom + 1, 200);
 }
 void GameObject::AddAnimation(int AniId)
 {

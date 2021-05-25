@@ -7,17 +7,17 @@ void Brick::Render()
 	float _x = CGame::GetInstance()->GetCamPos_x();
 	float _y = CGame::GetInstance()->GetCamPos_y();
 	animations[0]->Render(x + _x - int(_x), y + _y - int(_y));
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 Rect Brick::GetBoundingBox()
 {
-	return Rect(Point(x, y), BRICK_WIDTH + 0.05, BRICK_HEIGHT + 0.05);
+	return Rect(Point((int)x, (int)y), BRICK_WIDTH + 0.05, BRICK_HEIGHT + 0.05);
 }
 
 string Brick::getType()
 {
-	return string("Brick");
+	return string("Brick"); 
 }
 void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {

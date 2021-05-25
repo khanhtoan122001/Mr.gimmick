@@ -70,6 +70,17 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	}
 }
 
+Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list)
+{
+	// Init base game region for detecting collision
+	Quadtree* quadtree = new Quadtree(1, new Rect(Point(nakiri->GetPos() - Point(GAME_PLAY_WIDTH * 16, GAME_PLAY_HEIGHT * 16)),
+		(GAME_PLAY_WIDTH * 1.5) * 16, (GAME_PLAY_HEIGHT * 1.5) * 16));
+	for (auto i = list.begin(); i != list.end(); i++)
+		quadtree->Insert(*i);
+
+	return quadtree;
+}
+
 void updateLimit(int stage);
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
@@ -95,7 +106,9 @@ void CSampleKeyHander::KeyState(BYTE* states)
 }
 
 vector<vector<int>> MapTile, MapObj;
-vector<LPGAMEOBJECT> objects, screenObj;
+vector<LPGAMEOBJECT> objects, screenObj, actObj;
+vector<LPGAMEOBJECT>* coObj = new vector<LPGAMEOBJECT>();
+
 LPDIRECT3DTEXTURE9 texMap1;
 int lx, ly;
 int Stage;
@@ -119,15 +132,29 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
+void UpdateActObj() {
+	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
+	cx = nakiri->GetPos().x;
+	cy = nakiri->GetPos().y;
+	int stx = int(cx / BRICK_HEIGHT) - 5, sty = int(cy / BRICK_WIDTH) - 5;
+	if (stx < 0) stx = 0;
+	if (sty < 0) sty = 0;
+	actObj.clear();
+	for (int y = sty; y < sty + 10 && y < MapTile.size(); y++) {
+		for (int x = stx; x < stx + 10 && x < MapTile[y].size(); x++) {
+			if (MapObj[y][x] != -1)
+				actObj.push_back(objects.at(MapObj[y][x]));
+		}
+	}
+}
 
 void LoadResource() {
 
 	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(215, 121, 214));
+	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,255,255));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
-
+	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
 
@@ -334,7 +361,7 @@ void setCam(float x, float y) {
 	else
 		cx = x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH;
 
-	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT) * BRICK_HEIGHT * GAME_PLAY_HEIGHT;
+	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT)* BRICK_HEIGHT* GAME_PLAY_HEIGHT;
 
 	CGame::GetInstance()->SetCamPos((int)cx,cy);
 	
@@ -343,16 +370,21 @@ void setCam(float x, float y) {
 void Update(DWORD dt) {
 	float cx, cy;
 
-	/*vector<LPGAMEOBJECT> coObjects;
-	for (int i = 1; i < objects.size(); i++)
-	{
-		coObjects.push_back(objects[i]);
-	}*/
+	coObj->clear();
 
-	for (int i = 0; i < objects.size(); i++)
+	UpdateActObj();
+
+	coObj = &actObj;
+	/*quadtree = CreateQuadTree(actObj);
+
+	quadtree->Retrieve(coObj, nakiri);*/
+
+	for (int i = 0; i < actObj.size(); i++)
 	{
-		objects[i]->Update(dt, &screenObj);
+		actObj[i]->Update(dt);
 	}
+
+	nakiri->Update(dt, &actObj);
 
 	nakiri->GetPosition(cx, cy);
 
@@ -360,7 +392,6 @@ void Update(DWORD dt) {
 	updateLimit(Stage);
 
 	setCam(cx, cy);
-
 }
 
 void Render_Map() {
@@ -384,6 +415,10 @@ void Render_Map() {
 	}
 	for (int i = 0; i < screenObj.size(); i++)
 		screenObj.at(i)->Render();
+
+	for (int i = 0; i < coObj->size(); i++)
+		coObj->at(i)->RenderBoundingBox();
+	
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
 	}*/

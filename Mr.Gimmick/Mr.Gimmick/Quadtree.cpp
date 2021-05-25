@@ -93,16 +93,7 @@ void Quadtree::Insert(LPGAMEOBJECT entity)
         }
     }
 }
-Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list)
-{
-    // Init base game region for detecting collision
-    Quadtree* quadtree = new Quadtree(1, new Rect(Point(CGame::GetInstance()->getCamPos()), (GAME_PLAY_WIDTH + 3) * 16, (GAME_PLAY_HEIGHT + 3) * 16));
 
-    for (auto i = list.begin(); i != list.end(); i++)
-        quadtree->Insert(*i);
-
-    return quadtree;
-}
 void Quadtree::Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT entity)
 {
     if (m_nodes)

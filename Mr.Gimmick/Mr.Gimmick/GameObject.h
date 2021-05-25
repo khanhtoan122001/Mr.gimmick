@@ -6,7 +6,7 @@
 #include "Sprite.h"
 #include "Rect.h"
 //#include "Animation.h"
-#define ID_TEX_BBOX 1303
+#define ID_TEX_BBOX 303
 #define BRICK_WIDTH 16
 #define BRICK_HEIGHT 16
 

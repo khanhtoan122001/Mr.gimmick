@@ -103,6 +103,9 @@ public:
 	float GetCamPos_x() { return cam_x; }
 	float GetCamPos_y() { return cam_y; }
 
+	void SetScreenWidth(int i) { screen_width = i; }
+	void SetScreenHeight(int i) { screen_height = i; }
+
 
 
 	static CGame* GetInstance();

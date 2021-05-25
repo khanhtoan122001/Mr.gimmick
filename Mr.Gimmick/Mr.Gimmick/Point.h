@@ -17,6 +17,9 @@ public:
 	Point operator+ (Point a) {
 		return Point(x + a.x, y + a.y);
 	}
+	Point operator- (Point a) {
+		return Point(x - a.x, y - a.y);
+	}
 	Point operator* (int a) {
 		return Point(x * a, y * a);
 	}

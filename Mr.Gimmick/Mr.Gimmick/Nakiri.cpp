@@ -29,15 +29,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	if (colliable_objects != NULL) {
-		vy += NAKIRI_GRAVITY * dt;
-
-		Quadtree* quadtree = CreateQuadTree(*colliable_objects);
+		if(vy < NAKIRI_JUMP_SPEED * 1.5)
+			vy += NAKIRI_GRAVITY * dt;
+		else {
+			vy = NAKIRI_JUMP_SPEED;
+		}
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
-
-		vector<LPGAMEOBJECT>* return_list = new vector<LPGAMEOBJECT>();
-		quadtree->Retrieve(return_list, this);
 
 		if (GetTickCount() - untouchable_start > NAKIRI_UNTOUCHABLE_TIME)
 		{
@@ -45,13 +44,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			untouchable = 0;
 		}
 
-		if (vx > 10 || vy > 10)
-			vx = 0;
-
 		coEvents.clear();
 
 		if (state != NAKIRI_STATE_DIE)
-			CalcPotentialCollisions(return_list, coEvents);
+			CalcPotentialCollisions(colliable_objects, coEvents);
 
 		if (coEvents.size() == 0)
 		{
@@ -114,6 +110,7 @@ void Nakiri::Render()
 	else ani = NAKIRI_ANI_STAND;
 
 	animations[0]->Render((int)x, (int)y);
+	RenderBoundingBox();
 }
 
 string Nakiri::getType()
@@ -163,5 +160,5 @@ void Nakiri::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 Rect Nakiri::GetBoundingBox()
 {
-	return Rect(Point(x, y), NAKIRI_WIDTH - 0.5, NAKIRI_HEIGHT - 0.5);
+	return Rect(Point(x, y + 3), NAKIRI_WIDTH - 0.5, NAKIRI_HEIGHT - 0.5);
 }

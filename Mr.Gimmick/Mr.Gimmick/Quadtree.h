@@ -26,5 +26,3 @@ public:
     void Insert(LPGAMEOBJECT entity);
     void Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT entity);
 };
-
-Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list);
