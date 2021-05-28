@@ -12,7 +12,7 @@ void Brick::Render()
 
 Rect Brick::GetBoundingBox()
 {
-	return Rect(Point((int)x, (int)y), BRICK_WIDTH + 0.05, BRICK_HEIGHT + 0.05);
+	return Rect(Point((int)x, (int)y), this->width + 0.5, this->height + 0.5);
 }
 
 string Brick::getType()
@@ -23,6 +23,6 @@ void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + BRICK_BBOX_WIDTH + 0.05;
-	b = y + BRICK_BBOX_HEIGHT + 0.05;
+	r = x + this->width + 0.5;
+	b = y + this->height + 0.5;
 }

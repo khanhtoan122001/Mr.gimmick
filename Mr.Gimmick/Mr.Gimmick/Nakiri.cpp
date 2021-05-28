@@ -32,8 +32,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		if(vy < NAKIRI_JUMP_SPEED * 1.5)
 			vy += NAKIRI_GRAVITY * dt;
 		else {
+			dy -= vy * dt;
 			vy = NAKIRI_JUMP_SPEED;
+			dy += vy * dt;
 		}
+
+		vector<LPGAMEOBJECT>* return_list = new vector<LPGAMEOBJECT>();
+
+		//Quadtree quadtree = Creat
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -128,7 +134,7 @@ void Nakiri::SetState(int state)
 		nx = 1;
 		break;
 	case NAKIRI_STATE_WALKING_LEFT:
-		vx = -NAKIRI_WALKING_SPEED;
+		vx = -NAKIRI_WALKING_SPEED / 2;
 		nx = -1;
 		break;
 	case NAKIRI_STATE_JUMP:

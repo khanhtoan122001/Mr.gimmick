@@ -57,14 +57,10 @@ void Quadtree::Insert(LPGAMEOBJECT entity)
     // Insert entity into corresponding nodes
     if (m_nodes)
     {
-        if (m_nodes[0]->IsContain(entity))
-            m_nodes[0]->Insert(entity);
-        if (m_nodes[1]->IsContain(entity))
-            m_nodes[1]->Insert(entity);
-        if (m_nodes[2]->IsContain(entity))
-            m_nodes[2]->Insert(entity);
-        if (m_nodes[3]->IsContain(entity))
-            m_nodes[3]->Insert(entity);
+        for (int i = 0; i < MAX_OBJECT_IN_REGION; i++) {
+            if (m_nodes[i]->IsContain(entity))
+                m_nodes[i]->Insert(entity);
+        }
 
         return; // Return here to ignore rest.
     }
@@ -80,14 +76,9 @@ void Quadtree::Insert(LPGAMEOBJECT entity)
 
         while (!m_objects_list->empty())
         {
-            if (m_nodes[0]->IsContain(m_objects_list->back()))
-                m_nodes[0]->Insert(m_objects_list->back());
-            if (m_nodes[1]->IsContain(m_objects_list->back()))
-                m_nodes[1]->Insert(m_objects_list->back());
-            if (m_nodes[2]->IsContain(m_objects_list->back()))
-                m_nodes[2]->Insert(m_objects_list->back());
-            if (m_nodes[3]->IsContain(m_objects_list->back()))
-                m_nodes[3]->Insert(m_objects_list->back());
+            for(int i = 0; i < MAX_OBJECT_IN_REGION; i++)
+                if (m_nodes[i]->IsContain(m_objects_list->back()))
+                    m_nodes[i]->Insert(m_objects_list->back());
 
             m_objects_list->pop_back();
         }
@@ -98,14 +89,9 @@ void Quadtree::Retrieve(vector<LPGAMEOBJECT>* return_objects_list, LPGAMEOBJECT 
 {
     if (m_nodes)
     {
-        if (m_nodes[0]->IsContain(entity))
-            m_nodes[0]->Retrieve(return_objects_list, entity);
-        if (m_nodes[1]->IsContain(entity))
-            m_nodes[1]->Retrieve(return_objects_list, entity);
-        if (m_nodes[2]->IsContain(entity))
-            m_nodes[2]->Retrieve(return_objects_list, entity);
-        if (m_nodes[3]->IsContain(entity))
-            m_nodes[3]->Retrieve(return_objects_list, entity);
+        for (int i = 0; i < MAX_OBJECT_IN_REGION; i++)
+        if (m_nodes[i]->IsContain(entity))
+            m_nodes[i]->Retrieve(return_objects_list, entity);
 
         return; // Return here to ignore rest.
     }

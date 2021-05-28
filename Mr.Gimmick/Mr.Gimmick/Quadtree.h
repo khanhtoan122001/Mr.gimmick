@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Nakiri.h"
 
-#define MAX_LEVEL                5
+#define MAX_LEVEL                3
 #define MAX_OBJECT_IN_REGION     4
 
 class Quadtree

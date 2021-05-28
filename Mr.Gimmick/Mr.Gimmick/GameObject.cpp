@@ -27,7 +27,7 @@ void GameObject::RenderBoundingBox()
 	Rect re = GetBoundingBox();
 	_x = re.tf.x;
 	_y = re.tf.y;
-	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(120);
+	LPDIRECT3DTEXTURE9 bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
 
 	float l, t, r, b;
 
@@ -37,7 +37,7 @@ void GameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(_x, _y, bbox, rect.left, rect.top, rect.right + 1, rect.bottom + 1, 200);
+	CGame::GetInstance()->Draw(_x, _y, bbox, rect.left, rect.top, rect.right + 1, rect.bottom + 1, 50);
 }
 void GameObject::AddAnimation(int AniId)
 {

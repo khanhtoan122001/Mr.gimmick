@@ -73,7 +73,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list)
 {
 	// Init base game region for detecting collision
-	Quadtree* quadtree = new Quadtree(1, new Rect(Point(nakiri->GetPos() - Point(GAME_PLAY_WIDTH * 16, GAME_PLAY_HEIGHT * 16)),
+	Quadtree* quadtree = new Quadtree(1, new Rect(Point(CGame::GetInstance()->getCamPos()/* - Point(GAME_PLAY_WIDTH * 16, GAME_PLAY_HEIGHT * 16)*/),
 		(GAME_PLAY_WIDTH * 1.5) * 16, (GAME_PLAY_HEIGHT * 1.5) * 16));
 	for (auto i = list.begin(); i != list.end(); i++)
 		quadtree->Insert(*i);
@@ -140,8 +140,8 @@ void UpdateActObj() {
 	if (stx < 0) stx = 0;
 	if (sty < 0) sty = 0;
 	actObj.clear();
-	for (int y = sty; y < sty + 10 && y < MapTile.size(); y++) {
-		for (int x = stx; x < stx + 10 && x < MapTile[y].size(); x++) {
+	for (int y = sty; y < sty + 5 + SCREEN_HEIGHT / BRICK_HEIGHT && y < MapTile.size(); y++) {
+		for (int x = stx; x < stx + 5 + SCREEN_WIDTH / BRICK_WIDTH && x < MapTile[y].size(); x++) {
 			if (MapObj[y][x] != -1)
 				actObj.push_back(objects.at(MapObj[y][x]));
 		}
@@ -154,6 +154,7 @@ void LoadResource() {
 	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,255,255));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
+	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
@@ -288,11 +289,14 @@ void LoadMap(string MapFile) {
 
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Brick* brick = new Brick();
-
+		if (jsonfile["layers"][1]["objects"][i]["id"] == 1041)
+		{
+			int n;
+			n = 0;
+		}
 		brick->style = normal_brick;
-
-		brick->AddAnimation(jsonfile["layers"][1]["objects"][i]["gid"] - 1);
-		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"] - 16);
+		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
+		brick->SetWidthHeight(jsonfile["layers"][1]["objects"][i]["width"], jsonfile["layers"][1]["objects"][i]["height"]);
 		int x, y;
 
 		x = (int)(brick->x / BRICK_HEIGHT);
@@ -374,17 +378,18 @@ void Update(DWORD dt) {
 
 	UpdateActObj();
 
-	coObj = &actObj;
-	/*quadtree = CreateQuadTree(actObj);
+	//coObj = &actObj;
+	quadtree = CreateQuadTree(actObj);
 
-	quadtree->Retrieve(coObj, nakiri);*/
+	quadtree->Retrieve(coObj, nakiri);
 
-	for (int i = 0; i < actObj.size(); i++)
+	nakiri->Update(dt, coObj);
+
+	for (int i = 0; i < screenObj.size(); i++)
 	{
-		actObj[i]->Update(dt);
+		screenObj.at(i)->Update(dt);
 	}
 
-	nakiri->Update(dt, &actObj);
 
 	nakiri->GetPosition(cx, cy);
 
@@ -413,11 +418,11 @@ void Render_Map() {
 				screenObj.push_back(objects.at(MapObj[y][x]));
 		}
 	}
-	for (int i = 0; i < screenObj.size(); i++)
-		screenObj.at(i)->Render();
+	/*for (int i = 0; i < screenObj.size(); i++)
+		screenObj.at(i)->Render();*/
 
 	for (int i = 0; i < coObj->size(); i++)
-		coObj->at(i)->RenderBoundingBox();
+		coObj->at(i)->RenderBoundingBox();;
 	
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
