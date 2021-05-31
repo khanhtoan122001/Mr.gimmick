@@ -73,9 +73,10 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	float sl, st, sr, sb;		// static object bbox
 	float ml, mt, mr, mb;		// moving object bbox
 	float t, nx, ny;
+	Style style;
 	Rect r;
 	r = coO->GetBoundingBox();
-
+	style = coO->getType();
 	sl = r.tf.x;
 	st = r.tf.y;
 	sr = r.br.x;
@@ -102,7 +103,8 @@ LPCOLLISIONEVENT GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		ml, mt, mr, mb,
 		dx, dy,
 		sl, st, sr, sb,
-		t, nx, ny
+		t, nx, ny,
+		style
 	);
 
 	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, coO);

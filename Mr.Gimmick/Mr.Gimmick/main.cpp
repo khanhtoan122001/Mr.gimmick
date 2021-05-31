@@ -289,12 +289,13 @@ void LoadMap(string MapFile) {
 
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Brick* brick = new Brick();
-		if (jsonfile["layers"][1]["objects"][i]["id"] == 1041)
+		int id = jsonfile["layers"][1]["objects"][i]["id"];
+		if (id == 1285)
 		{
-			int n;
-			n = 0;
+			brick->SetStyle(diagonal_left);
 		}
-		brick->style = normal_brick;
+		else
+			brick->style = normal_brick;
 		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
 		brick->SetWidthHeight(jsonfile["layers"][1]["objects"][i]["width"], jsonfile["layers"][1]["objects"][i]["height"]);
 		int x, y;
@@ -306,7 +307,7 @@ void LoadMap(string MapFile) {
 		if (MapObj[y][x] != NULL)
 			MapObj[y][x] = objects.size() - 1;
 	}
-
+	
 }
 
 void Update(DWORD dt);

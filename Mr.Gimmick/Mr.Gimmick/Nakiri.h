@@ -37,7 +37,6 @@ public:
 	Nakiri(float x = 32, float y = 160);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
-	virtual string getType();
 
 	Point GetPos() { return Point(x, y); }
 

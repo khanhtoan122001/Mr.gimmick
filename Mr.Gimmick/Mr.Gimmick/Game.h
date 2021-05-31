@@ -93,7 +93,8 @@ public:
 		float sb,
 		float& t,
 		float& nx,
-		float& ny);
+		float& ny,
+		Style style);
 
 	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
@@ -113,3 +114,8 @@ public:
 	~CGame();
 };
 
+void swapAB(float& a, float& b);
+
+float calcY(float x1, float y1, float x2, float y2, float x, float y);
+
+float calcX(float x1, float y1, float x2, float y2, float x, float y);

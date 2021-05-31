@@ -13,7 +13,7 @@
 class GameObject;
 typedef GameObject* LPGAMEOBJECT;
 
-enum Style {normal_brick};
+enum Style {normal_brick, diagonal_left, diagonal_right, main_c};
 
 struct CCollisionEvent;
 typedef CCollisionEvent* LPCOLLISIONEVENT;
@@ -61,9 +61,10 @@ public:
 
 	int state;
 
-	Style style;
 
 	DWORD dt;
+
+	Style style;
 
 	LPDIRECT3DTEXTURE9 texture;
 
@@ -90,15 +91,12 @@ public:
 
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
+	void SetStyle(Style style) { this->style = style; }
 	void RenderBoundingBox();
 	virtual Rect GetBoundingBox() = 0;
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b) = 0;
 
-	virtual string getType() = 0;
-
-	bool IsCollide(GameObject *i) {
-
-	}
+	Style getType() { return this->style; }
 
 	GameObject();
 	~GameObject();

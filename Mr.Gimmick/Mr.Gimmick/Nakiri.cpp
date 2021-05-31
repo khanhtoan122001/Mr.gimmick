@@ -15,7 +15,7 @@ Nakiri* Nakiri::GetInstance()
 
 Nakiri::Nakiri(float x, float y)
 {
-
+	style = main_c;
 	untouchable = 0;
 
 	start_x = x;
@@ -76,6 +76,18 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		x = (int)x + 0.0001f;
 		y = (int)y + 0.0001f;
 
+		for (UINT i = 0; i < coEventsResult.size(); i++) {
+			LPCOLLISIONEVENT e = coEventsResult[i];
+			switch (e->obj->getType())
+			{
+			case diagonal_left:
+
+				break;
+			default:
+				break;
+			}
+		}
+
  		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
@@ -117,11 +129,6 @@ void Nakiri::Render()
 
 	animations[0]->Render((int)x, (int)y);
 	RenderBoundingBox();
-}
-
-string Nakiri::getType()
-{
-	return string("Nakiri");
 }
 
 void Nakiri::SetState(int state)

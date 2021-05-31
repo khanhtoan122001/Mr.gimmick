@@ -15,10 +15,6 @@ Rect Brick::GetBoundingBox()
 	return Rect(Point((int)x, (int)y), this->width + 0.5, this->height + 0.5);
 }
 
-string Brick::getType()
-{
-	return string("Brick"); 
-}
 void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
