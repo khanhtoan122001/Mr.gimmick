@@ -94,7 +94,7 @@ public:
 		float& tx,
 		float& nx,
 		float& ny,
-		Style style);
+		bool penetrable);
 
 	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }

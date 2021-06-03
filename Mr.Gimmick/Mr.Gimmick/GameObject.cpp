@@ -11,6 +11,7 @@
 
 GameObject::GameObject()
 {
+	penetrable = false;
 	x = y = 0;
 	vx = vy = 0;
 	nx = 1;
@@ -115,8 +116,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 				ml, mt, mr, mb,
 				dx, 0,
 				p.x, p.y - BRICK_HEIGHT / 2, p.x + BRICK_WIDTH, p.y,
-				t, nx, ny,
-				style
+				t, nx, ny, coO->GetPenetrable()
 			);
 			e.push_back(new CCollisionEvent(t, nx, ny, coO));
 		}
@@ -125,8 +125,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 			ml, mt, mr, mb,
 			0, dy,
 			p.x - BRICK_WIDTH, p.y, p.x, p.y + BRICK_HEIGHT,
-			t, nx, ny,
-			style
+			t, nx, ny, coO->GetPenetrable()
 		);
 
 		e.push_back(new CCollisionEvent(t, nx, ny, coO));
@@ -137,9 +136,8 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 			ml, mt, mr, mb,
 			dx, dy,
 			sl, st, sr, sb,
-			t, nx, ny,
-			style
-		);
+			t, nx, ny, coO->GetPenetrable()
+			);
 
 		vector<CCollisionEvent*> e;
 		e.push_back( new CCollisionEvent(t, nx, ny, coO));

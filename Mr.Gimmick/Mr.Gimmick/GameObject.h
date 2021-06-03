@@ -57,6 +57,8 @@ public:
 	int width;
 	int height;
 
+	bool penetrable;
+
 	int nx;
 	int ny;
 
@@ -76,6 +78,8 @@ public:
 	void SetWidthHeight(int w, int h) { this->width = w; this->height = h; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
+	void SetPenetrable(bool b) { this->penetrable = b; }
+	bool GetPenetrable() { return this->penetrable; }
 
 	Line getLine() {
 		if (style == diagonal_left)

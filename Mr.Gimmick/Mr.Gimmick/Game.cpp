@@ -234,7 +234,7 @@ void CGame::ProcessKeyboard()
 	}
 }
 
-void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy, float sl, float st, float sr, float sb, float& t, float& nx, float& ny, Style style)
+void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy, float sl, float st, float sr, float sb, float& t, float& nx, float& ny, bool penetrable)
 {
 	float dx_entry, dx_exit, tx_entry, tx_exit;
 	float dy_entry, dy_exit, ty_entry, ty_exit;
@@ -257,38 +257,29 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 	if (dx == 0 && dy == 0) return;		// moving object is not moving > obvious no collision
 	if (br < sl || bl > sr || bb < st || bt > sb) return;
 
-
-	switch (style)
+	if (dx > 0)
 	{
-
-	case diagonal_right:
-
-		break;
-	default:
-		if (dx > 0)
-		{
-			dx_entry = sl - mr;
-			dx_exit = sr - ml;
-		}
-		else if (dx < 0)
-		{
-			dx_entry = sr - ml;
-			dx_exit = sl - mr;
-		}
-
-
-		if (dy > 0)
-		{
-			dy_entry = st - mb;
-			dy_exit = sb - mt;
-		}
-		else if (dy < 0)
-		{
-			dy_entry = sb - mt;
-			dy_exit = st - mb;
-		}
-		break;
+		dx_entry = sl - mr;
+		dx_exit = penetrable ? 0 : sr - ml;
 	}
+	else if (dx < 0)
+	{
+		dx_entry = sr - ml;
+		dx_exit = penetrable ? 0 : sl - mr;
+	}
+
+
+	if (dy > 0)
+	{
+		dy_entry = st - mb;
+		dy_exit = penetrable ? 0 : sb - mt;
+	}
+	else if (dy < 0)
+	{
+		dy_entry = sb - mt;
+		dy_exit = penetrable ? 0 : st - mb;
+	}
+	
 
 	
 
