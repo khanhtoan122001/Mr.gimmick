@@ -10,7 +10,7 @@ public:
 		x = a.x;
 		y = a.y;
 	}
-	void operator*= (int a) {
+	void operator*= (float a) {
 		x *= a;
 		y *= a;
 	}
@@ -20,7 +20,7 @@ public:
 	Point operator- (Point a) {
 		return Point(x - a.x, y - a.y);
 	}
-	Point operator* (int a) {
+	Point operator* (float a) {
 		return Point(x * a, y * a);
 	}
 };

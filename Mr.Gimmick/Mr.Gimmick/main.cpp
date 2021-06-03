@@ -151,7 +151,7 @@ void UpdateActObj() {
 void LoadResource() {
 
 	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,255,255));
+	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,0,255));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
@@ -290,8 +290,11 @@ void LoadMap(string MapFile) {
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Brick* brick = new Brick();
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1285)
+		if (id == 1296)
 		{
+			brick->SetStyle(diagonal_left);
+		}
+		else if (id == 1300) {
 			brick->SetStyle(diagonal_left);
 		}
 		else
@@ -356,19 +359,21 @@ void updateStage(float x, float y) {
 }
 
 void setCam(float x, float y) {
-
+	int ox = (int)CGame::GetInstance()->GetCamPos_x();
 	int cx, cy;
 
 	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH < tf.x)
 		cx = tf.x;
 	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x)
 		cx = br.x - GAME_PLAY_WIDTH * BRICK_WIDTH;
-	else
+	else {
+
 		cx = x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH;
+	}
 
 	cy = (int)(y / BRICK_HEIGHT / GAME_PLAY_HEIGHT)* BRICK_HEIGHT* GAME_PLAY_HEIGHT;
 
-	CGame::GetInstance()->SetCamPos((int)cx,cy);
+	CGame::GetInstance()->SetCamPos(/*(int)*/cx,cy);
 	
 }
 

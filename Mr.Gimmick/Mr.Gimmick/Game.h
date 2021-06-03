@@ -91,7 +91,7 @@ public:
 		float st,
 		float sr,
 		float sb,
-		float& t,
+		float& tx,
 		float& nx,
 		float& ny,
 		Style style);
@@ -115,7 +115,3 @@ public:
 };
 
 void swapAB(float& a, float& b);
-
-float calcY(float x1, float y1, float x2, float y2, float x, float y);
-
-float calcX(float x1, float y1, float x2, float y2, float x, float y);

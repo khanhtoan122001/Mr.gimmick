@@ -5,6 +5,7 @@
 
 #include "Sprite.h"
 #include "Rect.h"
+#include "line.h"
 //#include "Animation.h"
 #define ID_TEX_BBOX 303
 #define BRICK_WIDTH 16
@@ -61,7 +62,6 @@ public:
 
 	int state;
 
-
 	DWORD dt;
 
 	Style style;
@@ -77,10 +77,18 @@ public:
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
+	Line getLine() {
+		if (style == diagonal_left)
+			return Line(Point(x + width, y), Point(x, y + height));
+		if (style == diagonal_right)
+			return Line(Point(x, y), Point(x + width, y + height));
+		return Line();
+	}
+
 	int GetState() { return this->state; }
 
 	void CalcPotentialCollisions(vector<LPGAMEOBJECT>* coObjects, vector<LPCOLLISIONEVENT>& coEvents);
-	LPCOLLISIONEVENT SweptAABBEx(LPGAMEOBJECT coO);
+	vector<LPCOLLISIONEVENT> SweptAABBEx(LPGAMEOBJECT coO);
 	void FilterCollision(
 		vector<LPCOLLISIONEVENT>& coEvents,
 		vector<LPCOLLISIONEVENT>& coEventsResult,

@@ -15,12 +15,12 @@ public:
 		return Rect(tf + a, br + a);
 	}
 
-	int height() {
-		return (int)( (tf.y - br.y) > 0 ? (tf.y - br.y) : -(tf.y - br.y));
+	float height() {
+		return ( (tf.y - br.y) > 0 ? (tf.y - br.y) : -(tf.y - br.y));
 	}
 
-	int width() {
-		return (int)((tf.x - br.x) > 0 ? (tf.x - br.x) : -(tf.x - br.x));
+	float width() {
+		return ((tf.x - br.x) > 0 ? (tf.x - br.x) : -(tf.x - br.x));
 	}
 
 	bool isIn(Point p);
@@ -34,7 +34,7 @@ public:
 
 	Rect(Point _tf, Point _br);
 
-	Rect(Point _tf, int width, int height);
+	Rect(Point _tf, float width, float height);
 
 };
 
