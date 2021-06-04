@@ -234,35 +234,7 @@ void CGame::ProcessKeyboard()
 	}
 }
 
-void swapAB(float& a, float& b) {
-	float c = a;
-	a = b;
-	b = c;
-}
-
-float calcY(float x1, float y1, float x2, float y2, float x, float y) {
-	if (x1 > x2) {
-		swapAB(x1, x2);
-		swapAB(y1, y2);
-	}
-	if (x > x2)
-		x = x2;
-	if (x < x1)
-		x = x1;
-	return /*a*/ (y1 - y2) / (x1 - x2) * x + /*b*/ (y1 - (y1 - y2) * x1 / (x1 - x2));
-}
-float calcX(float x1, float y1, float x2, float y2, float x, float y) {
-	if (y1 > y2) {
-		swapAB(x1, x2);
-		swapAB(y1, y2);
-	}
-	if (y > y2)
-		y = y2;
-	if (y < y1)
-		y = y1;
-	return  (y - /*b*/ (y1 - (y1 - y2) * x1 / (x1 - x2))) / /*a*/  (y1 - y2) * (x1 - x2);
-}
-void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy, float sl, float st, float sr, float sb, float& t, float& nx, float& ny, Style style)
+void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy, float sl, float st, float sr, float sb, float& t, float& nx, float& ny, bool penetrable)
 {
 	float dx_entry, dx_exit, tx_entry, tx_exit;
 	float dy_entry, dy_exit, ty_entry, ty_exit;
@@ -285,70 +257,29 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 	if (dx == 0 && dy == 0) return;		// moving object is not moving > obvious no collision
 	if (br < sl || bl > sr || bb < st || bt > sb) return;
 
-	switch (style)
+	if (dx > 0)
 	{
-	case diagonal_left:
-  		if (sl < br && sr > br && calcY(sl, sb, sr, st, br, bb) - bb > 0)
-			return;
-		break;
-	default:
-		break;
+		dx_entry = sl - mr;
+		dx_exit = penetrable ? 0 : sr - ml;
+	}
+	else if (dx < 0)
+	{
+		dx_entry = sr - ml;
+		dx_exit = penetrable ? 0 : sl - mr;
 	}
 
-	switch (style)
+
+	if (dy > 0)
 	{
-	case diagonal_left:
-		if (dx > 0)
-		{
-			dx_entry = calcX(sl, sb, sr, st, br, bb) - mr;
-			dx_exit = sr - ml;
-		}
-		else if (dx < 0)
-		{
-			dx_entry = sr - ml;
-			dx_exit = sl - mr;
-		}
-
-
- 		if (dy > 0)
-		{
-			dy_entry = calcY(sl, sb, sr, st, br, bb) - mb;
-			dy_exit = sb - mt + 2;
-		}
-		else if (dy < 0)
-		{
-			dy_entry = sb - calcY(sl, sb, sr, st, br, bb);
-			dy_exit = st - mb;
-		}
-		break;
-	case diagonal_right:
-
-		break;
-	default:
-		if (dx > 0)
-		{
-			dx_entry = sl - mr;
-			dx_exit = sr - ml;
-		}
-		else if (dx < 0)
-		{
-			dx_entry = sr - ml;
-			dx_exit = sl - mr;
-		}
-
-
-		if (dy > 0)
-		{
-			dy_entry = st - mb;
-			dy_exit = sb - mt;
-		}
-		else if (dy < 0)
-		{
-			dy_entry = sb - mt;
-			dy_exit = st - mb;
-		}
-		break;
+		dy_entry = st - mb;
+		dy_exit = penetrable ? 0 : sb - mt;
 	}
+	else if (dy < 0)
+	{
+		dy_entry = sb - mt;
+		dy_exit = penetrable ? 0 : st - mb;
+	}
+	
 
 	
 

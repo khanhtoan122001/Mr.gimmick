@@ -18,7 +18,7 @@ Rect::Rect(Point _tf, Point _br) {
 	tf = _tf; br = _br;
 }
 
-Rect::Rect(Point _tf, int width, int height)
+Rect::Rect(Point _tf, float width, float height)
 {
 	tf = _tf;
 	br.x = tf.x + width;

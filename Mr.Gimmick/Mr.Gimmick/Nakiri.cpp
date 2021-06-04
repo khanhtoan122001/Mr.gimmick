@@ -73,35 +73,43 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			if (ny != 0) vy = 0;
 		}
 
-		x = (int)x + 0.0001f;
-		y = (int)y + 0.0001f;
+		/*x = (int)x + 0.0001f;
+		y = (int)y + 0.0001f;*/
+
 		for (UINT i = 0; i < coEventsResult.size(); i++) {
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			switch (e->obj->getType())
 			{
-				case slide_left:
+			case slide_left:
 				{
 					x -= 2.0f;
 					break;
 				}
-				case slide_right:
+			case slide_right:
 				{
 					x += 2.0f;
 					break;
 				}
-				case trap:
+			case trap:
 				{
 					StartUntouchable();
 					break;
 				}
-				case normal_brick:
+			case normal_brick:
 				{
 					break;
 				}
-				default:
-				{
-					break;
+			case diagonal_left:
+				if (dx == 0) {
+					x -= NAKIRI_WALKING_SPEED * 0.1 * dt;
+					y += NAKIRI_GRAVITY * dt;
 				}
+				if (dx > 0) {
+					y -= 0.014 * dt;
+				}
+				break;
+			default:
+				break;
 			}
 		}
 
@@ -158,7 +166,7 @@ void Nakiri::SetState(int state)
 		nx = 1;
 		break;
 	case NAKIRI_STATE_WALKING_LEFT:
-		vx = -NAKIRI_WALKING_SPEED / 2;
+		vx = -NAKIRI_WALKING_SPEED;// / 2;
 		nx = -1;
 		break;
 	case NAKIRI_STATE_JUMP:
