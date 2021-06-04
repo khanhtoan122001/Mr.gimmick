@@ -294,6 +294,10 @@ void LoadMap(string MapFile) {
 		{
 			brick->SetStyle(diagonal_left);
 		}
+		else if (id == 1289)
+		{
+			brick->SetStyle(slide_right);
+		}
 		else
 			brick->style = normal_brick;
 		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);

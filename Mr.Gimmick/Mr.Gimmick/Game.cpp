@@ -310,7 +310,7 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 		}
 
 
-		if (dy > 0)
+ 		if (dy > 0)
 		{
 			dy_entry = calcY(sl, sb, sr, st, br, bb) - mb;
 			dy_exit = sb - mt + 2;

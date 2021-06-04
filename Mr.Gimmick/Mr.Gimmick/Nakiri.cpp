@@ -75,16 +75,33 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 
 		x = (int)x + 0.0001f;
 		y = (int)y + 0.0001f;
-
 		for (UINT i = 0; i < coEventsResult.size(); i++) {
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			switch (e->obj->getType())
 			{
-			case diagonal_left:
-
-				break;
-			default:
-				break;
+				case slide_left:
+				{
+					x -= 2.0f;
+					break;
+				}
+				case slide_right:
+				{
+					x += 2.0f;
+					break;
+				}
+				case trap:
+				{
+					StartUntouchable();
+					break;
+				}
+				case normal_brick:
+				{
+					break;
+				}
+				default:
+				{
+					break;
+				}
 			}
 		}
 
