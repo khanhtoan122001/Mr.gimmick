@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Quadtree.h"
 #include "Brick.h"
+#include "Trigger.h"
 Nakiri* Nakiri::__instance = NULL;
 
 Nakiri* Nakiri::GetInstance()
@@ -75,7 +76,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 
 		/*x = (int)x + 0.0001f;
 		y = (int)y + 0.0001f;*/
-
+		
 		for (UINT i = 0; i < coEventsResult.size(); i++) {
 			LPCOLLISIONEVENT e = coEventsResult[i];
 			switch (e->obj->getType())
@@ -107,6 +108,12 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (dx > 0) {
 					y -= 0.014 * dt;
 				}
+				break;
+			case trigger:
+			{
+				Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
+				trigg->getTrap()->SetSpeed(0, 0.02);
+			}
 				break;
 			default:
 				break;

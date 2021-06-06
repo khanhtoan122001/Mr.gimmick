@@ -158,6 +158,8 @@
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="Trigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Brick.h" />
@@ -170,6 +172,8 @@
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Textures.h" />
+    <ClInclude Include="Trap.h" />
+    <ClInclude Include="Trigger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

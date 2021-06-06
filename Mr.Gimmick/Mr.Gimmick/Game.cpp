@@ -260,24 +260,24 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 	if (dx > 0)
 	{
 		dx_entry = sl - mr;
-		dx_exit = penetrable ? 0 : sr - ml;
+ 		dx_exit = sr - ml;
 	}
 	else if (dx < 0)
 	{
 		dx_entry = sr - ml;
-		dx_exit = penetrable ? 0 : sl - mr;
+		dx_exit = sl - mr;
 	}
 
 
 	if (dy > 0)
 	{
 		dy_entry = st - mb;
-		dy_exit = penetrable ? 0 : sb - mt;
+		dy_exit = sb - mt;
 	}
 	else if (dy < 0)
 	{
 		dy_entry = sb - mt;
-		dy_exit = penetrable ? 0 : st - mb;
+		dy_exit = st - mb;
 	}
 	
 
@@ -313,7 +313,7 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
 	if (t_entry > t_exit) return;
 
-  	t = t_entry;
+  	t = !penetrable ? t_entry : 0.99f;
 
 	if (tx_entry > ty_entry )
 	{

@@ -66,7 +66,6 @@ void GameObject::CalcPotentialCollisions(
 			else
 				delete e[j];
 	}
-
 	std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 

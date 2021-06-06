@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include <fstream>
 
+#include "Trigger.h"
 #include "Textures.h"
 #include "Game.h"
 #include "GameObject.h"
@@ -15,10 +16,12 @@
 #include <unordered_map>
 #include "Quadtree.h"
 #include "Rect.h"
+#include "Trap.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
 #define ID_NAKIRI 15
+#define ID_TRAP 347
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"Gimmick"
 #define STARTPOS_STAGE_1_X 32
@@ -46,10 +49,12 @@
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
 
+#define TRAP_NORMAL 344
 CGame* game;
 Nakiri* nakiri;
 Quadtree* quadtree;
-
+Trap tp[2];
+Trigger trigg;
 class CSampleKeyHander : public CKeyEventHandler
 {
 	virtual void KeyState(BYTE* states);
@@ -146,6 +151,7 @@ void UpdateActObj() {
 				actObj.push_back(objects.at(MapObj[y][x]));
 		}
 	}
+	actObj.push_back(&trigg);
 }
 
 void LoadResource() {
@@ -154,6 +160,7 @@ void LoadResource() {
 	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,0,255));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
+	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
 	
 	CSprites* sprites = CSprites::GetInstance();
@@ -164,6 +171,12 @@ void LoadResource() {
 			sprites->Add(j * 14 + i + 1000, 1 + i * 17, 1 + j * 17, (i + 1) * 17, (j + 1) * 17, texMap1);
 		}
 	}
+
+	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
+	sprites->Add(12345, 2, 1, 15, 18, trap);
+	sprites->Add(12346, 19, 1, 32, 18, trap);
+	sprites->Add(12347, 36, 1, 49, 18, trap);
+	sprites->Add(12348, 53, 1, 66, 18, trap);
 
 	LPDIRECT3DTEXTURE9 texNakiri = textures->Get(ID_NAKIRI);
 	//stand
@@ -247,12 +260,41 @@ void LoadResource() {
 	ani->Add(10000);
 	ani->Add(10001);
 	animations->Add(NAKIRI_ANI_STAND, ani);
+	
+	ani = new CAnimation(10);
+	ani->Add(12345);
+	ani->Add(12346);
+	ani->Add(12347);
+	ani->Add(12348);
+	animations->Add(TRAP_NORMAL, ani);
 
 	nakiri = new Nakiri(32, 288);
 	nakiri->AddAnimation(NAKIRI_ANI_STAND);
 	objects.push_back(nakiri);
-}
 
+	tp[0].SetPosition(864, 416);
+	tp[1].SetPosition(816, 416);
+	for (int i = 0; i < 2; i++)
+	{
+		tp[i].AddAnimation(TRAP_NORMAL);
+	}
+	
+}
+void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
+
+	brick->SetStyle(style);
+
+	brick->SetPosition(p.x, p.y);
+	brick->SetWidthHeight(w, h);
+	int x, y;
+
+	x = (int)(brick->x / BRICK_HEIGHT);
+	y = (int)(brick->y / BRICK_WIDTH);
+
+	objects.push_back(brick);
+	if (MapObj[y][x] != NULL)
+		MapObj[y][x] = objects.size() - 1;
+}
 void LoadMap(string MapFile) {
 	ifstream ifs{ MapFile };
 	json jsonfile = json::parse(ifs);
@@ -288,34 +330,50 @@ void LoadMap(string MapFile) {
 	//}
 
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
-		Brick* brick = new Brick();
+		Style style;
+		int des = -1;
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1296)
+		if (id == 1301)
 		{
-			brick->SetStyle(diagonal_left);
+			style = (diagonal_left);
 		}
 		else if (id == 1289)
 		{
-			brick->SetStyle(slide_right);
+			style = (slide_right);
 		}
-		else if (id == 1300) {
-			brick->SetStyle(diagonal_left);
+		else if (id == 1356 || id == 1358){
+			style = trigger;
+			des = 0;
+		}
+		else if (id == 1355 || id == 1357)
+		{
+			style = trigger;
+			des = 1;
+		}
+		else if (id == 1303) {
+			style = (diagonal_left);
 		}
 		else
-			brick->style = normal_brick;
-		brick->SetPosition(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
-		brick->SetWidthHeight(jsonfile["layers"][1]["objects"][i]["width"], jsonfile["layers"][1]["objects"][i]["height"]);
-		int x, y;
+			style = normal_brick;
+		
+		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
+		int w = jsonfile["layers"][1]["objects"][i]["width"];
+		int h = jsonfile["layers"][1]["objects"][i]["height"];
 
-		x = (int)(brick->x / BRICK_HEIGHT);
-		y = (int)(brick->y / BRICK_WIDTH);
-
-		objects.push_back(brick);
-		if (MapObj[y][x] != NULL)
-			MapObj[y][x] = objects.size() - 1;
+		if (style == trigger) {
+			Trigger* trigg = new Trigger();
+			trigg->SetPenetrable(true);
+			trigg->setTrap(&tp[des]);
+			Obj(trigg, i, style, p, w, h);
+		}
+		else {
+			Brick* brick = new Brick();
+			Obj(brick, i, style, p, w, h);
+		}
 	}
 	
 }
+
 
 void Update(DWORD dt);
 
@@ -399,6 +457,10 @@ void Update(DWORD dt) {
 	{
 		screenObj.at(i)->Update(dt);
 	}
+	for (int i = 0; i < 2; i++)
+	{
+		tp[i].Update(dt);
+	}
 
 
 	nakiri->GetPosition(cx, cy);
@@ -433,6 +495,10 @@ void Render_Map() {
 
 	for (int i = 0; i < coObj->size(); i++)
 		coObj->at(i)->RenderBoundingBox();;
+	for (int i = 0; i < 2; i++)
+	{
+		tp[i].Render();
+	}
 	
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
