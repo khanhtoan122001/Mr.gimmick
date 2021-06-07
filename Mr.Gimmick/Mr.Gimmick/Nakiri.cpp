@@ -83,8 +83,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		/*x = (int)x + 0.0001f;
 		y = (int)y + 0.0001f;*/
 		
-		for (UINT i = 0; i < coEventsResult.size(); i++) {
-			LPCOLLISIONEVENT e = coEventsResult[i];
+		for (UINT i = 0; i < coEvents.size(); i++) {
+			LPCOLLISIONEVENT e = coEvents[i];
 			switch (e->obj->getType())
 			{
 			case slide_left:
