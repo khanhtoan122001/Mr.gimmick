@@ -1,9 +1,6 @@
 # Prerequisites
 *.d
 
-*.tlog
-*.suo
-
 # Compiled Object files
 *.slo
 *.lo
