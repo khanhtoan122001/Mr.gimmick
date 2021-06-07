@@ -7,6 +7,8 @@
 *.pdb
 *.ilk
 
+!Mr.Gimmick/Debug
+
 # User-specific files
 *.rsuser
 *.suo
