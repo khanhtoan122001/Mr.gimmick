@@ -60,14 +60,20 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		{
 			x += dx;
 			y += dy;
+			if (dy != 0) {
+				if (dx > 0) ny = 1;
+				else if (dx < 0) ny = -1;
+				else ny = nx == 0 ? 1 : nx;
+			}
+			
 		}
 		else {
 			float min_tx, min_ty, nx = 0, ny;
-
+			this->ny = 0;
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 			// block 
-			x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+	 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 			y += min_ty * dy + ny * 0.4f;
 
 			if (nx != 0) vx = 0;
@@ -107,6 +113,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				if (dx > 0) {
 					y -= 0.014 * dt;
+					vx = 0.001f;
 				}
 				break;
 			case trigger:
@@ -150,17 +157,23 @@ bool check(Rect r, int vx, int vy, Rect obj, int &nx, int &ny, int dt) {
 
 void Nakiri::Render()
 {
-	int ani = NAKIRI_ANI_STAND;
-	if (vx == 0)
-	{
-		if (nx > 0) ani = NAKIRI_ANI_STAND;
-		else ani = NAKIRI_ANI_STAND;
+	int ani = NAKIRI_ANI_STAND_RIGHT;
+	if(ny == 0)
+		if (vx == 0)
+		{
+			if (nx >= 0) ani = NAKIRI_ANI_STAND_RIGHT;
+			else ani = NAKIRI_ANI_STAND_LEFT;
+		}
+		else if (vx > 0)
+			ani = NAKIRI_ANI_WALKING_RIGHT;
+		else ani = NAKIRI_ANI_WALKING_LEFT;
+	else {
+		if (ny > 0)
+			ani = NAKIRI_ANI_JUMP_RIGHT;
+		else
+			ani = NAKIRI_ANI_JUMP_LEFT;
 	}
-	else if (vx > 0)
-		ani = NAKIRI_ANI_STAND;
-	else ani = NAKIRI_ANI_STAND;
-
-	animations[0]->Render((int)x, (int)y);
+	animations[ani - NAKIRI_ANI_STAND_RIGHT]->Render((int)x, (int)y);
 	RenderBoundingBox();
 }
 

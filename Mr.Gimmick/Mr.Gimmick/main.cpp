@@ -21,9 +21,11 @@
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
-#define ID_NAKIRI 15
+#define ID_NAKIRI_RIGHT 15
+#define ID_NAKIRI_LEFT 16
 #define ID_TRAP 347
-#define ID_ENEMIES 1505987
+#define ID_ENEMIES_RIGHT 15058
+#define ID_ENEMIES_LEFT 15235
 #define ID_BOOM 16
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
@@ -160,10 +162,12 @@ void LoadResource() {
 	CTextures* textures = CTextures::GetInstance();
 	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,0,255));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
-	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
+	textures->Add(ID_NAKIRI_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
+	textures->Add(ID_NAKIRI_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro(1).png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
-	textures->Add(ID_ENEMIES, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57,189,255));
+	textures->Add(ID_ENEMIES_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57, 189, 255));
+	textures->Add(ID_ENEMIES_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Enemies(1).png", D3DCOLOR_XRGB(57,189,255));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
@@ -174,18 +178,46 @@ void LoadResource() {
 		}
 	}
 
+	
+
 	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
 	sprites->Add(12345, 2, 1, 15, 18, trap);
 	sprites->Add(12346, 19, 1, 32, 18, trap);
 	sprites->Add(12347, 36, 1, 49, 18, trap);
 	sprites->Add(12348, 53, 1, 66, 18, trap);
 
-	LPDIRECT3DTEXTURE9 texNakiri = textures->Get(ID_NAKIRI);
-	//stand
-	sprites->Add(10000, 2, 2, 18, 21, texNakiri);
-	sprites->Add(10001, 22, 2, 38, 21, texNakiri);
+	LPDIRECT3DTEXTURE9 texNakiriR = textures->Get(ID_NAKIRI_RIGHT);
+	//stand right
+	sprites->Add(10000, 2, 2, 18, 21, texNakiriR);
+	sprites->Add(10001, 22, 2, 38, 21, texNakiriR);
 
-	//walk
+	//walk right
+	sprites->Add(10002, 2, 24, 18, 43, texNakiriR);
+	sprites->Add(10003, 21, 24, 37, 43, texNakiriR);
+	sprites->Add(10004, 39, 24, 55, 43, texNakiriR);
+	sprites->Add(10005, 58, 24, 74, 43, texNakiriR);
+	sprites->Add(10006, 79, 24, 95, 43, texNakiriR);
+	sprites->Add(10007, 99, 24, 115, 43, texNakiriR);
+
+	sprites->Add(10016, 2, 46, 18, 70, texNakiriR);
+
+
+	LPDIRECT3DTEXTURE9 texNakiriL = textures->Get(ID_NAKIRI_LEFT);
+	//stand left
+	sprites->Add(10008, 399, 2, 415, 21, texNakiriL);
+	sprites->Add(10009, 379, 2, 395, 21, texNakiriL);
+
+	//walk left
+	sprites->Add(10010, 302, 24, 318, 43, texNakiriL);
+	sprites->Add(10011, 322, 24, 338, 43, texNakiriL);
+	sprites->Add(10012, 343, 24, 359, 43, texNakiriL);
+	sprites->Add(10013, 362, 24, 378, 43, texNakiriL);
+	sprites->Add(10014, 380, 24, 396, 43, texNakiriL);
+	sprites->Add(10015, 399, 24, 415, 43, texNakiriL);
+
+	sprites->Add(10017, 399, 46, 415, 70, texNakiriL);
+
+
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
 
@@ -263,7 +295,38 @@ void LoadResource() {
 	ani = new CAnimation(500);
 	ani->Add(10000);
 	ani->Add(10001);
-	animations->Add(NAKIRI_ANI_STAND, ani);
+	animations->Add(NAKIRI_ANI_STAND_RIGHT, ani);
+
+	ani = new CAnimation(50);
+	ani->Add(10002);
+	ani->Add(10003);
+	ani->Add(10004);
+	ani->Add(10005);
+	ani->Add(10006);
+	ani->Add(10007);
+	animations->Add(NAKIRI_ANI_WALKING_RIGHT, ani);
+
+	ani = new CAnimation(50);
+	ani->Add(10010);
+	ani->Add(10011);
+	ani->Add(10012);
+	ani->Add(10013);
+	ani->Add(10014);
+	ani->Add(10015);
+	animations->Add(NAKIRI_ANI_WALKING_LEFT, ani);
+
+	ani = new CAnimation(500);
+	ani->Add(10008);
+	ani->Add(10009);
+	animations->Add(NAKIRI_ANI_STAND_LEFT, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(10016);
+	animations->Add(NAKIRI_ANI_JUMP_RIGHT, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(10017);
+	animations->Add(NAKIRI_ANI_JUMP_LEFT, ani);
 	
 	ani = new CAnimation(10);
 	ani->Add(12345);
@@ -282,13 +345,23 @@ void LoadResource() {
 
 	nakiri = Nakiri::GetInstance();
 	nakiri->SetPosition(32, 16 * 12);
-	nakiri->AddAnimation(NAKIRI_ANI_STAND);
+	nakiri->AddAnimation(NAKIRI_ANI_STAND_RIGHT);
+	nakiri->AddAnimation(NAKIRI_ANI_WALKING_RIGHT);
+	nakiri->AddAnimation(NAKIRI_ANI_STAND_LEFT);
+	nakiri->AddAnimation(NAKIRI_ANI_WALKING_LEFT);
+	nakiri->AddAnimation(NAKIRI_ANI_JUMP_RIGHT);
+	nakiri->AddAnimation(NAKIRI_ANI_JUMP_LEFT);
 	objects.push_back(nakiri);
 
-	LPDIRECT3DTEXTURE9 enemies = textures->Get(ID_ENEMIES);
-	sprites->Add(11000, 2, 1, 18, 16, enemies);
-	sprites->Add(11001, 20, 1, 36, 16, enemies);
-	sprites->Add(11002, 38, 1, 54, 16, enemies);
+	LPDIRECT3DTEXTURE9 enemiesR = textures->Get(ID_ENEMIES_RIGHT);
+	sprites->Add(11000, 2, 1, 18, 17, enemiesR);
+	sprites->Add(11001, 20, 1, 36, 17, enemiesR);
+	sprites->Add(11002, 38, 1, 54, 17, enemiesR);
+
+	LPDIRECT3DTEXTURE9 enemiesL = textures->Get(ID_ENEMIES_LEFT);
+	sprites->Add(11005, 642, 1, 658, 17, enemiesL);
+	sprites->Add(11004, 660, 1, 676, 17, enemiesL);
+	sprites->Add(11003, 678, 1, 694, 17, enemiesL);
 
 	ani = new CAnimation(100);
 	ani->Add(11000);
@@ -296,9 +369,16 @@ void LoadResource() {
 	ani->Add(11002);
 	animations->Add(BOOM_ANI_WALK_RIGHT, ani);
 
+	ani = new CAnimation(100);
+	ani->Add(11003);
+	ani->Add(11004);
+	ani->Add(11005);
+	animations->Add(BOOM_ANI_WALK_LEFT, ani);
+
 	boom = Boom::GetInstance();
 	boom->SetPosition(32 * 6, 16 * 21);
 	boom->AddAnimation(BOOM_ANI_WALK_RIGHT);
+	boom->AddAnimation(BOOM_ANI_WALK_LEFT);
 	objects.push_back(boom);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {

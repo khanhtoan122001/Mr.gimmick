@@ -12,16 +12,11 @@ Boom* Boom::GetInstance()
 void Boom::Render()
 {
 	int ani = BOOM_ANI_WALK_RIGHT;
-	if (vx == 0)
-	{
-		if (nx > 0) ani = BOOM_ANI_WALK_RIGHT;
-		else ani = BOOM_ANI_WALK_RIGHT;
-	}
-	else if (vx > 0)
+	if (vx > 0)
 		ani = BOOM_ANI_WALK_RIGHT;
-	else ani = BOOM_ANI_WALK_RIGHT;
+	else ani = BOOM_ANI_WALK_LEFT;
 
-	animations[0]->Render((int)x, (int)y);
+	animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
 }
 
 Rect Boom::GetBoundingBox()
