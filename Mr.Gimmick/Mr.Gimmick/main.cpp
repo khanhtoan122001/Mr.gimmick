@@ -17,11 +17,15 @@
 #include "Quadtree.h"
 #include "Rect.h"
 #include "Trap.h"
+#include "boom.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
 #define ID_NAKIRI 15
 #define ID_TRAP 347
+#define ID_ENEMIES 1505987
+#define ID_BOOM 16
+
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"Gimmick"
 #define STARTPOS_STAGE_1_X 32
@@ -37,8 +41,7 @@
 #define STAGE_3_MAP_BR Point(82,48)
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 256
+
 
 #define SPRITE_WIDTH 16
 #define SPRITE_HEIGHT 16
@@ -52,6 +55,7 @@
 #define TRAP_NORMAL 344
 CGame* game;
 Nakiri* nakiri;
+Boom* boom;
 Quadtree* quadtree;
 Trap tp[2];
 Trigger trigg;
@@ -75,11 +79,10 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	}
 }
 
-Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list)
+Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list, Point p)
 {
 	// Init base game region for detecting collision
-	Quadtree* quadtree = new Quadtree(1, new Rect(Point(CGame::GetInstance()->getCamPos()/* - Point(GAME_PLAY_WIDTH * 16, GAME_PLAY_HEIGHT * 16)*/),
-		(GAME_PLAY_WIDTH * 1.5) * 16, (GAME_PLAY_HEIGHT * 1.5) * 16));
+	Quadtree* quadtree = new Quadtree(1, new Rect(p - Point(5, 5) * 16, p + Point(5, 5) * 16));
 	for (auto i = list.begin(); i != list.end(); i++)
 		quadtree->Insert(*i);
 
@@ -111,7 +114,7 @@ void CSampleKeyHander::KeyState(BYTE* states)
 }
 
 vector<vector<int>> MapTile, MapObj;
-vector<LPGAMEOBJECT> objects, screenObj, actObj;
+vector<LPGAMEOBJECT> objects, screenObj, actObj, moveObj;
 vector<LPGAMEOBJECT>* coObj = new vector<LPGAMEOBJECT>();
 
 LPDIRECT3DTEXTURE9 texMap1;
@@ -137,10 +140,8 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-void UpdateActObj() {
-	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
-	cx = nakiri->GetPos().x;
-	cy = nakiri->GetPos().y;
+void UpdateActObj(Point p) {
+	float cx = p.x, cy = p.y;
 	int stx = int(cx / BRICK_HEIGHT) - 5, sty = int(cy / BRICK_WIDTH) - 5;
 	if (stx < 0) stx = 0;
 	if (sty < 0) sty = 0;
@@ -162,6 +163,7 @@ void LoadResource() {
 	textures->Add(ID_NAKIRI, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_ENEMIES, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57,189,255));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
@@ -194,6 +196,8 @@ void LoadResource() {
 			animations->Add(j * 14 + i, ani);
 		}
 	}
+	
+
 	ani = new CAnimation(100);
 	ani->Add(1132);
 	ani->Add(1133);
@@ -268,10 +272,6 @@ void LoadResource() {
 	ani->Add(12348);
 	animations->Add(TRAP_NORMAL, ani);
 
-	nakiri = new Nakiri(33, 288);
-	nakiri->AddAnimation(NAKIRI_ANI_STAND);
-	objects.push_back(nakiri);
-
 	tp[0].SetPosition(864, 416);
 	tp[1].SetPosition(816, 416);
 	for (int i = 0; i < 2; i++)
@@ -279,6 +279,27 @@ void LoadResource() {
 		tp[i].AddAnimation(TRAP_NORMAL);
 	}
 	
+
+	nakiri = Nakiri::GetInstance();
+	nakiri->SetPosition(32, 16 * 12);
+	nakiri->AddAnimation(NAKIRI_ANI_STAND);
+	objects.push_back(nakiri);
+
+	LPDIRECT3DTEXTURE9 enemies = textures->Get(ID_ENEMIES);
+	sprites->Add(11000, 2, 1, 18, 16, enemies);
+	sprites->Add(11001, 20, 1, 36, 16, enemies);
+	sprites->Add(11002, 38, 1, 54, 16, enemies);
+
+	ani = new CAnimation(100);
+	ani->Add(11000);
+	ani->Add(11001);
+	ani->Add(11002);
+	animations->Add(BOOM_ANI_WALK_RIGHT, ani);
+
+	boom = Boom::GetInstance();
+	boom->SetPosition(32 * 6, 16 * 21);
+	boom->AddAnimation(BOOM_ANI_WALK_RIGHT);
+	objects.push_back(boom);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
 
@@ -403,6 +424,7 @@ void Render()
 
 		Render_Map();
 		nakiri->Render();
+		boom->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -449,10 +471,22 @@ void Update(DWORD dt) {
 
 	coObj->clear();
 
-	UpdateActObj();
+	UpdateActObj(boom->GetPos());
+
+	quadtree = CreateQuadTree(actObj, boom->GetPos());
+
+	quadtree->Retrieve(coObj, boom);
+
+	boom->Update(dt, coObj);
+
+	quadtree->~Quadtree();
+
+	coObj->clear();
+
+	UpdateActObj(nakiri->GetPos());
 
 	//coObj = &actObj;
-	quadtree = CreateQuadTree(actObj);
+	quadtree = CreateQuadTree(actObj, nakiri->GetPos());
 
 	quadtree->Retrieve(coObj, nakiri);
 
@@ -467,6 +501,8 @@ void Update(DWORD dt) {
 		tp[i].Update(dt);
 	}
 
+	/*for (int i = 0; i < actObj.size(); i++)
+		actObj.at(i)->Update(dt);*/
 
 	nakiri->GetPosition(cx, cy);
 
