@@ -1,9 +1,9 @@
-﻿  Game.cpp
+﻿  GameObject.cpp
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
-C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(14,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.h(14,1): warning C4005: 'DIRECTINPUT_VERSION': macro redefinition
 C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h(42): message : see previous definition of 'DIRECTINPUT_VERSION'
-C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.cpp(288,26): warning C4305: '=': truncation from '__int64' to 'float'
-C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.cpp(289,24): warning C4305: '=': truncation from '__int64' to 'float'
-C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.cpp(299,26): warning C4305: '=': truncation from '__int64' to 'float'
-C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\Game.cpp(300,24): warning C4305: '=': truncation from '__int64' to 'float'
-  Mr.Gimmick.vcxproj -> C:\Users\ADMIN\Documents\GitHub\Mr.gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.cpp(39,17): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.cpp(40,18): warning C4244: '=': conversion from 'float' to 'LONG', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.cpp(42,43): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Github\Mr.gimmick\Mr.Gimmick\Mr.Gimmick\GameObject.cpp(42,34): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Mr.Gimmick.vcxproj -> D:\Github\Mr.gimmick\Mr.Gimmick\Debug\Mr.Gimmick.exe

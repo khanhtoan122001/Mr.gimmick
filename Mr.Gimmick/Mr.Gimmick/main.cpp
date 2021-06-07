@@ -268,7 +268,7 @@ void LoadResource() {
 	ani->Add(12348);
 	animations->Add(TRAP_NORMAL, ani);
 
-	nakiri = new Nakiri(32, 288);
+	nakiri = new Nakiri(33, 288);
 	nakiri->AddAnimation(NAKIRI_ANI_STAND);
 	objects.push_back(nakiri);
 
@@ -341,11 +341,15 @@ void LoadMap(string MapFile) {
 		{
 			style = (slide_right);
 		}
-		else if (id == 1356 || id == 1358){
+		else if (id == 1405 || id == 1406){
 			style = trigger;
 			des = 0;
 		}
-		else if (id == 1355 || id == 1357)
+		else if (id == 1408) {
+			style = trigger;
+			//des = 0;
+		}
+		else if (id == 1403 || id == 1404)
 		{
 			style = trigger;
 			des = 1;
@@ -363,7 +367,8 @@ void LoadMap(string MapFile) {
 		if (style == trigger) {
 			Trigger* trigg = new Trigger();
 			trigg->SetPenetrable(true);
-			trigg->setTrap(&tp[des]);
+			if(des >= 0)
+				trigg->setTrap(&tp[des]);
 			Obj(trigg, i, style, p, w, h);
 		}
 		else {

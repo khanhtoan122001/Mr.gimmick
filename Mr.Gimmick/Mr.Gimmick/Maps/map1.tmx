@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="128" height="101" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1400">
+<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="128" height="101" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="1411">
  <editorsettings>
   <export target="map1.json" format="json"/>
  </editorsettings>
@@ -157,10 +157,7 @@
   <object id="1086" x="1008" y="400" width="16" height="64"/>
   <object id="1087" x="976" y="384" width="16" height="48"/>
   <object id="1088" x="960" y="416" width="16" height="16"/>
-  <object id="1092" x="864" y="512" width="48" height="16"/>
-  <object id="1093" x="864" y="528" width="16" height="16"/>
   <object id="1094" x="832" y="544" width="32" height="16"/>
-  <object id="1095" x="816" y="512" width="16" height="32"/>
   <object id="1099" x="688" y="544" width="16" height="16"/>
   <object id="1104" x="560" y="512" width="16" height="64"/>
   <object id="1109" x="592" y="592" width="48" height="16"/>
@@ -315,7 +312,6 @@
   <object id="1302" x="960" y="464" width="48" height="16"/>
   <object id="1303" x="912" y="464" width="48" height="48"/>
   <object id="1304" x="912" y="512" width="16" height="16"/>
-  <object id="1305" x="800" y="512" width="16" height="16"/>
   <object id="1306" x="768" y="512" width="32" height="32"/>
   <object id="1307" x="768" y="544" width="16" height="16"/>
   <object id="1309" x="592" y="496" width="32" height="16"/>
@@ -358,12 +354,6 @@
   <object id="1349" x="1872" y="240" width="32" height="32"/>
   <object id="1350" x="1936" y="240" width="32" height="32"/>
   <object id="1351" x="1952" y="272" width="16" height="16"/>
-  <object id="1352" x="816" y="416" width="16" height="16"/>
-  <object id="1353" x="864" y="416" width="16" height="16"/>
-  <object id="1355" x="816" y="432" width="16" height="64"/>
-  <object id="1356" x="864" y="432" width="16" height="64"/>
-  <object id="1357" x="816" y="496" width="16" height="16"/>
-  <object id="1358" x="864" y="496" width="16" height="16"/>
   <object id="1363" x="832" y="608" width="16" height="16"/>
   <object id="1364" x="864" y="608" width="16" height="16"/>
   <object id="1365" x="896" y="608" width="16" height="16"/>
@@ -401,5 +391,11 @@
   <object id="1397" x="560" y="496" width="16" height="16"/>
   <object id="1398" x="576" y="496" width="16" height="16"/>
   <object id="1399" x="720" y="544" width="16" height="16"/>
+  <object id="1400" x="800" y="512" width="32" height="32"/>
+  <object id="1403" x="816" y="416" width="16" height="48"/>
+  <object id="1404" x="816" y="464" width="16" height="48"/>
+  <object id="1405" x="864" y="416" width="16" height="48"/>
+  <object id="1406" x="864" y="464" width="16" height="48"/>
+  <object id="1410" x="864" y="512" width="48" height="32"/>
  </objectgroup>
 </map>

@@ -313,7 +313,7 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
 	if (t_entry > t_exit) return;
 
-  	t = !penetrable ? t_entry : 0.99f;
+  	t = t_entry;
 
 	if (tx_entry > ty_entry )
 	{

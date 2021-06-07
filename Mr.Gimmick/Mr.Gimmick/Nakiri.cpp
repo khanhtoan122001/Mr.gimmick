@@ -112,7 +112,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			case trigger:
 			{
 				Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
-				trigg->getTrap()->SetSpeed(0, 0.02);
+				if(trigg->getTrap() != NULL)
+					trigg->getTrap()->SetSpeed(0, 0.02);
 			}
 				break;
 			default:
