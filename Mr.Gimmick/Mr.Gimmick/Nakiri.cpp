@@ -18,6 +18,7 @@ Nakiri::Nakiri(float x, float y)
 {
 	style = main_c;
 	untouchable = 0;
+	isSlip = false;
 
 	start_x = x;
 	start_y = y;
@@ -51,6 +52,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			untouchable = 0;
 		}
 
+		if (this->state == NAKIRI_STATE_JUMP) isSlip = false;
+
 		coEvents.clear();
 
 		if (state != NAKIRI_STATE_DIE)
@@ -60,12 +63,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		{
 			x += dx;
 			y += dy;
-			if (dy != 0) {
-				if (dx > 0) ny = 1;
-				else if (dx < 0) ny = -1;
-				else ny = nx == 0 ? 1 : nx;
+			if (!isSlip) {
+				if (dy != 0) {
+					if (dx > 0) ny = 1;
+					else if (dx < 0) ny = -1;
+					else ny = nx == 0 ? 1 : nx;
+				}
 			}
-			
+			else ny = 0;
 		}
 		else {
 			float min_tx, min_ty, nx = 0, ny;
@@ -82,7 +87,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 
 		/*x = (int)x + 0.0001f;
 		y = (int)y + 0.0001f;*/
-		
+		bool slip = false;
 		for (UINT i = 0; i < coEvents.size(); i++) {
 			LPCOLLISIONEVENT e = coEvents[i];
 			switch (e->obj->getType())
@@ -107,13 +112,17 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					break;
 				}
 			case diagonal_left:
+				slip = true;
 				if (dx == 0) {
-					x -= NAKIRI_WALKING_SPEED * 0.1 * dt;
+					x -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
 					y += NAKIRI_GRAVITY * dt;
 				}
 				if (dx > 0) {
 					y -= 0.014 * dt;
 					vx = 0.001f;
+				}
+				if (dx < 0) {
+					ny = 0;
 				}
 				break;
 			case trigger:
@@ -127,7 +136,9 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				break;
 			}
 		}
-
+		if(coEvents.size() != 0)
+			if (slip) isSlip = true;
+			else isSlip = false;
  		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){

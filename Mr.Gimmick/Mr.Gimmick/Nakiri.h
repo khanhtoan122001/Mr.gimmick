@@ -32,6 +32,8 @@ class Nakiri : public GameObject
 	int untouchable;
 	DWORD untouchable_start;
 
+	bool isSlip;
+
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 public:
