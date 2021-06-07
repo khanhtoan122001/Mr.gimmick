@@ -107,6 +107,8 @@ public:
 	void RenderBoundingBox();
 	virtual Rect GetBoundingBox() = 0;
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b) = 0;
+	Point GetPos() { return Point(x, y); }
+
 
 	Style getType() { return this->style; }
 

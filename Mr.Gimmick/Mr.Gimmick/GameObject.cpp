@@ -14,7 +14,7 @@ GameObject::GameObject()
 	penetrable = false;
 	x = y = 0;
 	vx = vy = 0;
-	nx = 1;
+	nx = 0;
 }
 
 GameObject::~GameObject()
@@ -124,7 +124,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		CGame::SweptAABB(
 			ml, mt, mr, mb,
 			0, dy,
-			p.x - BRICK_WIDTH, p.y, p.x, p.y + BRICK_HEIGHT,
+			p.x - 1, p.y, p.x + 16, p.y + BRICK_HEIGHT,
 			t, nx, ny, coO->GetPenetrable()
 		);
 

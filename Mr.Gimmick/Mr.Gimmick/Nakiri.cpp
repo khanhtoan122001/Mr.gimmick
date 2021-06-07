@@ -26,7 +26,17 @@ Nakiri::Nakiri(float x, float y)
 
 void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
+
 	GameObject::Update(dt);
+
+	/*if (nx == 1)
+		vx += dt * NAKIRI_WALKING_SPEED;
+	else if (nx == -1)
+		vx -= dt * NAKIRI_WALKING_SPEED;
+	else {
+		if (vx > 0) vx = vx - dt * NAKIRI_WALKING_SPEED < 0 ? 0 : vx - dt * NAKIRI_WALKING_SPEED;
+		if (vx < 0) vx = vx + dt * NAKIRI_WALKING_SPEED > 0 ? 0 : vx + dt * NAKIRI_WALKING_SPEED;
+	}*/
 
 	if (colliable_objects != NULL) {
 		if(vy < NAKIRI_JUMP_SPEED * 1.5)
@@ -69,15 +79,15 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 			y += min_ty * dy + ny * 0.4f;
 
-			if (nx != 0) vx = 0;
+			if (nx != 0) 
+				vx = 0;
 			if (ny != 0) vy = 0;
 		}
 
-		/*x = (int)x + 0.0001f;
-		y = (int)y + 0.0001f;*/
+		
 
-		for (UINT i = 0; i < coEventsResult.size(); i++) {
-			LPCOLLISIONEVENT e = coEventsResult[i];
+		for (UINT i = 0; i < coEvents.size(); i++) {
+			LPCOLLISIONEVENT e = coEvents[i];
 			switch (e->obj->getType())
 			{
 			case slide_left:
@@ -103,16 +113,16 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (dx == 0) {
 					x -= NAKIRI_WALKING_SPEED * 0.1 * dt;
 					y += NAKIRI_GRAVITY * dt;
-				}
-				if (dx > 0) {
-					y -= 0.014 * dt;
+				} else /*if (dx > 0) */{
+					y -= dx * (e->obj->height/e->obj->width);
 				}
 				break;
 			default:
 				break;
 			}
 		}
-
+		x = (int)x + 0.0001f;
+		y = (int)y + 0.0001f;
  		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
@@ -153,7 +163,7 @@ void Nakiri::Render()
 	else ani = NAKIRI_ANI_STAND;
 
 	animations[0]->Render((int)x, (int)y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Nakiri::SetState(int state)
@@ -166,18 +176,12 @@ void Nakiri::SetState(int state)
 		nx = 1;
 		break;
 	case NAKIRI_STATE_WALKING_LEFT:
-		vx = -NAKIRI_WALKING_SPEED;// / 2;
+		vx = -NAKIRI_WALKING_SPEED / 2;
 		nx = -1;
 		break;
 	case NAKIRI_STATE_JUMP:
 		vy = -NAKIRI_JUMP_SPEED;
-	/*case NAKIRI_STATE_DOWN:
-		vy = NAKIRI_WALKING_SPEED;
 		break;
-	case NAKIRI_STATE_UP:
-		vy = -NAKIRI_WALKING_SPEED;
-		break;*/
-
 	case NAKIRI_STATE_STAND:
 		vx = 0;
 		break;
