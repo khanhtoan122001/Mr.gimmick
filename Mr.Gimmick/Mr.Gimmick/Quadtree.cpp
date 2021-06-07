@@ -23,6 +23,9 @@ bool Quadtree::IsContain(LPGAMEOBJECT entity)
 {
     Rect* bound = new Rect(entity->GetBoundingBox());
 
+    bound->tf = bound->tf - Point(8, 8);
+    bound->br = bound->br - Point(8, 8);
+
     return !(bound->tf.x + bound->width() < m_region->tf.x ||
         bound->tf.y + bound->height() < m_region->tf.y ||
         bound->tf.x > m_region->tf.x + m_region->width() ||
