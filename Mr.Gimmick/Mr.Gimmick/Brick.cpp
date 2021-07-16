@@ -22,3 +22,20 @@ void Brick::GetBoundingBox(float& l, float& t, float& r, float& b)
 	r = x + this->width;
 	b = y + this->height;
 }
+
+void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
+{
+	dx = dy = 0;
+
+	GameObject::Update(dt, coObjects);
+	x += dx;
+	y += dy;
+	if (this->style == move_brick) {
+		if (x >= maxx || x <= minx) {
+			vx *= -1;
+			//if (x > maxx) maxx = x;
+		}
+		if (y >= maxy || y <= miny)
+			vy *= -1;
+	}
+}

@@ -14,7 +14,7 @@
 class GameObject;
 typedef GameObject* LPGAMEOBJECT;
 
-enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left, slide_right, spike, trap, trigger};
+enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left, slide_right, spike, trap, trigger, move_brick};
 
 struct CCollisionEvent;
 typedef CCollisionEvent* LPCOLLISIONEVENT;
@@ -61,6 +61,8 @@ public:
 
 	int nx;
 	int ny;
+
+	int maxx, maxy, minx, miny;
 
 	int state;
 

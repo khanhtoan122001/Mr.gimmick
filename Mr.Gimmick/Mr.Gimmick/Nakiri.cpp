@@ -28,6 +28,8 @@ Nakiri::Nakiri(float x, float y)
 
 void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
+	dx = dy = 0;
+
 	GameObject::Update(dt);
 
 	if (colliable_objects != NULL) {
@@ -107,10 +109,6 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					StartUntouchable();
 					break;
 				}
-			case normal_brick:
-				{
-					break;
-				}
 			case diagonal_left:
 				slip = true;
 				if (dx == 0) {
@@ -124,6 +122,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (dx < 0) {
 					ny = 0;
 				}
+				break;
+			case move_brick:
+				x += e->obj->dx * 2;
+				y += e->obj->dy > 0? e->obj->dy - 1 : e->obj->dy + 1;
 				break;
 			case trigger:
 			{
@@ -139,7 +141,6 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		if(coEvents.size() != 0)
 			if (slip) isSlip = true;
 			else isSlip = false;
- 		dx = dy = 0;
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
 			r = return_list->at(i)->GetBoundingBox();

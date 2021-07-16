@@ -153,6 +153,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="line.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
     <ClCompile Include="Nakiri.cpp" />
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Quadtree.cpp" />
@@ -168,6 +169,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="line.h" />
+    <ClInclude Include="map.h" />
     <ClInclude Include="Nakiri.h" />
     <ClInclude Include="Point.h" />
     <ClInclude Include="Quadtree.h" />

@@ -14,6 +14,7 @@
 #include "Nakiri.h"
 #include "Point.h"
 #include <unordered_map>
+#include "map.h"
 #include "Quadtree.h"
 #include "Rect.h"
 #include "Trap.h"
@@ -33,14 +34,6 @@
 #define STARTPOS_STAGE_1_X 32
 #define STARTPOS_STAGE_1_Y 80
 
-#define STAGE_1_MAP_TF Point(0,0)
-#define STAGE_1_MAP_BR Point(65,24)
-
-#define STAGE_2_MAP_TF Point(32,24)
-#define STAGE_2_MAP_BR Point(65,36)
-
-#define STAGE_3_MAP_TF Point(32,37)
-#define STAGE_3_MAP_BR Point(82,48)
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 
@@ -61,6 +54,8 @@ Boom* boom;
 Quadtree* quadtree;
 Trap tp[2];
 Trigger trigg;
+Map* map;
+
 class CSampleKeyHander : public CKeyEventHandler
 {
 	virtual void KeyState(BYTE* states);
@@ -442,6 +437,9 @@ void LoadMap(string MapFile) {
 		{
 			style = (slide_right);
 		}
+		else if (id == 1290) {
+			style = slide_left;
+		}
 		else if (id == 1405 || id == 1406){
 			style = trigger;
 			des = 0;
@@ -514,18 +512,7 @@ void Render()
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
-void updateStage(float x, float y) {
-	Rect rect(STAGE_1_MAP_TF * 16, STAGE_1_MAP_BR * 16);
-	Point p(x, y);
-	if (rect.isIn(p))
-		Stage = 1;
-	rect = Rect(STAGE_2_MAP_TF * 16, STAGE_2_MAP_BR * 16);
-	if (rect.isIn(p))
-		Stage = 2;
-	rect = Rect(STAGE_3_MAP_TF * 16, STAGE_3_MAP_BR * 16);
-	if (rect.isIn(p))
-		Stage = 3;
-}
+
 
 void setCam(float x, float y) {
 	int ox = (int)CGame::GetInstance()->GetCamPos_x();
@@ -570,31 +557,32 @@ void Update(DWORD dt) {
 
 	quadtree->Retrieve(coObj, nakiri);
 
-	nakiri->Update(dt, coObj);
+	nakiri->GetPosition(cx, cy);
 
-	for (int i = 0; i < screenObj.size(); i++)
+	Map::GetInstance()->updateMap(cx, cy, tf, br, coObj);
+
+	for (int i = 0; i < coObj->size(); i++)
 	{
-		screenObj.at(i)->Update(dt);
+		coObj->at(i)->Update(dt);
 	}
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i].Update(dt);
 	}
 
+	nakiri->Update(dt, coObj);
+
 	/*for (int i = 0; i < actObj.size(); i++)
 		actObj.at(i)->Update(dt);*/
-
-	nakiri->GetPosition(cx, cy);
-
-	updateStage(cx,cy);
-	updateLimit(Stage);
 
 	setCam(cx, cy);
 }
 
 void Render_Map() {
-
 	float cx = CGame::GetInstance()->GetCamPos_x(), cy = CGame::GetInstance()->GetCamPos_y();
+
+	//Map::GetInstance()->updateMap(nakiri->x, nakiri->y, tf, br, coObj);
+
 	screenObj.clear();
 	int stx = int(cx / BRICK_HEIGHT), sty = int(cy / BRICK_WIDTH);
 	if (stx < 0) stx = 0;
@@ -710,26 +698,6 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 	UpdateWindow(hWnd);
 
 	return hWnd;
-}
-void updateLimit(int stage) {
-	switch (stage)
-	{
-	case 1:
-		tf = STAGE_1_MAP_TF;
-		br = STAGE_1_MAP_BR;
-		break;
-	case 2:
-		tf = STAGE_2_MAP_TF;
-		br = STAGE_2_MAP_BR;
-		break;
-	case 3:
-		tf = STAGE_3_MAP_TF;
-		br = STAGE_3_MAP_BR;
-	default:
-		break;
-	}
-	tf *= BRICK_HEIGHT;
-	br *= BRICK_WIDTH;
 }
 
 
