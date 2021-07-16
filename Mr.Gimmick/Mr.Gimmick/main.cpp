@@ -434,13 +434,17 @@ void LoadMap(string MapFile) {
 		Style style;
 		int des = -1;
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1301)
+		if (id == 1301 || id == 1279)
 		{
 			style = (diagonal_left);
 		}
-		else if (id == 1289)
+		else if (id == 1289 || id == 1411)
 		{
 			style = (slide_right);
+		}
+		else if (id == 1290 || id == 1038 || id == 1062 || id == 1288)
+		{
+			style = (slide_left);
 		}
 		else if (id == 1405 || id == 1406){
 			style = trigger;
