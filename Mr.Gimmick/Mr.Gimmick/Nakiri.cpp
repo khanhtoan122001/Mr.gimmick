@@ -123,6 +123,20 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					ny = 0;
 				}
 				break;
+			case diagonal_right:
+				slip = true;
+				if (dx == 0) {
+					x += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
+					y += NAKIRI_GRAVITY * dt;
+				}
+				if (dx > 0) {
+					ny = 0;
+				}
+				if (dx < 0) {
+					y -= 0.014 * dt;
+					vx = -0.001f;
+				}
+				break;
 			case move_brick:
 				x += e->obj->vx * dt * 2;
 				y += e->obj->vy * dt;

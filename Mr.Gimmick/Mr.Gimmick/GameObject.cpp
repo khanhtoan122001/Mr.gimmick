@@ -99,7 +99,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 	mt = r.tf.y;
 	mr = r.br.x;
 	mb = r.br.y;
-	if (style == diagonal_left) {  
+	if (style == diagonal_left) {
 		Line mLine(Point(mr, mb), Point(mr, mb) + Point(dx, dy));
 		Line sLine = coO->getLine();
 		Point p;
@@ -114,7 +114,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 			CGame::SweptAABB(
 				ml, mt, mr, mb,
 				dx, 0,
-				p.x, p.y - BRICK_HEIGHT / 2, p.x + BRICK_WIDTH, p.y,
+				p.x, p.y - BRICK_HEIGHT, p.x + BRICK_WIDTH, p.y + 2,
 				t, nx, ny, coO->GetPenetrable()
 			);
 			e.push_back(new CCollisionEvent(t, nx, ny, coO));
@@ -123,7 +123,38 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		CGame::SweptAABB(
 			ml, mt, mr, mb,
 			0, dy,
-			p.x - 2, p.y, p.x + 8, p.y + BRICK_HEIGHT,
+			p.x - 4, p.y, p.x + 16, p.y + BRICK_HEIGHT,
+			t, nx, ny, coO->GetPenetrable()
+		);
+
+		e.push_back(new CCollisionEvent(t, nx, ny, coO));
+		return e;
+	}
+	else if (style == diagonal_right) {
+		Line mLine(Point(ml, mb), Point(ml, mb) + Point(dx, dy));
+		Line sLine = coO->getLine();
+		Point p;
+		if (mLine.isIntersecting(sLine))
+			p = mLine.intersectingWithLine(sLine);
+
+		vector<CCollisionEvent*> e;
+
+		if (p.x < sl || p.x > sr || (mb + dy < st))
+			return e;
+		if (dx != 0) {
+			CGame::SweptAABB(
+				ml, mt, mr, mb,
+				dx, 0,
+				p.x - BRICK_WIDTH, p.y - BRICK_HEIGHT, p.x, p.y + 2,
+				t, nx, ny, coO->GetPenetrable()
+			);
+			e.push_back(new CCollisionEvent(t, nx, ny, coO));
+		}
+
+		CGame::SweptAABB(
+			ml, mt, mr, mb,
+			0, dy,
+			p.x - 16, p.y, p.x + 16, p.y + BRICK_HEIGHT,
 			t, nx, ny, coO->GetPenetrable()
 		);
 

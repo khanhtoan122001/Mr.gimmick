@@ -428,15 +428,18 @@ void LoadMap(string MapFile) {
 		Style style;
 		int des = -1;
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1301)
+		if (id == 1433 || id == 1439 || id == 1446 || id == 1498 || id == 1494 || id == 1518)
 		{
 			style = (diagonal_left);
 		}
-		else if (id == 1289)
+		else if (id == 1435 || id == 1441 || id == 1486 || id == 1487 || id == 1512) {
+			style = diagonal_right;
+		}
+		else if (id == 1466)
 		{
 			style = (slide_right);
 		}
-		else if (id == 1290) {
+		else if (id == 1467) {
 			style = slide_left;
 		}
 		else if (id == 1405 || id == 1406){
@@ -451,9 +454,6 @@ void LoadMap(string MapFile) {
 		{
 			style = trigger;
 			des = 1;
-		}
-		else if (id == 1303) {
-			style = (diagonal_left);
 		}
 		else
 			style = normal_brick;
