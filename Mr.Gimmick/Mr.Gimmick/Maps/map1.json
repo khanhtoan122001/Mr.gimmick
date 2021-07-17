@@ -1667,61 +1667,6 @@
                  "y":1440
                 }, 
                 {
-                 "height":64,
-                 "id":1563,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1856,
-                 "y":992
-                }, 
-                {
-                 "height":32,
-                 "id":1564,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1888,
-                 "y":992
-                }, 
-                {
-                 "height":64,
-                 "id":1565,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1568,
-                 "y":1056
-                }, 
-                {
-                 "height":64,
-                 "id":1566,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1216,
-                 "y":1024
-                }, 
-                {
-                 "height":32,
-                 "id":1567,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1088,
-                 "y":704
-                }, 
-                {
                  "height":32,
                  "id":1568,
                  "name":"",
@@ -1744,28 +1689,6 @@
                  "y":704
                 }, 
                 {
-                 "height":64,
-                 "id":1570,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1664,
-                 "y":672
-                }, 
-                {
-                 "height":32,
-                 "id":1571,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1632,
-                 "y":704
-                }, 
-                {
                  "height":32,
                  "id":1572,
                  "name":"",
@@ -1775,6 +1698,50 @@
                  "width":96,
                  "x":1696,
                  "y":704
+                }, 
+                {
+                 "height":32,
+                 "id":1573,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1856,
+                 "y":1024
+                }, 
+                {
+                 "height":32,
+                 "id":1574,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1184,
+                 "y":1056
+                }, 
+                {
+                 "height":64,
+                 "id":1575,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":32,
+                 "x":1920,
+                 "y":992
+                }, 
+                {
+                 "height":32,
+                 "id":1576,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1632,
+                 "y":704
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1783,7 +1750,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":1573,
+ "nextobjectid":1577,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

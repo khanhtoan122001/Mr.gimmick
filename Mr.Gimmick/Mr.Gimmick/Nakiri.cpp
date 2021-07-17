@@ -116,7 +116,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					y += NAKIRI_GRAVITY * dt;
 				}
 				if (dx > 0) {
-					y -= 0.014 * dt;
+					y -= 0.028 * dt;
 					vx = 0.001f;
 				}
 				if (dx < 0) {
@@ -133,7 +133,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					ny = 0;
 				}
 				if (dx < 0) {
-					y -= 0.014 * dt;
+					y -= 0.028 * dt;
 					vx = -0.001f;
 				}
 				break;
