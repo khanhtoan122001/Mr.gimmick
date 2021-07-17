@@ -8,8 +8,8 @@
 #include "line.h"
 //#include "Animation.h"
 #define ID_TEX_BBOX 303
-#define BRICK_WIDTH 16
-#define BRICK_HEIGHT 16
+#define BRICK_WIDTH 32
+#define BRICK_HEIGHT 32
 
 class GameObject;
 typedef GameObject* LPGAMEOBJECT;

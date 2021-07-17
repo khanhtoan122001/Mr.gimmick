@@ -23,10 +23,10 @@ Map::Map()
 	mbrick->SetStyle(move_brick);
 
 	mbrick->SetWidthHeight(32, 16);
-	mbrick->SetPosition(80, 256);
-	mbrick->SetSpeed(0, 0.05);
-	mbrick->maxx = 128;
-	mbrick->minx = 64;
+	mbrick->SetPosition(80 + 256, 256);
+	mbrick->SetSpeed(0.05, 0);
+	mbrick->maxx = 128 + 256;
+	mbrick->minx = 64 + 256;
 	mbrick->maxy = 288;
 	mbrick->miny = 224;
 	mbrick->AddAnimation(0);
@@ -46,14 +46,14 @@ Map* Map::GetInstance()
 void Map::updateMap(float x, float y, Point& tf, Point& br, vector<LPGAMEOBJECT>* objs)
 {
 	this->listObj = objs;
-	Rect rect(STAGE_1_MAP_TF * 16, STAGE_1_MAP_BR * 16);
+	Rect rect(STAGE_1_MAP_TF * BRICK_WIDTH, STAGE_1_MAP_BR * BRICK_HEIGHT);
 	Point p(x, y);
 	if (rect.isIn(p))
 		this->Stage = 1;
-	rect = Rect(STAGE_2_MAP_TF * 16, STAGE_2_MAP_BR * 16);
+	rect = Rect(STAGE_2_MAP_TF * BRICK_WIDTH, STAGE_2_MAP_BR * BRICK_HEIGHT);
 	if (rect.isIn(p))
 		this->Stage = 2;
-	rect = Rect(STAGE_3_MAP_TF * 16, STAGE_3_MAP_BR * 16);
+	rect = Rect(STAGE_3_MAP_TF * BRICK_WIDTH, STAGE_3_MAP_BR * BRICK_HEIGHT);
 	if (rect.isIn(p))
 		this->Stage = 3;
 	switch (this->Stage)

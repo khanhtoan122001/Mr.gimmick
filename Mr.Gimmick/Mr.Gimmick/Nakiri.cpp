@@ -124,8 +124,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				break;
 			case move_brick:
-				x += e->obj->dx * 2;
-				y += e->obj->dy > 0? e->obj->dy - 1 : e->obj->dy + 1;
+				x += e->obj->vx * dt * 2;
+				y += e->obj->vy * dt;
 				break;
 			case trigger:
 			{
@@ -231,5 +231,5 @@ void Nakiri::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 Rect Nakiri::GetBoundingBox()
 {
-	return Rect(Point(x, y + 3), NAKIRI_WIDTH - 0.5, NAKIRI_HEIGHT - 0.5);
+	return Rect(Point(x, y + 6), NAKIRI_WIDTH - 1, NAKIRI_HEIGHT - 1);
 }

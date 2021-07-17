@@ -3,8 +3,8 @@
 #include "Game.h"
 #include "Nakiri.h"
 
-#define BOOM_WIDTH 16
-#define BOOM_HEIGHT 16
+#define BOOM_WIDTH 32
+#define BOOM_HEIGHT 32
 
 #define BOOM_ANI_WALK_RIGHT 156505
 #define BOOM_ANI_WALK_LEFT 156506

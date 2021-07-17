@@ -17,8 +17,8 @@
 #define GAME_PLAY_WIDTH 16
 #define GAME_PLAY_HEIGHT 12
 
-#define SCREEN_WIDTH 256
-#define SCREEN_HEIGHT 256
+#define SCREEN_WIDTH 512
+#define SCREEN_HEIGHT 512
 
 class CKeyEventHandler
 {

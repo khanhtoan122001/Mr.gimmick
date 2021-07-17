@@ -86,7 +86,6 @@ Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list, Point p)
 	return quadtree;
 }
 
-void updateLimit(int stage);
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
@@ -169,48 +168,48 @@ void LoadResource() {
 
 	for (int j = 0; j < 23; j++) {
 		for (int i = 0; i < 14; i++) {
-			sprites->Add(j * 14 + i + 1000, 1 + i * 17, 1 + j * 17, (i + 1) * 17, (j + 1) * 17, texMap1);
+			sprites->Add(j * 14 + i + 1000, 2 + i * 34, 2 + j * 34, (i + 1) * 34, (j + 1) * 34, texMap1);
 		}
 	}
 
 	
 
 	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
-	sprites->Add(12345, 2, 1, 15, 18, trap);
-	sprites->Add(12346, 19, 1, 32, 18, trap);
-	sprites->Add(12347, 36, 1, 49, 18, trap);
-	sprites->Add(12348, 53, 1, 66, 18, trap);
+	sprites->Add(12345, 2 * 2, 2, 15 * 2, 36, trap);
+	sprites->Add(12346, 19 * 2, 2, 32 * 2, 36, trap);
+	sprites->Add(12347, 36 * 2, 2, 49 * 2, 36, trap);
+	sprites->Add(12348, 53 * 2, 2, 66 * 2, 36, trap);
 
 	LPDIRECT3DTEXTURE9 texNakiriR = textures->Get(ID_NAKIRI_RIGHT);
 	//stand right
-	sprites->Add(10000, 2, 2, 18, 21, texNakiriR);
-	sprites->Add(10001, 22, 2, 38, 21, texNakiriR);
+	sprites->Add(10000, 4, 4, 36, 42, texNakiriR);
+	sprites->Add(10001, 44, 4, 76, 42, texNakiriR);
 
 	//walk right
-	sprites->Add(10002, 2, 24, 18, 43, texNakiriR);
-	sprites->Add(10003, 21, 24, 37, 43, texNakiriR);
-	sprites->Add(10004, 39, 24, 55, 43, texNakiriR);
-	sprites->Add(10005, 58, 24, 74, 43, texNakiriR);
-	sprites->Add(10006, 79, 24, 95, 43, texNakiriR);
-	sprites->Add(10007, 99, 24, 115, 43, texNakiriR);
+	sprites->Add(10002, 4, 48, 36, 86, texNakiriR);
+	sprites->Add(10003, 42, 48, 37 * 2, 86, texNakiriR);
+	sprites->Add(10004, 78, 48, 55*2, 86, texNakiriR);
+	sprites->Add(10005, 116, 48, 74*2, 86, texNakiriR);
+	sprites->Add(10006, 158, 48, 95*2, 86, texNakiriR);
+	sprites->Add(10007, 198, 48, 115*2, 86, texNakiriR);
 
-	sprites->Add(10016, 2, 46, 18, 70, texNakiriR);
+	sprites->Add(10016, 2*2, 46*2, 18*2, 70*2, texNakiriR);
 
 
 	LPDIRECT3DTEXTURE9 texNakiriL = textures->Get(ID_NAKIRI_LEFT);
 	//stand left
-	sprites->Add(10008, 399, 2, 415, 21, texNakiriL);
-	sprites->Add(10009, 379, 2, 395, 21, texNakiriL);
+	sprites->Add(10008, 399*2, 2*2, 415*2, 21*2, texNakiriL);
+	sprites->Add(10009, 379*2, 2*2, 395*2, 21*2, texNakiriL);
 
 	//walk left
-	sprites->Add(10010, 302, 24, 318, 43, texNakiriL);
-	sprites->Add(10011, 322, 24, 338, 43, texNakiriL);
-	sprites->Add(10012, 343, 24, 359, 43, texNakiriL);
-	sprites->Add(10013, 362, 24, 378, 43, texNakiriL);
-	sprites->Add(10014, 380, 24, 396, 43, texNakiriL);
-	sprites->Add(10015, 399, 24, 415, 43, texNakiriL);
+	sprites->Add(10010, 302*2, 24*2, 318*2, 43*2, texNakiriL);
+	sprites->Add(10011, 322*2, 24*2, 338*2, 43*2, texNakiriL);
+	sprites->Add(10012, 343*2, 24*2, 359*2, 43*2, texNakiriL);
+	sprites->Add(10013, 362*2, 24*2, 378*2, 43*2, texNakiriL);
+	sprites->Add(10014, 380*2, 24*2, 396*2, 43*2, texNakiriL);
+	sprites->Add(10015, 399*2, 24*2, 415*2, 43*2, texNakiriL);
 
-	sprites->Add(10017, 399, 46, 415, 70, texNakiriL);
+	sprites->Add(10017, 399*2, 46*2, 415*2, 70*2, texNakiriL);
 
 
 	CAnimations* animations = CAnimations::GetInstance();
@@ -330,8 +329,8 @@ void LoadResource() {
 	ani->Add(12348);
 	animations->Add(TRAP_NORMAL, ani);
 
-	tp[0].SetPosition(864, 416);
-	tp[1].SetPosition(816, 416);
+	tp[0].SetPosition(864 * 2, 416 * 2);
+	tp[1].SetPosition(816 * 2, 416 * 2);
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i].AddAnimation(TRAP_NORMAL);
@@ -346,17 +345,17 @@ void LoadResource() {
 	nakiri->AddAnimation(NAKIRI_ANI_WALKING_LEFT);
 	nakiri->AddAnimation(NAKIRI_ANI_JUMP_RIGHT);
 	nakiri->AddAnimation(NAKIRI_ANI_JUMP_LEFT);
-	objects.push_back(nakiri);
+	//objects.push_back(nakiri);
 
 	LPDIRECT3DTEXTURE9 enemiesR = textures->Get(ID_ENEMIES_RIGHT);
-	sprites->Add(11000, 2, 1, 18, 17, enemiesR);
-	sprites->Add(11001, 20, 1, 36, 17, enemiesR);
-	sprites->Add(11002, 38, 1, 54, 17, enemiesR);
+	sprites->Add(11000, 2*2, 2, 18 * 2, 34, enemiesR);
+	sprites->Add(11001, 20 * 2, 2, 36 * 2, 34, enemiesR);
+	sprites->Add(11002, 38 * 2, 2, 54 * 2, 34, enemiesR);
 
 	LPDIRECT3DTEXTURE9 enemiesL = textures->Get(ID_ENEMIES_LEFT);
-	sprites->Add(11005, 642, 1, 658, 17, enemiesL);
-	sprites->Add(11004, 660, 1, 676, 17, enemiesL);
-	sprites->Add(11003, 678, 1, 694, 17, enemiesL);
+	sprites->Add(11005, 642 * 2, 2, 658 * 2, 34, enemiesL);
+	sprites->Add(11004, 660 * 2, 2, 676 * 2, 34, enemiesL);
+	sprites->Add(11003, 678 * 2, 2, 694 * 2, 34, enemiesL);
 
 	ani = new CAnimation(100);
 	ani->Add(11000);
@@ -371,7 +370,7 @@ void LoadResource() {
 	animations->Add(BOOM_ANI_WALK_LEFT, ani);
 
 	boom = Boom::GetInstance();
-	boom->SetPosition(32 * 6, 16 * 21);
+	boom->SetPosition(32 * 6 * 2, 16 * 21 * 2);
 	boom->AddAnimation(BOOM_ANI_WALK_RIGHT);
 	boom->AddAnimation(BOOM_ANI_WALK_LEFT);
 	objects.push_back(boom);
@@ -518,12 +517,11 @@ void setCam(float x, float y) {
 	int ox = (int)CGame::GetInstance()->GetCamPos_x();
 	int cx, cy;
 
-	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH < tf.x)
+	if (x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH <= tf.x)
 		cx = tf.x;
-	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x)
-		cx = br.x - GAME_PLAY_WIDTH * BRICK_WIDTH;
+	else if (x + (GAME_PLAY_WIDTH / 2 + 1) * BRICK_WIDTH > br.x + 32 + 16)
+		cx = br.x - GAME_PLAY_WIDTH * BRICK_WIDTH + 32 + 16;
 	else {
-
 		cx = x - (GAME_PLAY_WIDTH / 2 - 1) * BRICK_WIDTH;
 	}
 
@@ -572,6 +570,8 @@ void Update(DWORD dt) {
 
 	nakiri->Update(dt, coObj);
 
+	nakiri->GetPosition(cx, cy);
+
 	/*for (int i = 0; i < actObj.size(); i++)
 		actObj.at(i)->Update(dt);*/
 
@@ -587,8 +587,8 @@ void Render_Map() {
 	int stx = int(cx / BRICK_HEIGHT), sty = int(cy / BRICK_WIDTH);
 	if (stx < 0) stx = 0;
 	if (sty < 0) sty = 0;
-	for (int y = sty; y < int(cy / BRICK_HEIGHT) + GAME_PLAY_HEIGHT && y < MapTile.size(); y++) {
-		for (int x = stx; x < int(cx / BRICK_WIDTH) + GAME_PLAY_WIDTH && x < MapTile[y].size(); x++) {
+	for (int y = sty; y < sty + GAME_PLAY_HEIGHT && y < MapTile.size(); y++) {
+		for (int x = stx; x <= stx + GAME_PLAY_WIDTH && x < MapTile[y].size(); x++) {
 			LPANIMATION ani;
 			if (MapTile[y][x] != -1) {
 				ani = CAnimations::GetInstance()->Get(MapTile[y][x]);
@@ -598,12 +598,12 @@ void Render_Map() {
 			if (MapObj[y][x] != -1)
 				screenObj.push_back(objects.at(MapObj[y][x]));
 		}
-	}
+ 	}
 	/*for (int i = 0; i < screenObj.size(); i++)
 		screenObj.at(i)->Render();*/
 
 	for (int i = 0; i < coObj->size(); i++)
-		coObj->at(i)->RenderBoundingBox();;
+		coObj->at(i)->RenderBoundingBox();
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i].Render();
@@ -703,7 +703,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH, SCREEN_HEIGHT);
+	HWND hWnd = CreateGameWindow(hInstance, nCmdShow, SCREEN_WIDTH * 1.0, SCREEN_HEIGHT);
 
 	game = CGame::GetInstance();
 	game->Init(hWnd);
