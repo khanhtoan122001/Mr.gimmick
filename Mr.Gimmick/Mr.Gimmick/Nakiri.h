@@ -32,7 +32,6 @@ class Nakiri : public GameObject
 	int untouchable;
 	DWORD untouchable_start;
 
-	bool isSlip;
 
 	float start_x;			// initial position of Mario at scene
 	float start_y;
@@ -41,6 +40,7 @@ public:
 	Nakiri(float x = 32, float y = 160);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
+	bool isSlip;
 
 	Point GetPos() { return Point(x, y); }
 

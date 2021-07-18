@@ -930,17 +930,6 @@
                  "y":1024
                 }, 
                 {
-                 "height":96,
-                 "id":1495,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":64,
-                 "x":1600,
-                 "y":1024
-                }, 
-                {
                  "height":64,
                  "id":1496,
                  "name":"",
@@ -1612,61 +1601,6 @@
                  "y":1408
                 }, 
                 {
-                 "height":64,
-                 "id":1558,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1440,
-                 "y":1440
-                }, 
-                {
-                 "height":64,
-                 "id":1559,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":1568,
-                 "y":1376
-                }, 
-                {
-                 "height":64,
-                 "id":1560,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":2112,
-                 "y":1440
-                }, 
-                {
-                 "height":64,
-                 "id":1561,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":2176,
-                 "y":1440
-                }, 
-                {
-                 "height":64,
-                 "id":1562,
-                 "name":"",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":32,
-                 "x":2432,
-                 "y":1440
-                }, 
-                {
                  "height":32,
                  "id":1568,
                  "name":"",
@@ -1742,6 +1676,116 @@
                  "width":64,
                  "x":1632,
                  "y":704
+                }, 
+                {
+                 "height":32,
+                 "id":1617,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":2432,
+                 "y":1472
+                }, 
+                {
+                 "height":32,
+                 "id":1619,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2080,
+                 "y":1472
+                }, 
+                {
+                 "height":32,
+                 "id":1620,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":2176,
+                 "y":1472
+                }, 
+                {
+                 "height":32,
+                 "id":1621,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":1760,
+                 "y":1472
+                }, 
+                {
+                 "height":32,
+                 "id":1622,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":1632,
+                 "y":1408
+                }, 
+                {
+                 "height":32,
+                 "id":1623,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1568,
+                 "y":1408
+                }, 
+                {
+                 "height":32,
+                 "id":1624,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1440,
+                 "y":1472
+                }, 
+                {
+                 "height":32,
+                 "id":1625,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":96,
+                 "x":1056,
+                 "y":1472
+                }, 
+                {
+                 "height":64,
+                 "id":1626,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1600,
+                 "y":1024
+                }, 
+                {
+                 "height":32,
+                 "id":1627,
+                 "name":"",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":64,
+                 "x":1568,
+                 "y":1088
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -1750,7 +1794,7 @@
          "y":0
         }],
  "nextlayerid":5,
- "nextobjectid":1577,
+ "nextobjectid":1628,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",
@@ -1761,7 +1805,7 @@
          "source":"NES - Gimmick Mr Gimmick - Stage 1.tsx"
         }, 
         {
-         "firstgid":1289,
+         "firstgid":323,
          "source":"..\/..\/..\/..\/..\/Gimmick map\/NES - Gimmick Mr Gimmick - Stage 7.tsx"
         }],
  "tilewidth":32,

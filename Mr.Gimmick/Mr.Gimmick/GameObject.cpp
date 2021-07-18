@@ -61,7 +61,7 @@ void GameObject::CalcPotentialCollisions(
 	{
 		vector<LPCOLLISIONEVENT> e = SweptAABBEx(coObjects->at(i));
 		for (UINT j = 0; j < e.size(); j++)
-			if (e[j]->t > 0 && e[j]->t <= 1.0f)
+			if (/*e[j]->t > 0 && */e[j]->t <= 1.0f)
 				coEvents.push_back(e[j]);
 			else
 				delete e[j];
@@ -197,14 +197,16 @@ void GameObject::FilterCollision(
 	{
 		LPCOLLISIONEVENT c = coEvents[i];
 
-		if (c->t <= min_tx && c->nx != 0) {
-			min_tx = c->t; nx = c->nx; min_ix = i;
-			px = px && c->obj->penetrable;
-		}
+		if (c->t >= 0) {
+			if (c->t <= min_tx && c->nx != 0) {
+				min_tx = c->t; nx = c->nx; min_ix = i;
+				px = px && c->obj->penetrable;
+			}
 
-		if (c->t <= min_ty && c->ny != 0) {
-			min_ty = c->t; ny = c->ny; min_iy = i;
-			py = py && c->obj->penetrable;
+			if (c->t <= min_ty && c->ny != 0) {
+				min_ty = c->t; ny = c->ny; min_iy = i;
+				py = py && c->obj->penetrable;
+			}
 		}
 	}
 	if (min_ix >= 0) {

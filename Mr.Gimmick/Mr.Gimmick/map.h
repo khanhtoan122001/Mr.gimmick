@@ -22,6 +22,7 @@ class Map
 public:
 	Map();
 	static Map* GetInstance();
-	void updateMap(float x, float y, Point& tf, Point& br, vector<LPGAMEOBJECT>*);
+	void updateMapObject(vector<LPGAMEOBJECT>*);
+	void updateMap(float x, float y, Point& tf, Point& br);
 };
 

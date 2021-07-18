@@ -19,6 +19,8 @@ Nakiri::Nakiri(float x, float y)
 	style = main_c;
 	untouchable = 0;
 	isSlip = false;
+	width = NAKIRI_WIDTH;
+	height = NAKIRI_HEIGHT;
 
 	start_x = x;
 	start_y = y;
@@ -92,61 +94,82 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		bool slip = false;
 		for (UINT i = 0; i < coEvents.size(); i++) {
 			LPCOLLISIONEVENT e = coEvents[i];
+			
 			switch (e->obj->getType())
 			{
 			case slide_left:
 				{
-					x -= 2.0f;
+					if (e->t > 0)
+						x -= 2.0f;
 					break;
 				}
 			case slide_right:
 				{
-					x += 2.0f;
+					if (e->t > 0)
+						x += 2.0f;
 					break;
 				}
 			case trap:
 				{
-					StartUntouchable();
+					if (e->t > 0)
+						StartUntouchable();
 					break;
 				}
 			case diagonal_left:
-				slip = true;
-				if (dx == 0) {
-					x -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-					y += NAKIRI_GRAVITY * dt;
-				}
-				if (dx > 0) {
-					y -= 0.028 * dt;
-					vx = 0.001f;
-				}
-				if (dx < 0) {
-					ny = 0;
+				if (e->t > 0)
+				{
+					slip = true;
+					if (dx == 0) {
+						x -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
+						y += NAKIRI_GRAVITY * dt;
+					}
+					if (dx > 0) {
+						y -= 0.028 * dt;
+						vx = 0.001f;
+					}
+					if (dx < 0) {
+						ny = 0;
+					}
 				}
 				break;
 			case diagonal_right:
-				slip = true;
-				if (dx == 0) {
-					x += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-					y += NAKIRI_GRAVITY * dt;
-				}
-				if (dx > 0) {
-					ny = 0;
-				}
-				if (dx < 0) {
-					y -= 0.028 * dt;
-					vx = -0.001f;
+				if (e->t > 0) {
+					slip = true;
+					if (dx == 0) {
+						x += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
+						y += NAKIRI_GRAVITY * dt;
+					}
+					if (dx > 0) {
+						ny = 0;
+					}
+					if (dx < 0) {
+						y -= 0.028 * dt;
+						vx = -0.001f;
+					}
 				}
 				break;
 			case move_brick:
-				x += e->obj->vx * dt * 2;
-				y += e->obj->vy * dt;
+				slip = true;
+				/*if (e->nx == 0) {
+					x += e->obj->dx * 2;
+					if (e->obj->ny >= 0) {
+						y -= (e->obj->vy * dt + 1);
+					}
+				}
+				else if (e->nx > 0) {
+					
+				}
+				if (dx > 0) vx = 0.001f;
+				if (dx < 0) vx = -0.001f;*/
 				break;
 			case trigger:
-			{
-				Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
-				if(trigg->getTrap() != NULL)
-					trigg->getTrap()->SetSpeed(0, 0.02);
-			}
+				if(e->t > 0)
+				{
+				
+					Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
+					if(trigg->getTrap() != NULL)
+						trigg->getTrap()->SetSpeed(0, 0.02);
+				}
 				break;
 			default:
 				break;

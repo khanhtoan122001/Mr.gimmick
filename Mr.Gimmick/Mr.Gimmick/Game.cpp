@@ -306,8 +306,19 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 	}
 
 
-	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f) return;
-
+	if ((tx_entry < 0.0f && ty_entry < 0.0f) || tx_entry > 1.0f || ty_entry > 1.0f) {
+		if (tx_entry > -1.0f && tx_entry < 0.0f) {
+			t = tx_entry;
+			ny = 0;
+			dx > 0 ? nx = (int)-1 : nx = (int)1.0;
+		}
+		if (ty_entry > -1.0f && ty_entry < 0.0f) {
+			t = ty_entry;
+			nx = (int)0;
+			dy > 0 ? ny = (int)-1 : ny = (int)1.0;
+		}
+		return;
+	}
 	t_entry = max(tx_entry, ty_entry);
 	t_exit = min(tx_exit, ty_exit);
 
@@ -315,7 +326,7 @@ void CGame::SweptAABB(float ml, float mt, float mr, float mb, float dx, float dy
 
   	t = t_entry;
 
-	if (tx_entry > ty_entry )
+	if (tx_entry > ty_entry)
 	{
 		ny = (int)0;
 		dx > 0 ? nx = (int)-1 : nx = (int)1.0;

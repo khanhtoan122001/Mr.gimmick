@@ -338,7 +338,7 @@ void LoadResource() {
 	
 
 	nakiri = Nakiri::GetInstance();
-	nakiri->SetPosition(32, 16 * 12);
+	nakiri->SetPosition(32 * 2, 2 * 16 * 12);
 	nakiri->AddAnimation(NAKIRI_ANI_STAND_RIGHT);
 	nakiri->AddAnimation(NAKIRI_ANI_WALKING_RIGHT);
 	nakiri->AddAnimation(NAKIRI_ANI_STAND_LEFT);
@@ -557,18 +557,27 @@ void Update(DWORD dt) {
 
 	nakiri->GetPosition(cx, cy);
 
-	Map::GetInstance()->updateMap(cx, cy, tf, br, coObj);
+	Map::GetInstance()->updateMap(cx, cy, tf, br);
+	Map::GetInstance()->updateMapObject(coObj);
 
-	for (int i = 0; i < coObj->size(); i++)
+	vector<LPGAMEOBJECT>* coObj2 = new vector<LPGAMEOBJECT>();
+
+	for (int i = 0; i < coObj->size(); i++) {
+		coObj2->push_back(coObj->at(i));
+	}
+
+	coObj->push_back(nakiri);
+
+	for (int i = 0; i < coObj->size() - 1; i++)
 	{
-		coObj->at(i)->Update(dt);
+		coObj->at(i)->Update(dt, coObj);
 	}
 	for (int i = 0; i < 2; i++)
 	{
-		tp[i].Update(dt);
+		tp[i].Update(dt, coObj);
 	}
 
-	nakiri->Update(dt, coObj);
+	nakiri->Update(dt, coObj2);
 
 	nakiri->GetPosition(cx, cy);
 
