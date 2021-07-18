@@ -149,7 +149,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				break;
 			case move_brick:
-				slip = true;
+				if (e->t > 0) {
+					slip = true;
+				}
+				
 				/*if (e->nx == 0) {
 					x += e->obj->dx * 2;
 					if (e->obj->ny >= 0) {

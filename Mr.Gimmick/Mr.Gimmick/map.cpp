@@ -24,7 +24,7 @@ Map::Map()
 
 	mbrick->SetWidthHeight(64, 32);
 	mbrick->SetPosition(160, 512/* + 256 - 96*/);
-	mbrick->SetSpeed(0.00, 0.05);
+	mbrick->SetSpeed(0.05, 0.0);
 	mbrick->maxx = 128 * 2;
 	mbrick->minx = 64 * 2;
 	mbrick->maxy = 288 * 2;
