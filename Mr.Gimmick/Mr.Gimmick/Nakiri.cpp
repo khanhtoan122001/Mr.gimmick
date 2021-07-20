@@ -63,7 +63,13 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		if (state != NAKIRI_STATE_DIE)
 			CalcPotentialCollisions(colliable_objects, coEvents);
 
-		if (coEvents.size() == 0)
+		int count = 0;
+
+		for (int i = 0; i < coEvents.size(); i++)
+			if (coEvents[i]->t > 0)
+				count++;
+
+		if (count == 0)
 		{
 			x += dx;
 			y += dy;
@@ -150,11 +156,12 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				break;
 			case move_brick:
 				if (e->t > 0) {
-					slip = true;
+					if (e->nx != 0 && dx != 0)
+						vx = -e->nx;
 				}
 				if (e->t > -1.0f && e->t < 0 && e->nx != 0) {
-					x -= dx * e->t * -1;
-					slip = true;
+					//x -= dx * 2;
+					//vx = e->nx;
 				}
 				
 				/*if (e->nx == 0) {

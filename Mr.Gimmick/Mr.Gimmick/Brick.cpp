@@ -28,6 +28,13 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 {
 	dx = dy = 0;
 
+	if (x >= maxx || x <= minx) {
+		vx *= -1;
+		//if (x > maxx) maxx = x;
+	}
+	if (y >= maxy || y <= miny)
+		vy *= -1;
+
 	GameObject::Update(dt, coObjects);
 
 	if (this->style == move_brick) {
@@ -54,7 +61,7 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 				for (int i = 0; i < coEvents.size(); i++) {
 					LPCOLLISIONEVENT e = coEvents[i];
 					if (e->obj->getType() == main_c) {
-						if(e->t > 0)
+						if(e->t > 0 && e->ny != 0)
 							e->obj->x += dx * 2;
 
 						if (e->t < 0 && e->t > -1.0f) {
@@ -67,11 +74,6 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 				}
 			}
 		}
-		if (x >= maxx || x <= minx) {
-			vx *= -1;
-			//if (x > maxx) maxx = x;
-		}
-		if (y >= maxy || y <= miny)
-			vy *= -1;
+		
 	}
 }

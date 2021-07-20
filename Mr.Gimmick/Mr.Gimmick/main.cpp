@@ -428,11 +428,12 @@ void LoadMap(string MapFile) {
 		Style style;
 		int des = -1;
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1433 || id == 1439 || id == 1446 || id == 1498 || id == 1494 || id == 1518)
+		if (id == 1433 || id == 1439 || id == 1633 || id == 1632 || id == 1646 || id == 1637 || id == 1643 || id == 1644
+			|| id == 1518 || id == 1647)
 		{
 			style = (diagonal_left);
 		}
-		else if (id == 1435 || id == 1441 || id == 1486 || id == 1487 || id == 1512) {
+		else if (id == 1435 || id == 1441 || id == 1639 || id == 1640 || id == 1487 || id == 1512) {
 			style = diagonal_right;
 		}
 		else if (id == 1466)
