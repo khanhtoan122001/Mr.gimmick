@@ -152,6 +152,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (e->t > 0) {
 					slip = true;
 				}
+				if (e->t > -1.0f && e->t < 0 && e->nx != 0) {
+					x -= dx * e->t * -1;
+					slip = true;
+				}
 				
 				/*if (e->nx == 0) {
 					x += e->obj->dx * 2;

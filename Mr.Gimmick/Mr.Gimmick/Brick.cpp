@@ -58,7 +58,8 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 							e->obj->x += dx * 2;
 
 						if (e->t < 0 && e->t > -1.0f) {
-							e->obj->y -= 1;
+							if(e->nx == 0)
+								e->obj->y -= 1;
 							e->obj->x += dx * 2;
 						}
 					}
