@@ -5,7 +5,9 @@
 #include "Quadtree.h"
 #include "Brick.h"
 #include "Trigger.h"
+#include "Tunnel.h"
 Nakiri* Nakiri::__instance = NULL;
+bool tunning = false;
 
 Nakiri* Nakiri::GetInstance()
 {
@@ -172,6 +174,23 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
 					if(trigg->getTrap() != NULL)
 						trigg->getTrap()->SetSpeed(0, 0.02);
+				}
+				break;
+			case tunnel:
+				if (e->t > 0)
+				{
+					tunning = true;
+				}
+				if (tunning)
+				{
+					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
+					x += 1.0f;
+				}
+				break;
+			case tunnel_end:
+				if (tunning)
+				{
+					tunning = false;
 				}
 				break;
 			default:

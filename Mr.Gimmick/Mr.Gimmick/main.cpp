@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include <fstream>
 
+#include "Tunnel.h"
 #include "Trigger.h"
 #include "Textures.h"
 #include "Game.h"
@@ -455,6 +456,14 @@ void LoadMap(string MapFile) {
 			style = trigger;
 			des = 1;
 		}
+		else if (id == 1628)
+		{
+			style = tunnel;
+		}
+		else if (id == 1455)
+		{
+			style = tunnel_end;
+		}
 		else
 			style = normal_brick;
 		
@@ -468,6 +477,12 @@ void LoadMap(string MapFile) {
 			if(des >= 0)
 				trigg->setTrap(&tp[des]);
 			Obj(trigg, i, style, p, w, h);
+		}
+		else if (style == tunnel)
+		{
+			Tunnel* tunnel = new Tunnel();
+			tunnel->SetPenetrable(true);
+			Obj(tunnel, i, style, p, w, h);
 		}
 		else {
 			Brick* brick = new Brick();
