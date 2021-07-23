@@ -29,6 +29,7 @@
 #define ID_ENEMIES_RIGHT 15058
 #define ID_ENEMIES_LEFT 15235
 #define ID_BOOM 16
+#define ID_TUNNEL 350
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"Gimmick"
@@ -49,6 +50,10 @@
 #define ID_TEX_MISC 20
 
 #define TRAP_NORMAL 344
+#define TUNNEL_1_0 3500
+#define TUNNEL_1_1 3501
+#define TUNNEL_1_2 3502
+
 CGame* game;
 Nakiri* nakiri;
 Boom* boom;
@@ -163,6 +168,7 @@ void LoadResource() {
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_ENEMIES_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57, 189, 255));
 	textures->Add(ID_ENEMIES_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Enemies(1).png", D3DCOLOR_XRGB(57,189,255));
+	textures->Add(ID_TRAP, L"Resource//Untitled.png", D3DCOLOR_XRGB(215, 121, 214));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
@@ -173,7 +179,23 @@ void LoadResource() {
 		}
 	}
 
-	
+	LPDIRECT3DTEXTURE9 tunnel = textures->Get(ID_TUNNEL);
+	sprites->Add(35000, 0, 0, 15, 15, tunnel);
+	sprites->Add(35001, 0, 17, 15, 32, tunnel);
+	sprites->Add(35002, 0, 34, 15, 49, tunnel);
+	sprites->Add(35003, 0, 51, 15, 66, tunnel);
+	sprites->Add(35004, 0, 68, 15, 83, tunnel);
+	sprites->Add(35005, 0, 85, 15, 100, tunnel);
+	sprites->Add(35006, 0, 102, 15, 117, tunnel);
+	sprites->Add(35007, 0, 119, 15, 134, tunnel);
+	sprites->Add(35008, 0, 136, 15, 151, tunnel);
+	sprites->Add(35009, 0, 153, 15, 168, tunnel);
+	sprites->Add(35010, 0, 170, 15, 185, tunnel);
+	sprites->Add(35011, 0, 187, 15, 202, tunnel);
+	sprites->Add(35012, 0, 204, 15, 219, tunnel);
+	sprites->Add(35013, 0, 221, 15, 236, tunnel);
+	sprites->Add(35014, 0, 238, 15, 253, tunnel);
+	sprites->Add(35015, 0, 255, 15, 270, tunnel);
 
 	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
 	sprites->Add(12345, 2 * 2, 2, 15 * 2, 36, trap);
@@ -337,6 +359,17 @@ void LoadResource() {
 		tp[i].AddAnimation(TRAP_NORMAL);
 	}
 	
+	ani = new CAnimation(10);
+	ani->Add(35000);
+	ani->Add(35001);
+	ani->Add(35002);
+	ani->Add(35003);
+	ani->Add(35004);
+	ani->Add(35005);
+	ani->Add(35006);
+	ani->Add(35007);
+	animations->Add(TUNNEL_1_1, ani);
+
 
 	nakiri = Nakiri::GetInstance();
 	nakiri->SetPosition(32 * 2, 2 * 16 * 12);
