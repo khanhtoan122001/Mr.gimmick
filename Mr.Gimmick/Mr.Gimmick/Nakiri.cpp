@@ -7,7 +7,6 @@
 #include "Trigger.h"
 #include "Tunnel.h"
 Nakiri* Nakiri::__instance = NULL;
-bool tunning = false;
 
 Nakiri* Nakiri::GetInstance()
 {
@@ -87,7 +86,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 			y += min_ty * dy + ny * 0.4f;
 
-			if (nx != 0) vx = 0;
+			if (nx != 0) // ok buoc 1 :v
+				vx = 0;
 			if (ny != 0) vy = 0;
 		}
 
@@ -177,21 +177,21 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				break;
 			case tunnel:
-				if (e->t > 0)
+				if (e->t != -1.0)
 				{
 					tunning = true;
-				}
-				if (tunning)
-				{
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					x += 1.0f;
+					vx = 0.06f;
 				}
+				//else 
+					//tunning = false;
 				break;
 			case tunnel_end:
-				if (tunning)
-				{
-					tunning = false;
-				}
+				if (e->t != -1.0)
+					if (tunning)
+					{
+						tunning = false;
+					}
 				break;
 			default:
 				break;
@@ -271,7 +271,10 @@ void Nakiri::SetState(int state)
 		break;*/
 
 	case NAKIRI_STATE_STAND:
-		vx = 0;
+		{
+			 if(!tunning)
+				vx = 0; 
+		} 
 		break;
 	}
 }

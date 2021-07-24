@@ -101,6 +101,7 @@ void CSampleKeyHander::KeyState(BYTE* states)
 {
 	// disable control key when Mario die 
 	if (nakiri->GetState() == NAKIRI_STATE_DIE) return;
+	if (nakiri->tunning) return;
 	if (game->IsKeyDown(DIK_RIGHT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_RIGHT);
 
@@ -165,10 +166,9 @@ void LoadResource() {
 	textures->Add(ID_NAKIRI_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_NAKIRI_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro(1).png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
-	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
+	textures->Add(ID_TEX_BBOX, L"Resource//Untitled1.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_ENEMIES_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57, 189, 255));
 	textures->Add(ID_ENEMIES_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Enemies(1).png", D3DCOLOR_XRGB(57,189,255));
-	textures->Add(ID_TRAP, L"Resource//Untitled.png", D3DCOLOR_XRGB(215, 121, 214));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
@@ -179,7 +179,7 @@ void LoadResource() {
 		}
 	}
 
-	LPDIRECT3DTEXTURE9 tunnel = textures->Get(ID_TUNNEL);
+	/*LPDIRECT3DTEXTURE9 tunnel = textures->Get(ID_TUNNEL);
 	sprites->Add(35000, 0, 0, 15, 15, tunnel);
 	sprites->Add(35001, 0, 17, 15, 32, tunnel);
 	sprites->Add(35002, 0, 34, 15, 49, tunnel);
@@ -195,7 +195,7 @@ void LoadResource() {
 	sprites->Add(35012, 0, 204, 15, 219, tunnel);
 	sprites->Add(35013, 0, 221, 15, 236, tunnel);
 	sprites->Add(35014, 0, 238, 15, 253, tunnel);
-	sprites->Add(35015, 0, 255, 15, 270, tunnel);
+	sprites->Add(35015, 0, 255, 15, 270, tunnel);*/
 
 	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
 	sprites->Add(12345, 2 * 2, 2, 15 * 2, 36, trap);
@@ -359,16 +359,6 @@ void LoadResource() {
 		tp[i].AddAnimation(TRAP_NORMAL);
 	}
 	
-	ani = new CAnimation(10);
-	ani->Add(35000);
-	ani->Add(35001);
-	ani->Add(35002);
-	ani->Add(35003);
-	ani->Add(35004);
-	ani->Add(35005);
-	ani->Add(35006);
-	ani->Add(35007);
-	animations->Add(TUNNEL_1_1, ani);
 
 
 	nakiri = Nakiri::GetInstance();
