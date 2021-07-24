@@ -16,7 +16,11 @@ void Boom::Render()
 		ani = BOOM_ANI_WALK_RIGHT;
 	else ani = BOOM_ANI_WALK_LEFT;
 
-	animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
+	float _x = CGame::GetInstance()->GetCamPos_x();
+	float _y = CGame::GetInstance()->GetCamPos_y();
+
+	if (_x < x + width && x + width < _x + GAME_PLAY_WIDTH * BRICK_WIDTH && _y < y && y < _y + GAME_PLAY_HEIGHT * BRICK_HEIGHT)
+		animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
 }
 
 Rect Boom::GetBoundingBox()

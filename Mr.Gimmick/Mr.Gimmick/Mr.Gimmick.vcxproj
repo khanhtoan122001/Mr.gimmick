@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -149,6 +149,8 @@
   <ItemGroup>
     <ClCompile Include="boom.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="cannons.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="line.cpp" />
@@ -159,6 +161,7 @@
     <ClCompile Include="Quadtree.cpp" />
     <ClCompile Include="Rect.cpp" />
     <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Star.cpp" />
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Trigger.cpp" />
@@ -166,6 +169,8 @@
   <ItemGroup>
     <ClInclude Include="boom.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="cannons.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="line.h" />
@@ -175,6 +180,7 @@
     <ClInclude Include="Quadtree.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Star.h" />
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Trigger.h" />

@@ -16,7 +16,7 @@ Nakiri* Nakiri::GetInstance()
 
 Nakiri::Nakiri(float x, float y)
 {
-	style = main_c;
+	type = main_c;
 	untouchable = 0;
 	isSlip = false;
 	width = NAKIRI_WIDTH;
@@ -175,6 +175,22 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				if (dx > 0) vx = 0.001f;
 				if (dx < 0) vx = -0.001f;*/
+				break;
+			case g_cannon:
+				if (e->t > 0) {
+					if (e->nx < 0) {
+						vx = -e->nx;
+						e->obj->x += 0.2;
+					}
+					if (e->nx > 0) {
+						vx = -e->nx;
+						e->obj->x -= 0.2;
+					}
+					if (e->ny != 0) {
+						y += 0.7f * e->ny;
+						slip = true;
+					}
+				}
 				break;
 			case trigger:
 				if(e->t > 0)

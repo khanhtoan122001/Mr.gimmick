@@ -19,6 +19,8 @@
 #include "Rect.h"
 #include "Trap.h"
 #include "boom.h"
+#include "cannons.h"
+#include "Star.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
@@ -28,6 +30,7 @@
 #define ID_ENEMIES_RIGHT 15058
 #define ID_ENEMIES_LEFT 15235
 #define ID_BOOM 16
+#define ID_CHARGE_STAR 16544
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"Gimmick"
@@ -55,6 +58,8 @@ Quadtree* quadtree;
 Trap tp[2];
 Trigger trigg;
 Map* map;
+Cannon* cannon;
+Star* star;
 
 class CSampleKeyHander : public CKeyEventHandler
 {
@@ -73,6 +78,13 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_SPACE:
 		nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
+	case DIK_S:
+		if (!star->isPress()) {
+			if(!star->Active)
+				star->SetState(STAR_CHARGE);
+			star->Press();
+		}
+		break;
 	}
 }
 
@@ -89,6 +101,16 @@ Quadtree* CreateQuadTree(vector<LPGAMEOBJECT> list, Point p)
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	switch (KeyCode)
+	{
+	case DIK_S:
+		if (star->isComplete)
+			star->Shot();
+		else
+			star->SetState(STAR_HIDE);
+		star->Press();
+		break;
+	}
 }
 
 void CSampleKeyHander::KeyState(BYTE* states)
@@ -109,7 +131,8 @@ void CSampleKeyHander::KeyState(BYTE* states)
 		nakiri->SetState(NAKIRI_STATE_STAND);
 }
 
-vector<vector<int>> MapTile, MapObj;
+vector<vector<int>> MapTile;
+vector<vector<vector<int>>> MapObj;
 vector<LPGAMEOBJECT> objects, screenObj, actObj, moveObj;
 vector<LPGAMEOBJECT>* coObj = new vector<LPGAMEOBJECT>();
 
@@ -144,8 +167,9 @@ void UpdateActObj(Point p) {
 	actObj.clear();
 	for (int y = sty; y < sty + 5 + SCREEN_HEIGHT / BRICK_HEIGHT && y < MapTile.size(); y++) {
 		for (int x = stx; x < stx + 5 + SCREEN_WIDTH / BRICK_WIDTH && x < MapTile[y].size(); x++) {
-			if (MapObj[y][x] != -1)
-				actObj.push_back(objects.at(MapObj[y][x]));
+			for(int i = 0; i < MapObj[y][x].size(); i++)
+				if (MapObj[y][x][i] != -1)
+					actObj.push_back(objects.at(MapObj[y][x][i]));
 		}
 	}
 	actObj.push_back(&trigg);
@@ -161,10 +185,12 @@ void LoadResource() {
 	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
 	textures->Add(ID_TEX_BBOX, L"Resource//Untitled.png", D3DCOLOR_XRGB(255, 255, 255));
 	textures->Add(ID_ENEMIES_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Enemies.png", D3DCOLOR_XRGB(57, 189, 255));
-	textures->Add(ID_ENEMIES_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Enemies(1).png", D3DCOLOR_XRGB(57,189,255));
+	textures->Add(ID_ENEMIES_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Enemies(1).png", D3DCOLOR_XRGB(57, 189, 255));
+	textures->Add(ID_CHARGE_STAR, L"Resource//star-charge.png", D3DCOLOR_XRGB(255, 174, 201));
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
+	LPDIRECT3DTEXTURE9 charge = textures->Get(ID_CHARGE_STAR);
 
 	for (int j = 0; j < 23; j++) {
 		for (int i = 0; i < 14; i++) {
@@ -172,7 +198,24 @@ void LoadResource() {
 		}
 	}
 
-	
+	sprites->Add(20000, 5, 5, 243, 235, charge);
+	sprites->Add(20001, 251, 5, 489, 235, charge);
+	sprites->Add(20002, 493, 5, 493 + STAR_CHARGE_WIDTH, 5 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20003, 7, 244, 7 + STAR_CHARGE_WIDTH, 244 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20004, 253, 244, 253 + STAR_CHARGE_WIDTH, 244 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20005, 495, 244, 495 + STAR_CHARGE_WIDTH, 244 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20006, 7, 481, 7 + STAR_CHARGE_WIDTH, 481 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20007, 253, 481, 253 + STAR_CHARGE_WIDTH, 481 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20008, 495, 481, 495 + STAR_CHARGE_WIDTH, 481 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20009, 6, 717, 6 + STAR_CHARGE_WIDTH, 717 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20010, 252, 717, 252 + STAR_CHARGE_WIDTH, 717 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20011, 494, 717, 494 + STAR_CHARGE_WIDTH, 717 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20012, 6, 953, 6 + STAR_CHARGE_WIDTH, 953 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20013, 252, 953, 252 + STAR_CHARGE_WIDTH, 953 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20014, 494, 953, 494 + STAR_CHARGE_WIDTH, 953 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20015, 735, 953, 735 + STAR_CHARGE_WIDTH, 953 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20016, 981, 953, 981 + STAR_CHARGE_WIDTH, 953 + STAR_CHARGE_HEIGHT, charge);
+	sprites->Add(20017, 739, 716, 739 + STAR_CHARGE_WIDTH, 716 + STAR_CHARGE_HEIGHT, charge);
 
 	LPDIRECT3DTEXTURE9 trap = textures->Get(ID_TRAP);
 	sprites->Add(12345, 2 * 2, 2, 15 * 2, 36, trap);
@@ -180,10 +223,34 @@ void LoadResource() {
 	sprites->Add(12347, 36 * 2, 2, 49 * 2, 36, trap);
 	sprites->Add(12348, 53 * 2, 2, 66 * 2, 36, trap);
 
+	sprites->Add(12500, 170, 44, 202, 76, trap);
+	sprites->Add(12501, 204, 44, 236, 76, trap);
+	sprites->Add(12502, 306, 383, 338, 415, trap);
+	sprites->Add(12503, 340, 383, 372, 415, trap);
+	sprites->Add(12504, 374, 383, 406, 415, trap);
+	sprites->Add(12505, 374 + 34, 383, 406 + 34, 415, trap);
+	sprites->Add(12506, 374 + 34 * 2, 383, 406 + 34 * 2, 415, trap);
+	sprites->Add(12507, 374 + 34 * 3, 383, 406 + 34 * 3, 415, trap);
+
+	//cannon
+	sprites->Add(12400, 170, 4, 202, 36, trap);
+	sprites->Add(12401, 204, 4, 236, 36, trap);
+
 	LPDIRECT3DTEXTURE9 texNakiriR = textures->Get(ID_NAKIRI_RIGHT);
 	//stand right
 	sprites->Add(10000, 4, 4, 36, 42, texNakiriR);
 	sprites->Add(10001, 44, 4, 76, 42, texNakiriR);
+
+	//Star
+	sprites->Add(17000, 568, 282, 600, 314, texNakiriR);
+	sprites->Add(17001, 604, 282, 636, 314, texNakiriR);
+
+	//Star explosive
+	sprites->Add(17100, 640, 282, 672, 314, texNakiriR);
+	sprites->Add(17101, 680, 282, 712, 314, texNakiriR);
+	sprites->Add(17102, 718, 282, 750, 314, texNakiriR);
+	sprites->Add(17103, 754, 282, 786, 314, texNakiriR);
+	sprites->Add(17104, 790, 282, 822, 314, texNakiriR);
 
 	//walk right
 	sprites->Add(10002, 4, 48, 36, 86, texNakiriR);
@@ -210,6 +277,9 @@ void LoadResource() {
 	sprites->Add(10015, 399*2, 24*2, 415*2, 43*2, texNakiriL);
 
 	sprites->Add(10017, 399*2, 46*2, 415*2, 70*2, texNakiriL);
+
+	//move_brick
+	sprites->Add(15000, 306, 425, 370, 457, trap);
 
 
 	CAnimations* animations = CAnimations::GetInstance();
@@ -267,6 +337,25 @@ void LoadResource() {
 	ani->Add(1212);
 	animations->Add(182, ani);
 
+	ani = new CAnimation(60);
+	for (int i = 0; i < 18; i++)
+		ani->Add(20000 + i);
+	animations->Add(CHARGE_ANI, ani);
+
+
+	ani = new CAnimation(100);
+	ani->Add(17000);
+	ani->Add(17001);
+	animations->Add(ACTIVE_ANI, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(17100);
+	ani->Add(17101);
+	ani->Add(17102);
+	ani->Add(17103);
+	ani->Add(17104);
+	animations->Add(EXPLOSIVE_ANI, ani);
+
 	ani = new CAnimation(100);
 	ani->Add(1183);
 	ani->Add(1185);
@@ -309,6 +398,21 @@ void LoadResource() {
 	ani->Add(10015);
 	animations->Add(NAKIRI_ANI_WALKING_LEFT, ani);
 
+	ani = new CAnimation(100);
+	ani->Add(15000);
+	animations->Add(MOVE_BRICK_ANI, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(12500);
+	ani->Add(12501);
+	ani->Add(12502);
+	ani->Add(12503);
+	ani->Add(12504);
+	ani->Add(12505);
+	ani->Add(12506);
+	ani->Add(12507);
+	animations->Add(BULLET_ANI, ani);
+
 	ani = new CAnimation(500);
 	ani->Add(10008);
 	ani->Add(10009);
@@ -321,6 +425,16 @@ void LoadResource() {
 	ani = new CAnimation(100);
 	ani->Add(10017);
 	animations->Add(NAKIRI_ANI_JUMP_LEFT, ani);
+
+	ani = new CAnimation(500);	//cannon
+	ani->Add(12400);
+	ani->Add(12401);
+	animations->Add(CANNON_ANI, ani);
+
+	cannon = new Cannon();
+	cannon->SetWidthHeight(32, 32);
+	cannon->AddAnimation(CANNON_ANI);
+	cannon->SetPosition(2336, 1280);
 	
 	ani = new CAnimation(10);
 	ani->Add(12345);
@@ -387,8 +501,7 @@ void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
 	y = (int)(brick->y / BRICK_WIDTH);
 
 	objects.push_back(brick);
-	if (MapObj[y][x] != NULL)
-		MapObj[y][x] = objects.size() - 1;
+	MapObj[y][x].push_back(objects.size() - 1);
 }
 void LoadMap(string MapFile) {
 	ifstream ifs{ MapFile };
@@ -396,14 +509,16 @@ void LoadMap(string MapFile) {
 
 
 	vector<vector<int>> r_map;
-	vector<int> lineMapTile, lineMapObj;
+	vector<int> lineMapTile;
+	vector<vector<int>> lineMapObj;
 	r_map.push_back(jsonfile["layers"][0]["data"]);
 
 	int w = jsonfile["layers"][0]["width"], h = jsonfile["layers"][0]["height"];
 	for (int i = 0; i < r_map[0].size(); i++) {
 		 {
 			lineMapTile.push_back(r_map[0][i] - 1);
-			lineMapObj.push_back(-1);
+			vector<int> a = vector<int>();
+			lineMapObj.push_back(a);
 			if (lineMapTile.size() == w) {
 				MapTile.push_back(lineMapTile);
 				lineMapTile.clear();
@@ -427,38 +542,39 @@ void LoadMap(string MapFile) {
 	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
 		Style style;
 		int des = -1;
-		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (id == 1433 || id == 1439 || id == 1633 || id == 1632 || id == 1646 || id == 1637 || id == 1643 || id == 1644
-			|| id == 1518 || id == 1647)
+		string type = jsonfile["layers"][1]["objects"][i]["type"];
+		/*int id = jsonfile["layers"][1]["objects"][i]["id"];*/
+		if (type == "0")
 		{
-			style = (diagonal_left);
+			style = normal_brick;
 		}
-		else if (id == 1435 || id == 1441 || id == 1639 || id == 1640 || id == 1487 || id == 1512) {
+		else if (type == "1") {
+			style = diagonal_left;
+		}
+		else if (type == "2") {
 			style = diagonal_right;
 		}
-		else if (id == 1466)
-		{
-			style = (slide_right);
+		else if (type == "3") {
+			style = main_c;
 		}
-		else if (id == 1467) {
+		else if (type == "4"){
 			style = slide_left;
 		}
-		else if (id == 1405 || id == 1406){
-			style = trigger;
-			des = 0;
+		else if (type == "5") {
+			style = slide_right;
 		}
-		else if (id == 1408) {
-			style = trigger;
-			//des = 0;
+		else if (type == "6") {
+			style = spike;
 		}
-		else if (id == 1403 || id == 1404)
-		{
-			style = trigger;
-			des = 1;
+		else if (type == "7") {
+			style = trap;
 		}
-		else
-			style = normal_brick;
-		
+		else if (type == "8") {
+			style = trigger;
+		}
+		else if (type == "9") {
+			style = move_brick;
+		}
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
 		int h = jsonfile["layers"][1]["objects"][i]["height"];
@@ -532,20 +648,30 @@ void setCam(float x, float y) {
 	
 }
 
+void UpdateObj(GameObject* obj, DWORD dt) {
+	coObj->clear();
+
+	UpdateActObj(obj->GetPos());
+
+	quadtree = CreateQuadTree(actObj, obj->GetPos());
+
+	quadtree->Retrieve(coObj, obj);
+
+	if(obj->type != g_star)
+		coObj->push_back(nakiri);
+
+	obj->Update(dt, coObj);
+
+	quadtree->~Quadtree();
+}
+
 void Update(DWORD dt) {
 	float cx, cy;
 
-	coObj->clear();
+	UpdateObj(boom, dt);
 
-	UpdateActObj(boom->GetPos());
+	UpdateObj(cannon, dt);
 
-	quadtree = CreateQuadTree(actObj, boom->GetPos());
-
-	quadtree->Retrieve(coObj, boom);
-
-	boom->Update(dt, coObj);
-
-	quadtree->~Quadtree();
 
 	coObj->clear();
 
@@ -561,11 +687,16 @@ void Update(DWORD dt) {
 	Map::GetInstance()->updateMap(cx, cy, tf, br);
 	Map::GetInstance()->updateMapObject(coObj);
 
+	for (int i = 0; i < cannon->bullets.size(); i++)
+		cannon->bullets[i]->Update(dt);
+
 	vector<LPGAMEOBJECT>* coObj2 = new vector<LPGAMEOBJECT>();
 
 	for (int i = 0; i < coObj->size(); i++) {
 		coObj2->push_back(coObj->at(i));
 	}
+	coObj2->push_back(cannon);
+	coObj2->push_back(boom);
 
 	coObj->push_back(nakiri);
 
@@ -579,6 +710,8 @@ void Update(DWORD dt) {
 	}
 
 	nakiri->Update(dt, coObj2);
+
+	UpdateObj(star, dt);
 
 	nakiri->GetPosition(cx, cy);
 
@@ -605,20 +738,31 @@ void Render_Map() {
 				if(ani != NULL)
 					ani->Render(BRICK_HEIGHT * (x)+ cx - (int)(cx), BRICK_WIDTH * (y)+ cy - (int)(cy));
 			}
-			if (MapObj[y][x] != -1)
-				screenObj.push_back(objects.at(MapObj[y][x]));
+			for (int i = 0; i < MapObj[y][x].size(); i++) {
+				screenObj.push_back(objects.at(MapObj[y][x][i]));
+			}
 		}
  	}
 	/*for (int i = 0; i < screenObj.size(); i++)
 		screenObj.at(i)->Render();*/
+	vector<LPGAMEOBJECT>* list = Map::GetInstance()->getList();
+	for (int i = 0; i < list->size(); i++)
+		list->at(i)->Render();
 
-	for (int i = 0; i < coObj->size(); i++)
+
+
+	for (int i = 0; i < cannon->bullets.size(); i++)
+		cannon->bullets[i]->Render();
+	for (int i = 0; i < coObj->size(); i++) {
 		coObj->at(i)->RenderBoundingBox();
+		//coObj->at(i)->Render();
+	}
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i].Render();
 	}
-	
+	star->Render();
+	cannon->Render();
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
 	}*/
@@ -721,11 +865,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	keyHandler = new CSampleKeyHander();
 	game->InitKeyboard(keyHandler);
 
+	
+
 	lx = ly = 0;
 
 	LoadResource();
 	LoadMap("Maps\\map1.json");
 
+	star = new Star();
+
+	
 	Run();
 	return 0;
 }

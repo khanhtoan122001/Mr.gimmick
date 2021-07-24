@@ -24,5 +24,6 @@ public:
 	static Map* GetInstance();
 	void updateMapObject(vector<LPGAMEOBJECT>*);
 	void updateMap(float x, float y, Point& tf, Point& br);
+	vector<LPGAMEOBJECT>* getList() { return listMoveBrick; };
 };
 

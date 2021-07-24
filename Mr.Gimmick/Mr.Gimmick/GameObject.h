@@ -11,10 +11,13 @@
 #define BRICK_WIDTH 32
 #define BRICK_HEIGHT 32
 
+#define GRAVITY 0.002f
+
 class GameObject;
 typedef GameObject* LPGAMEOBJECT;
 
-enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left, slide_right, spike, trap, trigger, move_brick};
+enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left,
+	slide_right, spike, trap, trigger, move_brick, g_cannon, g_star};
 
 struct CCollisionEvent;
 typedef CCollisionEvent* LPCOLLISIONEVENT;
@@ -68,7 +71,7 @@ public:
 
 	DWORD dt;
 
-	Style style;
+	Style type;
 
 	LPDIRECT3DTEXTURE9 texture;
 
@@ -84,9 +87,9 @@ public:
 	bool GetPenetrable() { return this->penetrable; }
 
 	Line getLine() {
-		if (style == diagonal_left)
+		if (type == diagonal_left)
 			return Line(Point(x + width, y), Point(x, y + height));
-		if (style == diagonal_right)
+		if (type == diagonal_right)
 			return Line(Point(x, y), Point(x + width, y + height));
 		return Line();
 	}
@@ -105,14 +108,14 @@ public:
 
 	virtual void Render() = 0;
 	virtual void SetState(int state) { this->state = state; }
-	void SetStyle(Style style) { this->style = style; }
+	void SetStyle(Style style) { this->type = style; }
 	void RenderBoundingBox();
 	virtual Rect GetBoundingBox() = 0;
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b) = 0;
 	Point GetPos() { return Point(x, y); }
 
 
-	Style getType() { return this->style; }
+	Style getType() { return this->type; }
 
 	GameObject();
 	~GameObject();

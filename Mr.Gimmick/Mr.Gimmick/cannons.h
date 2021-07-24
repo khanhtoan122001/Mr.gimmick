@@ -1,14 +1,19 @@
 #pragma once
 #include "GameObject.h"
+#include "Game.h"
+#include "Bullet.h"
 
-#define BRICK_BBOX_WIDTH  32
-#define BRICK_BBOX_HEIGHT 32
-#define MOVE_BRICK_ANI 984652
-class Brick : public GameObject
+#define CANNON_ANI 165165
+#define TIME_FIRE 500
+class Cannon : public GameObject
 {
+	int loop;
 public:
+	vector<LPGAMEOBJECT> bullets;
+	Cannon();
 	virtual void Render();
 	virtual Rect GetBoundingBox();
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 };
+

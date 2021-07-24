@@ -61,7 +61,7 @@ void GameObject::CalcPotentialCollisions(
 	{
 		vector<LPCOLLISIONEVENT> e = SweptAABBEx(coObjects->at(i));
 		for (UINT j = 0; j < e.size(); j++)
-			if (/*e[j]->t > 0 && */e[j]->t <= 1.0f)
+			if (e[j]->t > -1.0f && e[j]->t <= 1.0f)
 				coEvents.push_back(e[j]);
 			else
 				delete e[j];
@@ -103,7 +103,7 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		Line mLine(Point(mr, mb), Point(mr, mb) + Point(dx, dy));
 		Line sLine = coO->getLine();
 		Point p;
-		if (mLine.isIntersecting(sLine))
+		//if (mLine.isIntersecting(sLine))
 			p = mLine.intersectingWithLine(sLine);
 
 		vector<CCollisionEvent*> e;
@@ -131,16 +131,16 @@ vector<LPCOLLISIONEVENT> GameObject::SweptAABBEx(LPGAMEOBJECT coO)
 		return e;
 	}
 	else if (style == diagonal_right) {
-		Line mLine(Point(ml, mb), Point(ml, mb) + Point(dx, dy));
+ 		Line mLine(Point(ml, mb), Point(ml, mb) + Point(dx, dy));
 		Line sLine = coO->getLine();
 		Point p;
-		if (mLine.isIntersecting(sLine))
+		//if (mLine.isIntersecting(sLine))
 			p = mLine.intersectingWithLine(sLine);
 
 		vector<CCollisionEvent*> e;
 
 		if (p.x < sl || p.x > sr || (mb + dy < st))
-			return e;
+   			return e;
 		if (dx != 0) {
 			CGame::SweptAABB(
 				ml, mt, mr, mb,
