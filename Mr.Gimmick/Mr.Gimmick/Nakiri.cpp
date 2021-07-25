@@ -36,13 +36,16 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	GameObject::Update(dt);
 
 	if (colliable_objects != NULL) {
-		if(vy < NAKIRI_JUMP_SPEED * 1.5)
-			vy += NAKIRI_GRAVITY * dt;
-		else {
-			dy -= vy * dt;
-			vy = NAKIRI_JUMP_SPEED;
-			dy += vy * dt;
-		}
+		if (!tunning && !tunning_rev)
+		{
+			if (vy < NAKIRI_JUMP_SPEED * 1.5)
+				vy += NAKIRI_GRAVITY * dt;
+			else {
+				dy -= vy * dt;
+				vy = NAKIRI_JUMP_SPEED;
+				dy += vy * dt;
+			}
+		}		
 
 		vector<LPGAMEOBJECT>* return_list = new vector<LPGAMEOBJECT>();
 
@@ -83,8 +86,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 			// block 
-	 		x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-			y += min_ty * dy + ny * 0.4f;
+	 		x += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+			y += min_ty * dy + ny * 0.8f;
 
 			if (nx != 0) // ok buoc 1 :v
 				vx = 0;
@@ -176,8 +179,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						trigg->getTrap()->SetSpeed(0, 0.02);
 				}
 				break;
-			case tunnel:
-				if (e->t != -1.0)
+			case tunnel1:
+				if (e->t != -1.0 && !tunning_rev)
 				{
 					tunning = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
@@ -186,12 +189,35 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				//else 
 					//tunning = false;
 				break;
-			case tunnel_end:
+			case corner_1_1:
 				if (e->t != -1.0)
 					if (tunning)
 					{
-						tunning = false;
+						vx = 0;
+						vy = 0.3f;
 					}
+				break;
+			case corner_1_2:
+				if (e->t != -1.0)
+					if (tunning_rev)
+					{
+						vy = 0;
+						vx = -0.1f;
+					}
+				break;
+			case tunnel1_end:
+				if (e->t != -1.0 && tunning)
+				{
+					tunning = false;
+				}
+				break;
+			case tunnel1_1:
+				if (e->t != -1.0 && !tunning)
+				{
+					tunning_rev = true;
+					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
+					vy = -0.3f;
+				}
 				break;
 			default:
 				break;
@@ -272,7 +298,7 @@ void Nakiri::SetState(int state)
 
 	case NAKIRI_STATE_STAND:
 		{
-			 if(!tunning)
+			 if(!tunning && !tunning_rev)
 				vx = 0; 
 		} 
 		break;

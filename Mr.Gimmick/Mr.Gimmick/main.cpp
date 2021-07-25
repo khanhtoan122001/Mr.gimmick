@@ -74,6 +74,7 @@ CSampleKeyHander* keyHandler;
 void CSampleKeyHander::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
+	if (nakiri->tunning || nakiri->tunning_rev) return;
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
@@ -101,7 +102,7 @@ void CSampleKeyHander::KeyState(BYTE* states)
 {
 	// disable control key when Mario die 
 	if (nakiri->GetState() == NAKIRI_STATE_DIE) return;
-	if (nakiri->tunning) return;
+	if (nakiri->tunning || nakiri->tunning_rev) return;
 	if (game->IsKeyDown(DIK_RIGHT))
 		nakiri->SetState(NAKIRI_STATE_WALKING_RIGHT);
 
@@ -448,7 +449,8 @@ void LoadMap(string MapFile) {
 	//	}
 	//}
 
-	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) {
+	for (int i = 0; i < jsonfile["layers"][1]["objects"].size(); i++) 
+	{
 		Style style;
 		int des = -1;
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
@@ -481,11 +483,27 @@ void LoadMap(string MapFile) {
 		}
 		else if (id == 1628)
 		{
-			style = tunnel;
+			style = tunnel1;
+		}
+		else if (id == 1631)
+		{
+			style = tunnel1_end;
+		}
+		else if (id == 1629)
+		{
+			style = tunnel1_1;
+		}
+		else if (id == 1632)
+		{
+			style = tunnel1_1_end;
+		}
+		else if (id == 1452)
+		{
+			style = corner_1_2;
 		}
 		else if (id == 1455)
 		{
-			style = tunnel_end;
+			style = corner_1_1;
 		}
 		else
 			style = normal_brick;
@@ -494,14 +512,15 @@ void LoadMap(string MapFile) {
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
 		int h = jsonfile["layers"][1]["objects"][i]["height"];
 
-		if (style == trigger) {
+		if (style == trigger) 
+		{
 			Trigger* trigg = new Trigger();
 			trigg->SetPenetrable(true);
 			if(des >= 0)
 				trigg->setTrap(&tp[des]);
 			Obj(trigg, i, style, p, w, h);
 		}
-		else if (style == tunnel)
+		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end)
 		{
 			Tunnel* tunnel = new Tunnel();
 			tunnel->SetPenetrable(true);
