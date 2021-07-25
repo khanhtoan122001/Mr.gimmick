@@ -3,6 +3,7 @@
 #include <d3dx9.h>
 #include <fstream>
 
+#include "Tunnel.h"
 #include "Trigger.h"
 #include "Textures.h"
 #include "Game.h"
@@ -533,7 +534,7 @@ void LoadMap(string MapFile) {
 		Style style;
 		int des = -1;
 		string type = jsonfile["layers"][1]["objects"][i]["type"];
-		/*int id = jsonfile["layers"][1]["objects"][i]["id"];*/
+		int id = jsonfile["layers"][1]["objects"][i]["id"];
 		if (type == "0")
 		{
 			style = normal_brick;
@@ -565,6 +566,11 @@ void LoadMap(string MapFile) {
 		else if (type == "9") {
 			style = move_brick;
 		}
+		else if (id == 1412)
+		{
+			style = (tunnel);
+		}
+		
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
 		int h = jsonfile["layers"][1]["objects"][i]["height"];
@@ -575,6 +581,12 @@ void LoadMap(string MapFile) {
 			if(des >= 0)
 				trigg->setTrap(&tp[des]);
 			Obj(trigg, i, style, p, w, h);
+		}
+		else if (style == tunnel)
+		{
+			Tunnel* tunnel = new Tunnel();
+			tunnel->SetPenetrable(true);
+			Obj(tunnel, i, style, p, w, h);
 		}
 		else {
 			Brick* brick = new Brick();

@@ -165,6 +165,7 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Trigger.cpp" />
+    <ClCompile Include="tunnel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boom.h" />
@@ -184,6 +185,7 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Trigger.h" />
+    <ClInclude Include="Tunnel.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

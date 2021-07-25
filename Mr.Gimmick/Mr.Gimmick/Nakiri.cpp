@@ -7,6 +7,8 @@
 #include "Trigger.h"
 #include "Star.h"
 #include "boom.h"
+#include <winuser.h>
+#include "Tunnel.h"
 Nakiri* Nakiri::__instance = NULL;
 
 Nakiri::Nakiri()
@@ -259,6 +261,12 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					boom->penetrable = false;
 				}
 				break;
+			case tunnel:
+			{
+				Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
+				x += 4.0f;
+			}
+			break;
 			default:
 				break;
 			}
