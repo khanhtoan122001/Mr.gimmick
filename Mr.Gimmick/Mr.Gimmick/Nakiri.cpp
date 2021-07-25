@@ -46,11 +46,11 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	if (colliable_objects != NULL) {
 		if (!tunning && !tunning_rev)
 		{
-			if (vy < NAKIRI_JUMP_SPEED * 1.5)
+			if (vy < NAKIRI_MAX_JUMP_SPEED * 1.5)
 				vy += NAKIRI_GRAVITY * dt;
 			else {
 				dy -= vy * dt;
-				vy = NAKIRI_JUMP_SPEED;
+				vy = NAKIRI_MAX_JUMP_SPEED;
 				dy += vy * dt;
 			}
 		}		
@@ -100,8 +100,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 			// block 
-	 		x += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-			y += min_ty * dy + ny * 0.8f;
+	 		x0 += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+			y0 += min_ty * dy + ny * 0.4f;
 
 			if (nx != 0) // ok buoc 1 :v
 				vx = 0;
@@ -265,11 +265,11 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					boom->penetrable = false;
 				}
 				break;
-			case tunnel:
+			/*case tunnel:
 			{
 				Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
 				x += 4.0f;
-			}
+			}*/
 			break;
 			case tunnel1:
 				if (e->t != -1.0 && !tunning_rev)

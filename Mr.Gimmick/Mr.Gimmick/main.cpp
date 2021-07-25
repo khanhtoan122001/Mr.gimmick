@@ -620,8 +620,6 @@ void LoadMap(string MapFile) {
 		{
 			style = corner_1_1;
 		}
-		else
-			style = normal_brick;
 		
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
