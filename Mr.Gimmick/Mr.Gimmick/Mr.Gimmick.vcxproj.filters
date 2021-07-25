@@ -65,6 +65,7 @@
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
     <ClCompile Include="tunnel.cpp">
+    <ClCompile Include="Tunnel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

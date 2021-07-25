@@ -165,7 +165,7 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Trigger.cpp" />
-    <ClCompile Include="tunnel.cpp" />
+    <ClCompile Include="Tunnel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boom.h" />

@@ -37,6 +37,8 @@ class Nakiri : public GameObject
 	float start_x;			// initial position of Mario at scene
 	float start_y;
 public:
+	bool tunning = false;
+	bool tunning_rev = false;
 	static Nakiri* GetInstance();
 	Nakiri();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
