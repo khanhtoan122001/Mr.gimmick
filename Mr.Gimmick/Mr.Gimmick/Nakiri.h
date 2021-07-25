@@ -12,8 +12,9 @@
 #define NAKIRI_WIDTH 32
 #define NAKIRI_HEIGHT 32
 
-#define NAKIRI_WALKING_SPEED 0.26
-#define NAKIRI_JUMP_SPEED 0.43f
+#define NAKIRI_WALKING_SPEED 0.30
+#define NAKIRI_MAX_JUMP_SPEED 0.63f
+#define NAKIRI_MEDIUM_JUMP_SPEED 0.33
 
 #define NAKIRI_ANI_STAND_RIGHT 1503
 #define NAKIRI_ANI_STAND_LEFT 1505
@@ -37,7 +38,7 @@ class Nakiri : public GameObject
 	float start_y;
 public:
 	static Nakiri* GetInstance();
-	Nakiri(float x = 32, float y = 160);
+	Nakiri();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
 	virtual void Render();
 	bool isSlip;

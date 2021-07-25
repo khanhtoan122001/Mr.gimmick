@@ -1,9 +1,13 @@
 #include "Star.h"
+#include "boom.h"
 
 void Star::Reset()
 {
 	state = STAR_HIDE;
 	x = y = -99999;
+	canPress = true;
+	canShot = true;
+	isComplete = false;
 	time_ex = 0;
 	time = 0;
 }
@@ -14,6 +18,7 @@ Star::Star()
 	this->AddAnimation(ACTIVE_ANI);
 	this->AddAnimation(EXPLOSIVE_ANI);
 	width = height = 32;
+	penetrable = true;
 	type = g_star;
 	Reset();
 }
@@ -64,7 +69,7 @@ void Star::Shot()
 	float _nx = Nakiri::GetInstance()->nx;
 	float _vx = Nakiri::GetInstance()->vx;
 	float _vy = Nakiri::GetInstance()->vy;
-	if (_nx > 0)
+	if (_nx >= 0)
 		this->SetSpeed(0.25 + _vx, -0.03 + _vy);
 	if (_nx < 0)
 		this->SetSpeed(-0.25 + _vx, -0.03 + _vy);
@@ -81,10 +86,10 @@ void Star::GetBoundingBox(float& l, float& t, float& r, float& b)
 void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	if (!isActive() && state != STAR_CHARGE && state != STAR_INDIE) {
-		Active = false;
 		Reset();
 	}
-	else Active = true;
+	//else isComplete = false;
+
 	Point p = Nakiri::GetInstance()->GetPos();
 	if (state == STAR_EXPLOSIVE) {
 		time_ex += dt;
@@ -94,7 +99,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 	if (state == STAR_INDIE) {
 		x = p.x;
-		y = p.y - 32;
+		y = p.y - 20;
 	}
 	
 	if (state == STAR_CHARGE) {
@@ -103,7 +108,8 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			state = STAR_INDIE;
 			isComplete = true;
 			animations[0]->Reset();
-			this->SetSpeed(0.07, 0);
+			//this->SetSpeed(0.07, 0);
+			canShot = true;
 			time = 0;
 		}
 		else {
@@ -115,6 +121,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		time = 0;
 	}
 	if (state == STAR_MOVE) {
+		canShot = false;
 		if (-VX_MIN < vx && vx < VX_MIN)
 			time_ex += dt;
 		else if (-VY_MIN < vy && vy < VY_MIN)
@@ -123,7 +130,6 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (time_ex >= ACTIVE_TIME) {
 			state = STAR_EXPLOSIVE;
 			time_ex = 0;
-			return;
 		}
 		dx = dy = 0;
 		GameObject::Update(dt, coObjects);
@@ -131,8 +137,16 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		bool isXChange = false;
 		bool isYChange = false;
 
-		vy += GRAVITY * dt;
+		if (vy < STAR_MAX_SPEED_FALL * 1.3)
+			vy += GRAVITY * dt;
+		else {
+			dy -= vy * dt;
+			vy = STAR_MAX_SPEED_FALL;
+			dy += vy * dt;
+		}
+
 		float _vx = vx, _vy = vy;
+		float x0 = x, y0 = y;
 
 		if (coObjects != NULL) {
 			vector<LPCOLLISIONEVENT> coEvents;
@@ -147,10 +161,27 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				// block 
 
-				for (int i = 0; i < coEventsResult.size(); i++) {
-					LPCOLLISIONEVENT e = coEventsResult[i];
-					if (e->obj->getType() == main_c)
-						continue;
+				for (int i = 0; i < coEvents.size(); i++) {
+					LPCOLLISIONEVENT e = coEvents[i];
+					//if (e->t <= 0) continue;
+
+					if (e->obj->getType() == main_c) {
+
+						Nakiri* nakiri = dynamic_cast<Nakiri*>(e->obj);
+						nakiri->penetrable = true;
+
+						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+						y0 += min_ty * dy + ny * 0.8f;
+
+						nakiri->penetrable = false;
+
+						if (e->ny == 1) {
+							nakiri->x += min_tx * dx;
+							nakiri->y += min_ty * dy;
+						}
+
+					}
 					else if (e->obj->getType() == diagonal_left) {
 						if (vx > 0)
 							vx = -_vx * 0.8;
@@ -161,9 +192,22 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							vx = -_vx * 0.8;
 						vy = -_vy * 0.7;
 					}
+					else if (e->obj->getType() == g_boom) {
+
+						Boom* boom = dynamic_cast<Boom*>(e->obj);
+						boom->penetrable = true;
+
+						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+						// block 
+						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+						y0 += min_ty * dy + ny * 0.8f;
+
+						boom->penetrable = false;
+					}
 					else {
-						x += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-						y += min_ty * dy + ny * 0.8f;
+						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+						y0 += min_ty * dy + ny * 0.8f;
 
 
 						if (nx != 0) {
@@ -177,10 +221,16 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				}
 			}
 			else {
-				x += dx;
-				y += dy;
+				x0 += dx;
+				y0 += dy;
 			}
+
+			for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
+
 		}
+
+		x = x0;
+		y = y0;
 	}
 
 

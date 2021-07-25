@@ -10,6 +10,7 @@ void Map::updateObj()
 	{
 	case 1:
 	{
+		listObj = listMoveBrick;
 	}
 	default:
 		break;
@@ -24,7 +25,7 @@ Map::Map()
 
 	mbrick->SetWidthHeight(64, 32);
 	mbrick->AddAnimation(MOVE_BRICK_ANI);
-	mbrick->SetPosition(160, 512 + 256 - 96);
+	mbrick->SetPosition(160, 512 + 256 - 96 - 64);
 	mbrick->SetSpeed(0.05, 0.0);
 	mbrick->maxx = 128 * 2;
 	mbrick->minx = 64 * 2;
@@ -45,8 +46,10 @@ Map* Map::GetInstance()
 
 void Map::updateMapObject(vector<LPGAMEOBJECT>* objs)
 {
-	this->listObj = objs;
-	objs->push_back(this->listMoveBrick->at(0));
+	updateObj();
+	//this->listObj = objs;
+	for(int i = 0; i < listObj->size(); i++)
+		objs->push_back(this->listObj->at(0));
 }
 
 void Map::updateMap(float x, float y, Point& tf, Point& br)

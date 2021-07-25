@@ -2,6 +2,11 @@
 #include "Textures.h"
 #include "Game.h"
 
+/*Trap::Trap()
+{
+	this->AddAnimation(TRAP_NORMAL);
+}*/
+
 void Trap::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	GameObject::Update(dt);

@@ -6,20 +6,23 @@
 #define BOOM_WIDTH 32
 #define BOOM_HEIGHT 32
 
+
+#define BOOM_ANI_DIE 894512
 #define BOOM_ANI_WALK_RIGHT 156505
 #define BOOM_ANI_WALK_LEFT 156506
 
-#define BOOM_WALK_SPEED 0.02
+#define BOOM_WALK_SPEED 0
 
 class Boom : public GameObject
 {
-	static Boom* __instance;
 	int untouchable;
 	DWORD untouchable_start;
 	float start_x;			// initial position of Mario at scene
 	float start_y;
+	bool canChange = true;
+
 public:
-	static Boom* GetInstance();
+	Boom();
 	virtual void Render();
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
 	virtual Rect GetBoundingBox();

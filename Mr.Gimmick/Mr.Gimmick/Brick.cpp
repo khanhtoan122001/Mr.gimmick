@@ -62,20 +62,37 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 
 				for (int i = 0; i < coEvents.size(); i++) {
 					LPCOLLISIONEVENT e = coEvents[i];
-					if (e->obj->getType() == main_c) {
-						if(e->t > 0 && e->ny != 0)
+					switch (e->obj->getType())
+					{
+					case main_c:
+						if (e->t > 0 && e->ny != 0)
 							e->obj->x += dx * 2;
 
 						if (e->t < 0 && e->t > -1.0f) {
-							if(e->nx == 0)
+							if (e->nx == 0)
 								e->obj->y -= 1;
 							e->obj->x += dx * 2;
 						}
+						break;
+					case g_boom:
+
+						if (e->t > 0 && e->ny != 0)
+							e->obj->x += dx * 2;
+
+						if (e->t < 0 && e->t > -1.0f) {
+							if (e->nx == 0)
+								e->obj->y -= 1;
+							e->obj->x += dx * 2;
+						}
+
+						break;
+					default:
+						break;
 					}
-					
+
 				}
 			}
 		}
-		
+
 	}
 }

@@ -50,7 +50,6 @@
 #define ID_TEX_ENEMY 10
 #define ID_TEX_MISC 20
 
-#define TRAP_NORMAL 344
 CGame* game;
 Nakiri* nakiri;
 Boom* boom;
@@ -79,10 +78,10 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
 	case DIK_S:
-		if (!star->isPress()) {
-			if(!star->Active)
+		if (star->canPress) {
+			if(!star->isComplete && star->canShot)
 				star->SetState(STAR_CHARGE);
-			star->Press();
+			star->canPress = false;
 		}
 		break;
 	}
@@ -104,11 +103,13 @@ void CSampleKeyHander::OnKeyUp(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_S:
-		if (star->isComplete)
-			star->Shot();
+		if (star->isComplete) {
+			if (star->canShot)
+				star->Shot();
+		}
 		else
-			star->SetState(STAR_HIDE);
-		star->Press();
+			star->Reset();
+		star->canPress = true;
 		break;
 	}
 }
@@ -445,20 +446,11 @@ void LoadResource() {
 
 	tp[0].SetPosition(864 * 2, 416 * 2);
 	tp[1].SetPosition(816 * 2, 416 * 2);
-	for (int i = 0; i < 2; i++)
-	{
-		tp[i].AddAnimation(TRAP_NORMAL);
-	}
-	
+	tp[0].AddAnimation(TRAP_NORMAL);
+	tp[1].AddAnimation(TRAP_NORMAL);
 
 	nakiri = Nakiri::GetInstance();
 	nakiri->SetPosition(32 * 2, 2 * 16 * 12);
-	nakiri->AddAnimation(NAKIRI_ANI_STAND_RIGHT);
-	nakiri->AddAnimation(NAKIRI_ANI_WALKING_RIGHT);
-	nakiri->AddAnimation(NAKIRI_ANI_STAND_LEFT);
-	nakiri->AddAnimation(NAKIRI_ANI_WALKING_LEFT);
-	nakiri->AddAnimation(NAKIRI_ANI_JUMP_RIGHT);
-	nakiri->AddAnimation(NAKIRI_ANI_JUMP_LEFT);
 	//objects.push_back(nakiri);
 
 	LPDIRECT3DTEXTURE9 enemiesR = textures->Get(ID_ENEMIES_RIGHT);
@@ -483,10 +475,8 @@ void LoadResource() {
 	ani->Add(11005);
 	animations->Add(BOOM_ANI_WALK_LEFT, ani);
 
-	boom = Boom::GetInstance();
-	boom->SetPosition(32 * 6 * 2, 16 * 21 * 2);
-	boom->AddAnimation(BOOM_ANI_WALK_RIGHT);
-	boom->AddAnimation(BOOM_ANI_WALK_LEFT);
+	boom = new Boom();
+	boom->SetPosition(1440, 704 - 64);
 	objects.push_back(boom);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
@@ -651,14 +641,23 @@ void setCam(float x, float y) {
 void UpdateObj(GameObject* obj, DWORD dt) {
 	coObj->clear();
 
+	float cx, cy;
+	nakiri->GetPosition(cx, cy);
+
 	UpdateActObj(obj->GetPos());
 
 	quadtree = CreateQuadTree(actObj, obj->GetPos());
 
 	quadtree->Retrieve(coObj, obj);
 
-	if(obj->type != g_star)
-		coObj->push_back(nakiri);
+	//if(obj->type != g_star)
+
+	coObj->push_back(nakiri);
+	coObj->push_back(cannon);
+	coObj->push_back(boom);
+	coObj->push_back(star);
+	Map::GetInstance()->updateMap(cx, cy, tf, br);
+	Map::GetInstance()->updateMapObject(coObj);
 
 	obj->Update(dt, coObj);
 
@@ -672,6 +671,7 @@ void Update(DWORD dt) {
 
 	UpdateObj(cannon, dt);
 
+	UpdateObj(star, dt);
 
 	coObj->clear();
 
@@ -690,18 +690,21 @@ void Update(DWORD dt) {
 	for (int i = 0; i < cannon->bullets.size(); i++)
 		cannon->bullets[i]->Update(dt);
 
-	vector<LPGAMEOBJECT>* coObj2 = new vector<LPGAMEOBJECT>();
-
-	for (int i = 0; i < coObj->size(); i++) {
-		coObj2->push_back(coObj->at(i));
-	}
-	coObj2->push_back(cannon);
-	coObj2->push_back(boom);
-
 	coObj->push_back(nakiri);
+	coObj->push_back(cannon);
+	coObj->push_back(boom);
+	coObj->push_back(star);
 
-	for (int i = 0; i < coObj->size() - 1; i++)
+	for (int i = 0; i < coObj->size(); i++)
 	{
+		if (coObj->at(i)->type == g_boom)
+			continue;
+		if (coObj->at(i)->type == g_cannon)
+			continue;
+		if (coObj->at(i)->type == g_star)
+			continue;
+		if (coObj->at(i)->type == main_c)
+			continue;
 		coObj->at(i)->Update(dt, coObj);
 	}
 	for (int i = 0; i < 2; i++)
@@ -709,9 +712,8 @@ void Update(DWORD dt) {
 		tp[i].Update(dt, coObj);
 	}
 
-	nakiri->Update(dt, coObj2);
 
-	UpdateObj(star, dt);
+	nakiri->Update(dt, coObj);
 
 	nakiri->GetPosition(cx, cy);
 
@@ -753,10 +755,10 @@ void Render_Map() {
 
 	for (int i = 0; i < cannon->bullets.size(); i++)
 		cannon->bullets[i]->Render();
-	for (int i = 0; i < coObj->size(); i++) {
+	/*for (int i = 0; i < coObj->size(); i++) {
 		coObj->at(i)->RenderBoundingBox();
 		//coObj->at(i)->Render();
-	}
+	}*/
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i].Render();
@@ -873,7 +875,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	LoadMap("Maps\\map1.json");
 
 	star = new Star();
-
 	
 	Run();
 	return 0;

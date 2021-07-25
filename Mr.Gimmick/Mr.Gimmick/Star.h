@@ -16,6 +16,8 @@
 #define STAR_CHARGE_WIDTH 238
 #define STAR_CHARGE_HEIGHT 230
 
+#define STAR_MAX_SPEED_FALL 0.4f
+
 #define CHARGE_ANI 616506
 #define ACTIVE_ANI 684124
 #define MOVE_ANI 641321
@@ -28,16 +30,14 @@ class Star : public GameObject
 {
 	int time = 0;
 	int time_ex = 0;
-	bool press = false;
 	int count = 0;
-	void Reset();
 public:
 	bool isComplete = false;
-	bool Active = true;
+	void Reset();
+	bool canPress = true;
+	bool canShot = true;
 	Star();
 	virtual void Render();
-	bool isPress() { return press; }
-	void Press() { press = !press; }
 	bool isActive();
 	virtual Rect GetBoundingBox();
 	void Shot();

@@ -1,12 +1,14 @@
 #include "boom.h"
+#include "Star.h"
 
-Boom* Boom::__instance = NULL;
 
-Boom* Boom::GetInstance()
+Boom::Boom()
 {
-	if (__instance == NULL)
-		__instance = new Boom();
-	return __instance;
+	//vx = 0.8f;
+	this->AddAnimation(BOOM_ANI_WALK_RIGHT);
+	this->AddAnimation(BOOM_ANI_WALK_LEFT);
+	penetrable = false;
+	type = g_boom;
 }
 
 void Boom::Render()
@@ -38,27 +40,31 @@ void Boom::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
-	float _x, _y;
+	float _x, _y, v;
 	Nakiri::GetInstance()->GetPosition(_x, _y);
 	float dtx = _x - this->x;
 	if (dtx < 0) {
-		if (dtx < -GAME_PLAY_WIDTH * 16 / 4)
+		if (dtx < -GAME_PLAY_WIDTH * BRICK_WIDTH / 4)
 			vx = -BOOM_WALK_SPEED;
 	}
-	else {
-		if (dtx > GAME_PLAY_WIDTH * 16 / 4)
+	else{
+		if (dtx > GAME_PLAY_WIDTH * BRICK_HEIGHT / 4)
 			vx = BOOM_WALK_SPEED;
 	}
 	if (nx != 0) vx = -vx;
+	dx = dy = 0;
 
 	GameObject::Update(dt);
 
+	float x0 = x, y0 = y;
+	float _vx = vx, _vy = vy;
+
 	if (colliable_objects != NULL) {
-		if (vy < NAKIRI_JUMP_SPEED * 1.5)
+		if (vy < NAKIRI_MAX_JUMP_SPEED * 1.5)
 			vy += NAKIRI_GRAVITY * dt;
 		else {
 			dy -= vy * dt;
-			vy = NAKIRI_JUMP_SPEED;
+			vy = NAKIRI_MAX_JUMP_SPEED;
 			dy += vy * dt;
 		}
 
@@ -78,12 +84,12 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		coEvents.clear();
 
 		/*if (state != NAKIRI_STATE_DIE)*/
-			CalcPotentialCollisions(colliable_objects, coEvents);
+		CalcPotentialCollisions(colliable_objects, coEvents);
 
 		if (coEvents.size() == 0)
 		{
-			x += dx;
-			y += dy;
+			x0 += dx;
+			y0 += dy;
 		}
 		else {
 			float min_tx, min_ty, nx = 0, ny;
@@ -91,55 +97,167 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
 
 			// block 
-			x += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-			y += min_ty * dy + ny * 0.4f;
+			x0 += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+			y0 += min_ty * dy + ny * 0.4f;
 
-			if (nx != 0) 
-				vx = -vx;
+			if (nx != 0)
+				vx = -_vx;
 			if (ny != 0) vy = 0;
+
+			for (UINT i = 0; i < coEvents.size(); i++) {
+				LPCOLLISIONEVENT e = coEvents[i];
+				switch (e->obj->getType())
+				{
+				case slide_left:
+				{
+					if (e->t > 0 && e->ny == -1)
+						x0 -= 3.0f;
+					break;
+				}
+				case slide_right:
+				{
+					if (e->t > 0 && e->ny == -1)
+						x0 += 3.0f;
+					break;
+				}
+				case trap:
+				{
+					StartUntouchable();
+					break;
+				}
+				case diagonal_left:
+					if (e->t > 0)
+					{
+						if (dx == 0) {
+							x0 -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
+							y0 += NAKIRI_GRAVITY * dt;
+						}
+						if (dx > 0) {
+							y0 -= 0.028 * dt;
+							vx = 0.001f;
+						}
+						if (dx < 0) {
+							ny = 0;
+						}
+					}
+					break;
+				case diagonal_right:
+					if (e->t > 0) {
+						if (dx == 0) {
+							x0 += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
+							y0 += NAKIRI_GRAVITY * dt;
+						}
+						if (dx > 0) {
+							ny = 0;
+						}
+						if (dx < 0) {
+							y0 -= 0.028 * dt;
+							vx = -0.001f;
+						}
+					}
+					break;
+				case main_c:
+					if (e->t > 0)
+					{
+						Nakiri* nakiri = dynamic_cast<Nakiri*>(e->obj);
+						nakiri->penetrable = true;
+
+						x0 = x;
+						y0 = y;
+
+						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+						y0 += min_ty * dy + ny * 0.8f;
+
+						nakiri->penetrable = false;
+
+						if (nx != 0) vx = 0;
+						if (ny != 0) vy = 0;
+
+						/*if (e->t > 0 && e->ny == 1) {
+							e->obj->x += dx * 2;
+							e->dy -= 0.8f;
+						}
+
+						if (e->t < 0 && e->t > -1.0f) {
+							if (e->nx == 0)
+								e->obj->y -= 1;
+							e->obj->x += dx * 2;
+						}*/
+					}
+					break;
+				case move_brick:
+					if (e->t > 0) {
+						if (e->nx != 0 && dx != 0)
+							vx = -_vx;
+					}
+					break;
+				case g_star:
+				{
+					Star* star = dynamic_cast<Star*>(e->obj);
+					if (e->t > 0)
+					{
+
+						float min_tx, min_ty, nx = 0, ny;
+						this->ny = 0;
+
+						if (e->ny == -1)
+						{
+
+							star->penetrable = false;
+							x0 = x;
+							y0 = y;
+							FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+							// block 
+							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+							y0 += min_ty * dy + ny * 0.6f;
+
+							if (nx != 0) vx = 0;
+							if (ny != 0) vy = 0;
+							star->penetrable = true;
+
+						}
+						else {
+
+							star->penetrable = true;
+
+							x0 = x;
+							y0 = y;
+
+							FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
+
+							// block 
+							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
+							y0 += min_ty * dy + ny * 0.6f;
+
+							if (nx != 0) vx = 0;
+							if (ny != 0) vy = 0;
+							star->penetrable = false;
+						}
+					}
+				}
+
+				break;
+				case normal_brick:
+					if (e->t > 0 && e->nx != 0) {
+						vy = -NAKIRI_MEDIUM_JUMP_SPEED;
+					}
+					break;
+				default:
+					break;
+				}
+
+			}
+
 		}
 
 
 
-		for (UINT i = 0; i < coEventsResult.size(); i++) {
-			LPCOLLISIONEVENT e = coEventsResult[i];
-			switch (e->obj->getType())
-			{
-			case slide_left:
-			{
-				x -= 2.0f;
-				break;
-			}
-			case slide_right:
-			{
-				x += 2.0f;
-				break;
-			}
-			case trap:
-			{
-				StartUntouchable();
-				break;
-			}
-			case normal_brick:
-			{
-				break;
-			}
-			case diagonal_left:
-				if (dx == 0) {
-					x -= NAKIRI_WALKING_SPEED * 0.1 * dt;
-					y += NAKIRI_GRAVITY * dt;
-				}
-				else /*if (dx > 0) */ {
-					y -= dx * (e->obj->height / e->obj->width);
-				}
-				break;
-			default:
-				break;
-			}
-		}
-		x = x + 0.0001f;
-		y = (int)y + 0.0001f;
-		dx = dy = 0;
+
+		x = x0; y = y0;
+		/*x = x + 0.0001f;
+		y = (int)y + 0.0001f;*/
 		/*Rect r;
 		for(int i = 0; i < return_list->size();i++){
 			r = return_list->at(i)->GetBoundingBox();
