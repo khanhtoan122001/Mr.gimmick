@@ -167,6 +167,7 @@
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Trigger.cpp" />
     <ClCompile Include="Tunnel.cpp" />
+    <ClCompile Include="Worm.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boom.h" />
@@ -188,6 +189,7 @@
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Trigger.h" />
     <ClInclude Include="Tunnel.h" />
+    <ClInclude Include="Worm.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

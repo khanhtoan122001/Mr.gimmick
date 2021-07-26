@@ -213,8 +213,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					slip = true;
 					if (dx == 0) {
-						x0 -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-						y0 += NAKIRI_GRAVITY * dt;
+						x0 -= NAKIRI_GRAVITY * dt * 8 * ((float)e->obj->width / (float)e->obj->height);
+						y0 += NAKIRI_GRAVITY * dt * 8;
 					}
 					if (dx > 0) {
 						y0 -= 0.028 * dt;
@@ -229,8 +229,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (e->t > 0) {
 					slip = true;
 					if (dx == 0) {
-						x0 += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-						y0 += NAKIRI_GRAVITY * dt;
+						x0 += NAKIRI_GRAVITY * dt * 8 * ((float)e->obj->width / (float)e->obj->height);
+						y0 += NAKIRI_GRAVITY * dt * 8;
 					}
 					if (dx > 0) {
 						ny = 0;
@@ -275,7 +275,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			case g_boom:
 				if (e->t > 0) {
 					//StartUntouchable();
-					state = NAKIRI_STATE_STUN;
+					if (e->obj->state != BOOM_STATE_DIE)
+						state = NAKIRI_STATE_STUN;
 					//stun_time = 0;
 					return;
 				}
@@ -283,7 +284,17 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			case sp_boom:
 				if (e->t > 0) {
 					//StartUntouchable();
-					state = NAKIRI_STATE_STUN;
+					if (e->obj->state != BOOM_STATE_DIE)
+						state = NAKIRI_STATE_STUN;
+					//stun_time = 0;
+					return;
+				}
+				break;
+			case g_worm:
+				if (e->t > 0) {
+					//StartUntouchable();
+					if(e->obj->state != BOOM_STATE_DIE)
+						state = NAKIRI_STATE_STUN;
 					//stun_time = 0;
 					return;
 				}

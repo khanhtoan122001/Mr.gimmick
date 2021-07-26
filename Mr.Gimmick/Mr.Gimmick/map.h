@@ -22,7 +22,9 @@
 
 #define SWAP_POINT_STAGE_1 Point(96,576+16)
 #define SWAP_POINT_STAGE_2_3 Point(1984,864 +16)
+#define SWAP_POINT_STAGE_3 Point(1088, 1312 -16)
 #define SWAP_POINT_STAGE_5_6 Point(3616,1344+16)
+#define SWAP_POINT_STAGE_6 Point(3872,1024-16)
 #define SWAP_POINT_STAGE_7 Point(3904,256+16)
 
 #include "GameObject.h"
@@ -40,6 +42,8 @@ class Map
 public:
 	vector<LPGAMEOBJECT>* Stage1Enemies = new vector<LPGAMEOBJECT>();
 	vector<LPGAMEOBJECT>* Stage7Enemies = new vector<LPGAMEOBJECT>();
+	vector<LPGAMEOBJECT>* Stage3Enemies = new vector<LPGAMEOBJECT>();
+	vector<LPGAMEOBJECT>* Stage6Enemies = new vector<LPGAMEOBJECT>();
 
 	Map();
 	static Map* GetInstance();

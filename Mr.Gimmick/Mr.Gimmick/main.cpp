@@ -23,6 +23,7 @@
 #include "cannons.h"
 #include "Star.h"
 #include "Super_Boom.h"
+#include "Worm.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
@@ -101,6 +102,12 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_1:
 		nakiri->SetPosition(SWAP_POINT_STAGE_1);
+		break;
+	case DIK_3:
+		nakiri->SetPosition(SWAP_POINT_STAGE_3);
+		break;
+	case DIK_6:
+		nakiri->SetPosition(SWAP_POINT_STAGE_6);
 		break;
 	case DIK_S:
 		if (star->canPress) {
@@ -540,6 +547,20 @@ void LoadResource() {
 	sprites->Add(11102, 76, 77, 108, 122, enemiesR);
 	sprites->Add(11103, 112, 77, 144, 122, enemiesR);
 
+	sprites->Add(11200, 4, 628, 50, 656, enemiesR);
+	sprites->Add(11201, 53, 628, 99, 656, enemiesR);
+
+	sprites->Add(11300, 4, 674, 47, 702, enemiesR);
+
+	ani = new CAnimation(1000);
+	ani->Add(11300);
+	animations->Add(WORM_ANI_DIE, ani);
+
+	ani = new CAnimation(200);
+	ani->Add(11200);
+	ani->Add(11201);
+	animations->Add(WORM_ANI_WALK_RIGHT, ani);
+
 	ani = new CAnimation(100);
 	ani->Add(11100);
 	ani->Add(11101);
@@ -559,6 +580,14 @@ void LoadResource() {
 	sprites->Add(11105, 1392 - 40 - 32, 77, 1392 - 72 + 32, 122, enemiesL);
 	sprites->Add(11106, 1392 - 76 - 32, 77, 1392 - 108 + 32, 122, enemiesL);
 	sprites->Add(11107, 1392 - 112 - 32, 77, 1392 - 144 + 32, 122, enemiesL);
+
+	sprites->Add(11202, 1392 - 4 - 48, 628, 1392 - 50 + 48, 656, enemiesL);
+	sprites->Add(11203, 1392 - 53 - 48, 628, 1392 - 99 + 48, 656, enemiesL);
+
+	ani = new CAnimation(200);
+	ani->Add(11202);
+	ani->Add(11203);
+	animations->Add(WORM_ANI_WALK_LEFT, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(11104);
@@ -1001,11 +1030,7 @@ void Update(DWORD dt) {
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
-		if (coObj->at(i)->type == g_boom) {
-			UpdateObj(coObj->at(i), dt);
-			continue;
-		}
-		if (coObj->at(i)->type == sp_boom) {
+		if (coObj->at(i)->type == g_boom || coObj->at(i)->type == sp_boom || coObj->at(i)->type == g_worm) {
 			UpdateObj(coObj->at(i), dt);
 			continue;
 		}

@@ -3,6 +3,7 @@
 #include "Brick.h"
 #include "boom.h"
 #include "Super_Boom.h"
+#include "Worm.h"
 
 Map* Map::_instance = nullptr;
 
@@ -41,6 +42,25 @@ void Map::updateObj()
 			}
 		}
 	}
+	break;
+	case 3:
+		if (Stage3Enemies->at(0)->enable) {
+			listObj->push_back(Stage3Enemies->at(0));
+			Worm* worm = dynamic_cast<Worm*>(Stage3Enemies->at(0));
+			worm->Appear();
+			//worm->Reset();
+			Stage3Enemies->at(0)->enable = false;
+		}
+		break;
+	case 6:
+		if (Stage6Enemies->at(0)->enable) {
+			listObj->push_back(Stage6Enemies->at(0));
+			Worm* worm = dynamic_cast<Worm*>(Stage6Enemies->at(0));
+			worm->Appear();
+			//worm->Reset();
+			Stage6Enemies->at(0)->enable = false;
+		}
+		break;
 	case 7:
 	{
 		Rect rect(this->tf, this->br);
@@ -75,6 +95,21 @@ Map::Map()
 	this->listMoveBrick = new vector<LPGAMEOBJECT>();
 	this->listTrigg = new vector<Trigger*>();
 	this->listObj = new vector<LPGAMEOBJECT>();
+
+	Worm* worm;
+	worm = new Worm();
+	worm->SetPosition(1472 + 32, 1280 - 32);
+	worm->Hide();
+	worm->minx = 1472;
+	worm->maxx = 1472 + 96;
+	Stage3Enemies->push_back(worm);
+
+	worm = new Worm();
+	worm->SetPosition(3712, 992 - 32);
+	worm->Hide();
+	worm->minx = 3712;
+	worm->maxx = 3712 + 64;
+	Stage6Enemies->push_back(worm);
 
 	Super_Boom* spBoom;
 	spBoom = new Super_Boom();
@@ -256,6 +291,10 @@ void Map::MapReset()
 		listTrigg->at(i)->enable = true;
 		listTrigg->at(i)->Reset();
 	}
+	Worm* worm = dynamic_cast<Worm*>(Stage3Enemies->at(0));
+	worm->Reset();
+	worm = dynamic_cast<Worm*>(Stage6Enemies->at(0));
+	worm->Reset();
 
 }
 
