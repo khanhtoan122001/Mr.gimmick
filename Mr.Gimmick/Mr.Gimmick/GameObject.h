@@ -60,6 +60,8 @@ public:
 	float vx;
 	float vy;
 
+	bool enable = true;
+
 	int width;
 	int height;
 

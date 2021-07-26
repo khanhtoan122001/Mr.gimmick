@@ -46,6 +46,7 @@ public:
 	void updateMapObject(vector<LPGAMEOBJECT>*);
 	void AddTrigger(Trigger* t) { listTrigg->push_back(t); }
 	void updateMap(float x, float y, Point& tf, Point& br);
+	void MapReset();
 	vector<LPGAMEOBJECT>* getList() { return listMoveBrick; };
 };
 

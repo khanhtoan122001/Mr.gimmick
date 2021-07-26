@@ -23,8 +23,9 @@ void Boom::Reset()
 	x = start_x;
 	y = start_y;
 	vx = vy = 0;
+	enable = true;
 	state = BOOM_STATE_NONE;
-	Hide();
+	//Hide();
 }
 void Boom::SetPosition(float x, float y)
 {
@@ -34,7 +35,6 @@ void Boom::SetPosition(float x, float y)
 }
 void Boom::Render()
 {
-	
 	int ani = BOOM_ANI_WALK_RIGHT;
 	if (vx > 0)
 		ani = BOOM_ANI_WALK_RIGHT;
@@ -203,19 +203,6 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (e->t > 0)
 					{
 						Nakiri* nakiri = dynamic_cast<Nakiri*>(e->obj);
-						nakiri->penetrable = true;
-
-						x0 = x;
-						y0 = y;
-
-						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-						y0 += min_ty * dy + ny * 0.8f;
-
-						nakiri->penetrable = false;
-
-						if (nx != 0) vx = 0;
-						if (ny != 0) vy = 0;
 
 						/*if (e->t > 0 && e->ny == 1) {
 							e->obj->x += dx * 2;

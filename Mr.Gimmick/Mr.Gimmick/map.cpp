@@ -7,15 +7,37 @@ Map* Map::_instance = nullptr;
 
 void Map::updateObj()
 {
+	//listObj->clear();
 	switch (Stage)
 	{
 	case 1:
 	{
-		listObj = listMoveBrick;
+		for (int i = 0; i < listMoveBrick->size(); i++) {
+			if (listMoveBrick->at(i)->enable) {
+				listObj->push_back(listMoveBrick->at(i));
+				listMoveBrick->at(i)->enable = false;
+			}
+		}
+
 		Rect rect(this->tf, this->br);
 		for (int i = 0; i < listTrigg->size(); i++) {
-			if (rect.isIn(listTrigg->at(i)->GetPos()))
-				listObj->push_back(listTrigg->at(i));
+			if (rect.isIn(listTrigg->at(i)->GetPos())) {
+				if (listTrigg->at(i)->enable) {
+					listObj->push_back(listTrigg->at(i));
+					listTrigg->at(i)->enable = false;
+				}
+
+
+				if (listTrigg->at(i)->isTrigg) {
+					Trigger* trigger = listTrigg->at(i);
+					for (int j = 0; j < trigger->getEnemies()->size(); j++) {
+						if (trigger->getEnemies()->at(j)->enable) {
+							listObj->push_back(trigger->getEnemies()->at(j));
+							trigger->getEnemies()->at(j)->enable = false;
+						}
+					}
+				}
+			}
 		}
 	}
 	default:
@@ -23,26 +45,32 @@ void Map::updateObj()
 	}
 }
 
+
 Map::Map()
 {
 	this->listMoveBrick = new vector<LPGAMEOBJECT>();
 	this->listTrigg = new vector<Trigger*>();
+	this->listObj = new vector<LPGAMEOBJECT>();
 
 	Boom* boom;
 	boom = new Boom();
-	boom->SetPosition(1440, 704 - 64);
+	boom->SetPosition(1120, 192);
+	boom->Hide();
 	Stage1Enemies->push_back(boom);
 
 	boom = new Boom();
-	boom->SetPosition(1440, 704 - 64 - 32);
+	boom->SetPosition(1216, 288);
+	boom->Hide();
 	Stage1Enemies->push_back(boom);
 
 	boom = new Boom();
-	boom->SetPosition(1440, 704 - 64 - 32 * 2);
+	boom->SetPosition(1367, 288);
+	boom->Hide();
 	Stage1Enemies->push_back(boom);
 
 	boom = new Boom();
-	boom->SetPosition(1440, 704 - 64 - 32 * 3);
+	boom->SetPosition(1376 + 32, 288);
+	boom->Hide();
 	Stage1Enemies->push_back(boom);
 
 	Brick* mbrick;
@@ -119,6 +147,7 @@ void Map::updateMapObject(vector<LPGAMEOBJECT>* objs)
 
 void Map::updateMap(float x, float y, Point& tf, Point& br)
 {
+	int stage = this->Stage;
 	Rect rect(STAGE_1_MAP_TF * BRICK_WIDTH, STAGE_1_MAP_BR * BRICK_HEIGHT);
 	Point p(x, y);
 	if (rect.isIn(p))
@@ -178,5 +207,20 @@ void Map::updateMap(float x, float y, Point& tf, Point& br)
 	br *= BRICK_WIDTH;
 	this->tf = tf;
 	this->br = br;
+	if (stage != this->Stage) {
+		MapReset();
+	}
+}
+
+void Map::MapReset()
+{
+	listObj->clear();
+	for (int i = 0; i < listMoveBrick->size(); i++)
+		listMoveBrick->at(i)->enable = true;
+	for (int i = 0; i < listTrigg->size(); i++) {
+		listTrigg->at(i)->enable = true;
+		listTrigg->at(i)->Reset();
+	}
+
 }
 

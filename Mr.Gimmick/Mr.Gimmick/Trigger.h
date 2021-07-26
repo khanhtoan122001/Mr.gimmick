@@ -14,6 +14,7 @@ public:
 	void setEnemies(LPGAMEOBJECT e) { enemies->push_back(e); }
 	void setEnemies(vector<LPGAMEOBJECT>* _enemies) { enemies = _enemies; }
 	vector<LPGAMEOBJECT>* getEnemies() { return enemies; }
+	void TriggEnemies();
 	Trigger();
 };
 

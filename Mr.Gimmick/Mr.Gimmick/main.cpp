@@ -87,6 +87,7 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	case DIK_R:
 		tp[0]->Reset();
 		tp[1]->Reset();
+		Map::GetInstance()->MapReset();
 		break;
 	case DIK_T:
 		nakiri->doubleJump = !nakiri->doubleJump;
@@ -791,7 +792,9 @@ void LoadMap(string MapFile) {
 		}
 		else if (style == trigger_Enemies) {
 			Trigger* trigg = new Trigger();
-			if (id == 1826 || id == 1825) {
+			trigg->SetPosition(p);
+			trigg->SetStyle(style);
+			if (id == 1847 || id == 1848 || id == 1849 || id == 1850) {
 				trigg->setEnemies(Map::GetInstance()->Stage1Enemies);
 			}
 			Map::GetInstance()->AddTrigger(trigg);
@@ -871,7 +874,7 @@ void setCam(float x, float y) {
 }
 
 void UpdateObj(GameObject* obj, DWORD dt) {
-	coObj->clear();
+	vector<LPGAMEOBJECT>* _coObj = new vector<LPGAMEOBJECT>();
 
 	float cx, cy;
 	nakiri->GetPosition(cx, cy);
@@ -880,17 +883,17 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 
 	quadtree = CreateQuadTree(actObj, obj->GetPos());
 
-	quadtree->Retrieve(coObj, obj);
+	quadtree->Retrieve(_coObj, obj);
 
 	if(obj->type != g_star)
-		coObj->push_back(nakiri);
-	coObj->push_back(cannon);
+		_coObj->push_back(nakiri);
+	_coObj->push_back(cannon);
 	//coObj->push_back(boom);
-	coObj->push_back(star);
+	_coObj->push_back(star);
 	Map::GetInstance()->updateMap(cx, cy, tf, br);
-	Map::GetInstance()->updateMapObject(coObj);
+	Map::GetInstance()->updateMapObject(_coObj);
 
-	obj->Update(dt, coObj);
+	obj->Update(dt, _coObj);
 
 	quadtree->~Quadtree();
 }
@@ -932,8 +935,10 @@ void Update(DWORD dt) {
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
-		if (coObj->at(i)->type == g_boom)
+		if (coObj->at(i)->type == g_boom) {
+			UpdateObj(coObj->at(i), dt);
 			continue;
+		}
 		if (coObj->at(i)->type == g_cannon)
 			continue;
 		if (coObj->at(i)->type == g_star)
@@ -942,9 +947,8 @@ void Update(DWORD dt) {
 			continue;
 		if (coObj->at(i)->type == trap)
 			continue;
-		if (coObj->at(i)->type == trigger_Enemies) {
-			Trigger* _trigg = dynamic_cast<Trigger*>(coObj->at(i));
-		}
+		if (coObj->at(i)->type == trigger_Enemies)
+			continue;
 		coObj->at(i)->Update(dt, coObj);
 	}
 
@@ -990,10 +994,10 @@ void Render_Map() {
 
 	for (int i = 0; i < cannon->bullets.size(); i++)
 		cannon->bullets[i]->Render();
-	/*for (int i = 0; i < coObj->size(); i++) {
-		coObj->at(i)->RenderBoundingBox();
-		//coObj->at(i)->Render();
-	}*/
+	for (int i = 0; i < coObj->size(); i++) {
+		//coObj->at(i)->RenderBoundingBox();
+		coObj->at(i)->Render();
+	}
 	for (int i = 0; i < 2; i++)
 	{
 		tp[i]->Render();

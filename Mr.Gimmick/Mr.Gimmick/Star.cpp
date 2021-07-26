@@ -171,13 +171,6 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (style == main_c) {
 
 						Nakiri* nakiri = dynamic_cast<Nakiri*>(e->obj);
-						nakiri->penetrable = true;
-
-						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-						y0 += min_ty * dy + ny * 0.8f;
-
-						nakiri->penetrable = false;
 
 						if (e->ny == 1) {
 							nakiri->canJump = true;
@@ -199,15 +192,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					else if (style == g_boom) {
 
 						Boom* boom = dynamic_cast<Boom*>(e->obj);
-						boom->penetrable = true;
-
-						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-						// block 
-						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-						y0 += min_ty * dy + ny * 0.8f;
-
-						boom->penetrable = false;
+						
 					}
 					else if (style == thorns || style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5 || style == tunnel5_end || style == tunnel5_1) {
 						state = STAR_EXPLOSIVE;

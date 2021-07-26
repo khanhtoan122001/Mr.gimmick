@@ -176,26 +176,6 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						star->penetrable = true;
 
 					}
-					else {
-				
-						star->penetrable = true;
-
-						x0 = x;
-						y0 = y;
-
-						FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-						// block 
-						x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-						y0 += min_ty * dy + ny * 0.6f;
-						if (ny == -1) {
-							canJump = true;
-							this->count = 0;
-						}
-						if (nx != 0) vx = 0;
-						if (ny != 0) vy = 0;
-						star->penetrable = false;
-					}
 				}
 			}
 
@@ -311,7 +291,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (stage == 7)
 						this->SetPosition(SWAP_POINT_STAGE_7);
 					this->Reset();
+					Map::GetInstance()->MapReset();
 					return;
+				}
+				break;
+			case trigger_Enemies:
+				if (e->t > 0) {
+					Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
+					trigg->TriggEnemies();
 				}
 				break;
 			/*case tunnel:
@@ -597,7 +584,7 @@ void Nakiri::Render()
 
 void Nakiri::SetState(int state)
 {
-	if (this->state == NAKIRI_STATE_STUN) 
+	if (this->state == NAKIRI_STATE_STUN)
 		return;
 	int _state = this->state;
  	GameObject::SetState(state);
