@@ -26,20 +26,25 @@
 #define SWAP_POINT_STAGE_7 Point(3904,256)
 
 #include "GameObject.h"
+#include "Trigger.h"
 
 class Map
 {
 	static Map* _instance;
 	vector<LPGAMEOBJECT>* listObj;
 	vector<LPGAMEOBJECT>* listMoveBrick;
-
+	vector<Trigger*>* listTrigg;
 	void updateObj();
+	Point tf, br;
 
 public:
+	vector<LPGAMEOBJECT>* Stage1Enemies = new vector<LPGAMEOBJECT>();
+
 	Map();
 	static Map* GetInstance();
 	int Stage;
 	void updateMapObject(vector<LPGAMEOBJECT>*);
+	void AddTrigger(Trigger* t) { listTrigg->push_back(t); }
 	void updateMap(float x, float y, Point& tf, Point& br);
 	vector<LPGAMEOBJECT>* getList() { return listMoveBrick; };
 };

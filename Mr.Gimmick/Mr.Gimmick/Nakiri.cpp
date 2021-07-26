@@ -435,8 +435,10 @@ void Nakiri::SetState(int state)
 			this->count = 1;
 		}
 		else if (doubleJump) {
-			if(this->count == 1)
+			if (this->count == 1) {
 				vy = -NAKIRI_MAX_JUMP_SPEED;
+				this->count = 2;
+			}
 		}
 		break;
 	case NAKIRI_STATE_STAND:

@@ -1,6 +1,7 @@
 #include "map.h"
 #include "Rect.h"
 #include "Brick.h"
+#include "boom.h"
 
 Map* Map::_instance = nullptr;
 
@@ -11,6 +12,11 @@ void Map::updateObj()
 	case 1:
 	{
 		listObj = listMoveBrick;
+		Rect rect(this->tf, this->br);
+		for (int i = 0; i < listTrigg->size(); i++) {
+			if (rect.isIn(listTrigg->at(i)->GetPos()))
+				listObj->push_back(listTrigg->at(i));
+		}
 	}
 	default:
 		break;
@@ -20,6 +26,25 @@ void Map::updateObj()
 Map::Map()
 {
 	this->listMoveBrick = new vector<LPGAMEOBJECT>();
+	this->listTrigg = new vector<Trigger*>();
+
+	Boom* boom;
+	boom = new Boom();
+	boom->SetPosition(1440, 704 - 64);
+	Stage1Enemies->push_back(boom);
+
+	boom = new Boom();
+	boom->SetPosition(1440, 704 - 64 - 32);
+	Stage1Enemies->push_back(boom);
+
+	boom = new Boom();
+	boom->SetPosition(1440, 704 - 64 - 32 * 2);
+	Stage1Enemies->push_back(boom);
+
+	boom = new Boom();
+	boom->SetPosition(1440, 704 - 64 - 32 * 3);
+	Stage1Enemies->push_back(boom);
+
 	Brick* mbrick;
 	mbrick = new Brick();
 	mbrick->SetStyle(move_brick);
@@ -151,5 +176,7 @@ void Map::updateMap(float x, float y, Point& tf, Point& br)
 	}
 	tf *= BRICK_HEIGHT;
 	br *= BRICK_WIDTH;
+	this->tf = tf;
+	this->br = br;
 }
 

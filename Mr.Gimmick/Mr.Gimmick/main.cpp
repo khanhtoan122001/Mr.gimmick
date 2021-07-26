@@ -553,10 +553,6 @@ void LoadResource() {
 	ani->Add(11007);
 	animations->Add(BOOM_ANI_DIE_LEFT, ani);
 
-	boom = new Boom();
-	boom->SetPosition(1440, 704 - 64);
-	objects.push_back(boom);
-
 	Trap* _trap = new Trap();
 	tp.push_back(_trap);
 	_trap = new Trap();
@@ -706,7 +702,12 @@ void LoadMap(string MapFile) {
 			Obj(trigg, i, style, p, w, h);
 		}
 		else if (style == trigger_Enemies) {
-
+			Trigger* trigg = new Trigger();
+			if (id == 1826 || id == 1825) {
+				trigg->setEnemies(Map::GetInstance()->Stage1Enemies);
+			}
+			Map::GetInstance()->AddTrigger(trigg);
+			//Obj(trigg, i, style, p, w, h);
 		}
 		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end)
 		{
@@ -809,8 +810,6 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 void Update(DWORD dt) {
 	float cx, cy;
 
-	UpdateObj(boom, dt);
-
 	UpdateObj(cannon, dt);
 
 	UpdateObj(star, dt);
@@ -839,7 +838,6 @@ void Update(DWORD dt) {
 
 	coObj->push_back(nakiri);
 	coObj->push_back(cannon);
-	coObj->push_back(boom);
 	coObj->push_back(star);
 	coObj->push_back(tp[0]);
 	coObj->push_back(tp[1]);
@@ -856,6 +854,9 @@ void Update(DWORD dt) {
 			continue;
 		if (coObj->at(i)->type == trap)
 			continue;
+		if (coObj->at(i)->type == trigger_Enemies) {
+			Trigger* _trigg = dynamic_cast<Trigger*>(coObj->at(i));
+		}
 		coObj->at(i)->Update(dt, coObj);
 	}
 
