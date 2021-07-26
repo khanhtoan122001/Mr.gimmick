@@ -818,7 +818,7 @@ void LoadMap(string MapFile) {
 			Trigger* trigg = new Trigger();
 			trigg->SetPosition(p);
 			trigg->SetStyle(style);
-			if (id == 1847 || id == 1848 || id == 1849 || id == 1850) {
+			if (id == 1858 || id == 1859 || id == 1860 || id == 1861) {
 				trigg->setEnemies(Map::GetInstance()->Stage1Enemies);
 			}
 			Map::GetInstance()->AddTrigger(trigg);
@@ -1020,10 +1020,10 @@ void Render_Map() {
 
 	for (int i = 0; i < cannon->bullets.size(); i++)
 		cannon->bullets[i]->Render();
-	/*for (int i = 0; i < coObj->size(); i++) {
-		coObj->at(i)->RenderBoundingBox();
-		//coObj->at(i)->Render();
-	}*/
+	for (int i = 0; i < coObj->size(); i++) {
+		//coObj->at(i)->RenderBoundingBox();
+		coObj->at(i)->Render();
+	}
 	for (int i = 0; i < 8; i++)
 	{
 		tp[i]->Render();
