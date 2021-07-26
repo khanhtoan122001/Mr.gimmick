@@ -280,6 +280,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					return;
 				}
 				break;
+			case sp_boom:
+				if (e->t > 0) {
+					//StartUntouchable();
+					state = NAKIRI_STATE_STUN;
+					//stun_time = 0;
+					return;
+				}
+				break;
 			case thorns:
 				if (e->t > 0) {
 					int stage = Map::GetInstance()->Stage;

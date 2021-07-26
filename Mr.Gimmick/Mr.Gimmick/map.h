@@ -39,6 +39,7 @@ class Map
 
 public:
 	vector<LPGAMEOBJECT>* Stage1Enemies = new vector<LPGAMEOBJECT>();
+	vector<LPGAMEOBJECT>* Stage7Enemies = new vector<LPGAMEOBJECT>();
 
 	Map();
 	static Map* GetInstance();

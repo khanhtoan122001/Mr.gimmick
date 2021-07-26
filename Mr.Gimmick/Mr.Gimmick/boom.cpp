@@ -87,11 +87,11 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	Nakiri::GetInstance()->GetPosition(_x, _y);
 	float dtx = _x - this->x;
 	if (dtx < 0) {
-		if (dtx < -GAME_PLAY_WIDTH * BRICK_WIDTH / 4)
+		if (dtx - 32 < -GAME_PLAY_WIDTH * BRICK_WIDTH / 4)
 			vx = -BOOM_WALK_SPEED;
 	}
 	else{
-		if (dtx > GAME_PLAY_WIDTH * BRICK_HEIGHT / 4)
+		if (dtx + 32 > GAME_PLAY_WIDTH * BRICK_HEIGHT / 4)
 			vx = BOOM_WALK_SPEED;
 	}
 	if (nx != 0) vx = -vx;
@@ -280,10 +280,6 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			}
 
 		}
-
-
-
-
 		x = x0; y = y0;
 		/*x = x + 0.0001f;
 		y = (int)y + 0.0001f;*/

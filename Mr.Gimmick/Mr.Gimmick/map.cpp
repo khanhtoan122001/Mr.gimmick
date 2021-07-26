@@ -2,6 +2,7 @@
 #include "Rect.h"
 #include "Brick.h"
 #include "boom.h"
+#include "Super_Boom.h"
 
 Map* Map::_instance = nullptr;
 
@@ -40,6 +41,29 @@ void Map::updateObj()
 			}
 		}
 	}
+	case 7:
+	{
+		Rect rect(this->tf, this->br);
+		for (int i = 0; i < listTrigg->size(); i++) {
+			if (rect.isIn(listTrigg->at(i)->GetPos())) {
+				if (listTrigg->at(i)->enable) {
+					listObj->push_back(listTrigg->at(i));
+					listTrigg->at(i)->enable = false;
+				}
+
+
+				if (listTrigg->at(i)->isTrigg) {
+					Trigger* trigger = listTrigg->at(i);
+					for (int j = 0; j < trigger->getEnemies()->size(); j++) {
+						if (trigger->getEnemies()->at(j)->enable) {
+							listObj->push_back(trigger->getEnemies()->at(j));
+							trigger->getEnemies()->at(j)->enable = false;
+						}
+					}
+				}
+			}
+		}
+	}
 	default:
 		break;
 	}
@@ -51,6 +75,17 @@ Map::Map()
 	this->listMoveBrick = new vector<LPGAMEOBJECT>();
 	this->listTrigg = new vector<Trigger*>();
 	this->listObj = new vector<LPGAMEOBJECT>();
+
+	Super_Boom* spBoom;
+	spBoom = new Super_Boom();
+	spBoom->SetPosition(3808, 192);
+	spBoom->Hide();
+	Stage7Enemies->push_back(spBoom);
+
+	spBoom = new Super_Boom();
+	spBoom->SetPosition(3616, 192);
+	spBoom->Hide();
+	Stage7Enemies->push_back(spBoom);
 
 	Boom* boom;
 	boom = new Boom();

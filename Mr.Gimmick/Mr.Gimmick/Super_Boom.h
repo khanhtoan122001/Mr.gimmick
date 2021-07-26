@@ -4,6 +4,9 @@
 #include "Game.h"
 #include "Nakiri.h"
 
+#define SP_BOOM_ANI_WALK_RIGHT 986513
+#define SP_BOOM_ANI_WALK_LEFT 986387
+
 class Super_Boom : public GameObject
 {
 	int untouchable;

@@ -22,9 +22,11 @@
 #include "boom.h"
 #include "cannons.h"
 #include "Star.h"
+#include "Super_Boom.h"
 
 #define ID_MAP_1 120
 #define ID_MAP_7 180
+#define ID_MAP_2 852
 #define ID_NAKIRI_RIGHT 15
 #define ID_NAKIRI_LEFT 16
 #define ID_TRAP 347
@@ -93,6 +95,12 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		break;
 	case DIK_T:
 		nakiri->doubleJump = !nakiri->doubleJump;
+		break;
+	case DIK_7:
+		nakiri->SetPosition(SWAP_POINT_STAGE_7);
+		break;
+	case DIK_1:
+		nakiri->SetPosition(SWAP_POINT_STAGE_1);
 		break;
 	case DIK_S:
 		if (star->canPress) {
@@ -197,7 +205,8 @@ void UpdateActObj(Point p) {
 void LoadResource() {
 
 	CTextures* textures = CTextures::GetInstance();
-	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255,0,255));
+	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255, 0, 255));
+	textures->Add(ID_MAP_2, L"Resource//NES - Gimmick Mr Gimmick - Stage 2.png", D3DCOLOR_XRGB(54,168,167));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_NAKIRI_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro(1).png", D3DCOLOR_XRGB(0, 0, 255));
@@ -526,6 +535,17 @@ void LoadResource() {
 
 	sprites->Add(11006, 112, 2, 144, 34, enemiesR);
 
+	sprites->Add(11100, 4, 77, 36, 122, enemiesR);
+	sprites->Add(11101, 40, 77, 72, 122, enemiesR);
+	sprites->Add(11102, 76, 77, 108, 122, enemiesR);
+	sprites->Add(11103, 112, 77, 144, 122, enemiesR);
+
+	ani = new CAnimation(100);
+	ani->Add(11100);
+	ani->Add(11101);
+	ani->Add(11102);
+	ani->Add(11103);
+	animations->Add(SP_BOOM_ANI_WALK_RIGHT, ani);
 
 
 	LPDIRECT3DTEXTURE9 enemiesL = textures->Get(ID_ENEMIES_LEFT);
@@ -534,6 +554,18 @@ void LoadResource() {
 	sprites->Add(11003, 678 * 2, 2, 694 * 2, 34, enemiesL);
 
 	sprites->Add(11007, 1248, 2, 1280, 34, enemiesL);
+
+	sprites->Add(11104, 1392 - 4 - 32, 77, 1392 - 36 + 32, 122, enemiesL);
+	sprites->Add(11105, 1392 - 40 - 32, 77, 1392 - 72 + 32, 122, enemiesL);
+	sprites->Add(11106, 1392 - 76 - 32, 77, 1392 - 108 + 32, 122, enemiesL);
+	sprites->Add(11107, 1392 - 112 - 32, 77, 1392 - 144 + 32, 122, enemiesL);
+
+	ani = new CAnimation(100);
+	ani->Add(11104);
+	ani->Add(11105);
+	ani->Add(11106);
+	ani->Add(11107);
+	animations->Add(SP_BOOM_ANI_WALK_LEFT, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(11000);
@@ -821,6 +853,12 @@ void LoadMap(string MapFile) {
 			if (id == 1858 || id == 1859 || id == 1860 || id == 1861) {
 				trigg->setEnemies(Map::GetInstance()->Stage1Enemies);
 			}
+			if (id == 1862 || id == 1863) {
+				trigg->setEnemies(Map::GetInstance()->Stage7Enemies->at(0));
+			}
+			if (id == 1864 || id == 1865) {
+				trigg->setEnemies(Map::GetInstance()->Stage7Enemies->at(1));
+			}
 			Map::GetInstance()->AddTrigger(trigg);
 			//Obj(trigg, i, style, p, w, h);
 		}
@@ -929,6 +967,8 @@ void Update(DWORD dt) {
 
 	UpdateObj(star, dt);
 
+	//UpdateObj(spBoom, dt);
+
 	for (int i = 0; i < 8; i++)
 	{
 		UpdateObj(tp[i], dt);
@@ -962,6 +1002,10 @@ void Update(DWORD dt) {
 	for (int i = 0; i < coObj->size(); i++)
 	{
 		if (coObj->at(i)->type == g_boom) {
+			UpdateObj(coObj->at(i), dt);
+			continue;
+		}
+		if (coObj->at(i)->type == sp_boom) {
 			UpdateObj(coObj->at(i), dt);
 			continue;
 		}

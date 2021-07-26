@@ -6,12 +6,12 @@
 Super_Boom::Super_Boom()
 {
 	//vx = 0.8f;
-	this->AddAnimation(BOOM_ANI_WALK_RIGHT);
-	this->AddAnimation(BOOM_ANI_WALK_LEFT);
-	this->AddAnimation(BOOM_ANI_DIE_RIGHT);
-	this->AddAnimation(BOOM_ANI_DIE_LEFT);
+	this->AddAnimation(SP_BOOM_ANI_WALK_RIGHT);
+	this->AddAnimation(SP_BOOM_ANI_WALK_LEFT);
 	penetrable = true;
-	type = g_boom;
+	type = sp_boom;
+	this->SetWidthHeight(32, 32);
+	vx = 0.15f;
 	state = BOOM_STATE_NONE;
 }
 void Super_Boom::SetPosition(Point p)
@@ -24,6 +24,7 @@ void Super_Boom::Reset()
 	x = start_x;
 	y = start_y;
 	vx = vy = 0;
+	vx = 0.15f;
 	enable = true;
 	state = BOOM_STATE_NONE;
 	//Hide();
@@ -36,24 +37,14 @@ void Super_Boom::SetPosition(float x, float y)
 }
 void Super_Boom::Render()
 {
-	int ani = BOOM_ANI_WALK_RIGHT;
-	if (vx > 0)
-		ani = BOOM_ANI_WALK_RIGHT;
-	else ani = BOOM_ANI_WALK_LEFT;
-
 	float _x = CGame::GetInstance()->GetCamPos_x();
 	float _y = CGame::GetInstance()->GetCamPos_y();
 
 	if (_x < x + width && x + width < _x + GAME_PLAY_WIDTH * BRICK_WIDTH && _y < y && y < _y + GAME_PLAY_HEIGHT * BRICK_HEIGHT) {
-		if (state == BOOM_STATE_DIE) {
-			if (ani == BOOM_ANI_WALK_RIGHT)
-				animations[2]->Render((int)x, (int)y);
-			else
-				animations[3]->Render((int)x, (int)y);
-		}
-		else
-			animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
-
+		if (vx > 0)
+			animations[0]->Render((int)x, (int)y - 12);
+		else animations[1]->Render((int)x, (int)y - 12);
+		
 	}
 }
 
@@ -72,27 +63,17 @@ void Super_Boom::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void Super_Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
-	if (state == BOOM_STATE_DIE) {
-		time += dt;
-		if (time >= 500) {
-			time = 0;
-			vx = vy = 0;
-			Hide();
-		}
-		GameObject::Update(dt);
-		x += dx;
-		y += dy;
+	if (state == BOOM_STATE_DIE)
 		return;
-	}
 	float _x, _y, v;
 	Nakiri::GetInstance()->GetPosition(_x, _y);
 	float dtx = _x - this->x;
 	if (dtx < 0) {
-		if (dtx < -GAME_PLAY_WIDTH * BRICK_WIDTH / 4)
+		if (dtx - 32 < -GAME_PLAY_WIDTH * BRICK_WIDTH / 4)
 			vx = -BOOM_WALK_SPEED;
 	}
 	else {
-		if (dtx > GAME_PLAY_WIDTH * BRICK_HEIGHT / 4)
+		if (dtx + 32 > GAME_PLAY_WIDTH * BRICK_HEIGHT / 4)
 			vx = BOOM_WALK_SPEED;
 	}
 	if (nx != 0) vx = -vx;
@@ -150,7 +131,14 @@ void Super_Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 
 			for (UINT i = 0; i < coEvents.size(); i++) {
 				LPCOLLISIONEVENT e = coEvents[i];
-				switch (e->obj->getType())
+				int style = e->obj->getType();
+				if (style == thorns || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5_end || style == tunnel5_1)
+				{
+					this->Hide();
+					state = BOOM_STATE_DIE;
+					return;
+				}
+				switch (style)
 				{
 				case slide_left:
 				{
@@ -162,11 +150,6 @@ void Super_Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					if (e->t > 0 && e->ny == -1)
 						x0 += 2.0f;
-					break;
-				}
-				case trap:
-				{
-					StartUntouchable();
 					break;
 				}
 				case diagonal_left:
@@ -223,52 +206,6 @@ void Super_Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 							vx = -_vx;
 					}
 					break;
-				case g_star:
-				{
-					Star* star = dynamic_cast<Star*>(e->obj);
-					if (e->t > 0)
-					{
-						state = BOOM_STATE_DIE;
-
-						vx = 0; vy = 0.07f;
-
-						float min_tx, min_ty, nx = 0, ny;
-						this->ny = 0;
-
-						if (e->ny == -1)
-						{
-
-							star->penetrable = false;
-							x0 = x;
-							y0 = y;
-							FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-							// block 
-							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-							y0 += min_ty * dy + ny * 0.6f;
-
-							star->penetrable = true;
-
-						}
-						else {
-
-							star->penetrable = true;
-
-							x0 = x;
-							y0 = y;
-
-							FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-							// block 
-							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-							y0 += min_ty * dy + ny * 0.6f;
-
-							star->penetrable = false;
-						}
-					}
-				}
-
-				break;
 				case normal_brick:
 					if (e->t > 0 && e->nx != 0) {
 						vy = -NAKIRI_MEDIUM_JUMP_SPEED;
@@ -281,10 +218,6 @@ void Super_Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			}
 
 		}
-
-
-
-
 		x = x0; y = y0;
 		/*x = x + 0.0001f;
 		y = (int)y + 0.0001f;*/

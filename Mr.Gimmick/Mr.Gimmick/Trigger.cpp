@@ -1,5 +1,6 @@
 #include "Trigger.h"
 #include "boom.h"
+#include "Super_Boom.h"
 
 void Trigger::Reset()
 {
@@ -12,6 +13,11 @@ void Trigger::Reset()
 			int type = enemies->at(i)->getType();
 			if (type == g_boom) {
 				Boom* boom = dynamic_cast<Boom*>(enemies->at(i));
+				boom->Reset();
+				boom->Hide();
+			}
+			if (type == sp_boom) {
+				Super_Boom* boom = dynamic_cast<Super_Boom*>(enemies->at(i));
 				boom->Reset();
 				boom->Hide();
 			}
@@ -28,6 +34,11 @@ void Trigger::TriggEnemies()
 			if (style == g_boom) {
 				Boom* boom = dynamic_cast<Boom*>(enemies->at(i));
 				if(boom->enable)
+					boom->Reset();
+			}
+			if (style == sp_boom) {
+				Super_Boom* boom = dynamic_cast<Super_Boom*>(enemies->at(i));
+				if (boom->enable)
 					boom->Reset();
 			}
 		}
