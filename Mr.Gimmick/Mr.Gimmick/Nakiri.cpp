@@ -216,6 +216,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				break;
 			case move_brick:
 				if (e->t > 0) {
+					slip = true;
 					if (e->nx != 0 && dx != 0)
 						vx = -e->nx;
 				}
@@ -269,8 +270,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			{
 				Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
 				x += 4.0f;
-			}*/
-			break;
+			}
+			break;*/
 			case tunnel1:
 				if (e->t != -1.0 && !tunning_rev)
 				{

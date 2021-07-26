@@ -8,6 +8,20 @@
 #define STAGE_3_MAP_TF Point(32,37)
 #define STAGE_3_MAP_BR Point(80,48)
 
+#define STAGE_4_MAP_TF Point(81,37)
+#define STAGE_4_MAP_BR Point(110,48)
+
+#define STAGE_5_MAP_TF Point(111,37)
+#define STAGE_5_MAP_BR Point(127,48)
+
+#define STAGE_6_MAP_TF Point(112,12)
+#define STAGE_6_MAP_BR Point(127,36)
+
+#define STAGE_7_MAP_TF Point(64,0)
+#define STAGE_7_MAP_BR Point(127,11)
+
+
+
 #include "GameObject.h"
 
 class Map

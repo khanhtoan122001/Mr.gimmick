@@ -7,12 +7,16 @@ Boom::Boom()
 	//vx = 0.8f;
 	this->AddAnimation(BOOM_ANI_WALK_RIGHT);
 	this->AddAnimation(BOOM_ANI_WALK_LEFT);
+	this->AddAnimation(BOOM_ANI_DIE_RIGHT);
+	this->AddAnimation(BOOM_ANI_DIE_LEFT);
 	penetrable = false;
 	type = g_boom;
+	state = BOOM_STATE_NONE;
 }
 
 void Boom::Render()
 {
+	
 	int ani = BOOM_ANI_WALK_RIGHT;
 	if (vx > 0)
 		ani = BOOM_ANI_WALK_RIGHT;
@@ -21,8 +25,17 @@ void Boom::Render()
 	float _x = CGame::GetInstance()->GetCamPos_x();
 	float _y = CGame::GetInstance()->GetCamPos_y();
 
-	if (_x < x + width && x + width < _x + GAME_PLAY_WIDTH * BRICK_WIDTH && _y < y && y < _y + GAME_PLAY_HEIGHT * BRICK_HEIGHT)
-		animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
+	if (_x < x + width && x + width < _x + GAME_PLAY_WIDTH * BRICK_WIDTH && _y < y && y < _y + GAME_PLAY_HEIGHT * BRICK_HEIGHT) {
+		if (state == BOOM_STATE_DIE) {
+			if (ani == BOOM_ANI_WALK_RIGHT)
+				animations[2]->Render((int)x, (int)y);
+			else
+				animations[3]->Render((int)x, (int)y);
+		}
+		else
+			animations[ani - BOOM_ANI_WALK_RIGHT]->Render((int)x, (int)y);
+
+	}
 }
 
 Rect Boom::GetBoundingBox()
@@ -40,6 +53,18 @@ void Boom::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
+	if (state == BOOM_STATE_DIE) {
+		time += dt;
+		if (time >= 500) {
+			time = 0;
+			vx = vy = 0;
+			Hide();
+		}
+		GameObject::Update(dt);
+		x += dx;
+		y += dy;
+		return;
+	}
 	float _x, _y, v;
 	Nakiri::GetInstance()->GetPosition(_x, _y);
 	float dtx = _x - this->x;
@@ -197,6 +222,9 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					Star* star = dynamic_cast<Star*>(e->obj);
 					if (e->t > 0)
 					{
+						state = BOOM_STATE_DIE;
+
+						vx = 0; vy = 0.07f;
 
 						float min_tx, min_ty, nx = 0, ny;
 						this->ny = 0;
@@ -213,8 +241,6 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 							y0 += min_ty * dy + ny * 0.6f;
 
-							if (nx != 0) vx = 0;
-							if (ny != 0) vy = 0;
 							star->penetrable = true;
 
 						}
@@ -231,8 +257,6 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 							x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 							y0 += min_ty * dy + ny * 0.6f;
 
-							if (nx != 0) vx = 0;
-							if (ny != 0) vy = 0;
 							star->penetrable = false;
 						}
 					}
@@ -270,4 +294,9 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 		}*/
 		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
+}
+
+void Boom::Hide()
+{
+	x = y = -9999;
 }

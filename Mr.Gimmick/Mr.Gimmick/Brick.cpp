@@ -65,26 +65,23 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 					switch (e->obj->getType())
 					{
 					case main_c:
-						if (e->t > 0 && e->ny != 0)
+						if (e->t > 0 && e->ny != 0) {
 							e->obj->x += dx * 2;
+							if (dy < 0)
+								e->obj->y += dy * 1.1;
+							else
+								e->obj->vy += 0.8f;
+						}
 
 						if (e->t < 0 && e->t > -1.0f) {
 							if (e->nx == 0)
 								e->obj->y -= 1;
 							e->obj->x += dx * 2;
+							if (dy < 0)
+								e->obj->y += dy * 1.1;
+							else
+								e->obj->vy += 0.8f;
 						}
-						break;
-					case g_boom:
-
-						if (e->t > 0 && e->ny != 0)
-							e->obj->x += dx * 2;
-
-						if (e->t < 0 && e->t > -1.0f) {
-							if (e->nx == 0)
-								e->obj->y -= 1;
-							e->obj->x += dx * 2;
-						}
-
 						break;
 					default:
 						break;

@@ -484,10 +484,16 @@ void LoadResource() {
 	sprites->Add(11001, 20 * 2, 2, 36 * 2, 34, enemiesR);
 	sprites->Add(11002, 38 * 2, 2, 54 * 2, 34, enemiesR);
 
+	sprites->Add(11006, 112, 2, 144, 34, enemiesR);
+
+
+
 	LPDIRECT3DTEXTURE9 enemiesL = textures->Get(ID_ENEMIES_LEFT);
 	sprites->Add(11005, 642 * 2, 2, 658 * 2, 34, enemiesL);
 	sprites->Add(11004, 660 * 2, 2, 676 * 2, 34, enemiesL);
 	sprites->Add(11003, 678 * 2, 2, 694 * 2, 34, enemiesL);
+
+	sprites->Add(11007, 1248, 2, 1280, 34, enemiesL);
 
 	ani = new CAnimation(100);
 	ani->Add(11000);
@@ -500,6 +506,14 @@ void LoadResource() {
 	ani->Add(11004);
 	ani->Add(11005);
 	animations->Add(BOOM_ANI_WALK_LEFT, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(11006);
+	animations->Add(BOOM_ANI_DIE_RIGHT, ani);
+
+	ani = new CAnimation(100);
+	ani->Add(11007);
+	animations->Add(BOOM_ANI_DIE_LEFT, ani);
 
 	boom = new Boom();
 	boom->SetPosition(1440, 704 - 64);
@@ -574,7 +588,7 @@ void LoadMap(string MapFile) {
 		else if (type == "3") {
 			style = main_c;
 		}
-		else if (type == "4"){
+		else if (type == "4") {
 			style = slide_left;
 		}
 		else if (type == "5") {
@@ -620,6 +634,8 @@ void LoadMap(string MapFile) {
 		{
 			style = corner_1_1;
 		}
+		else
+			style = normal_brick;
 		
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
@@ -713,9 +729,8 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 
 	quadtree->Retrieve(coObj, obj);
 
-	//if(obj->type != g_star)
-
-	coObj->push_back(nakiri);
+	if(obj->type != g_star)
+		coObj->push_back(nakiri);
 	coObj->push_back(cannon);
 	coObj->push_back(boom);
 	coObj->push_back(star);
