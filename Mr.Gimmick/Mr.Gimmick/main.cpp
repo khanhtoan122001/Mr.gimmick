@@ -25,9 +25,6 @@
 #include "Super_Boom.h"
 #include "Worm.h"
 
-#define ID_MAP_1 120
-#define ID_MAP_7 180
-#define ID_MAP_2 852
 #define ID_NAKIRI_RIGHT 15
 #define ID_NAKIRI_LEFT 16
 #define ID_TRAP 347
@@ -41,6 +38,9 @@
 #define MAIN_WINDOW_TITLE L"Gimmick"
 #define STARTPOS_STAGE_1_X 32
 #define STARTPOS_STAGE_1_Y 80
+
+#define PATH_MAP_1 "Maps\\map1.json"
+#define PATH_MAP_2 "Maps\\map2.json"
 
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
@@ -63,10 +63,8 @@ CGame* game;
 Nakiri* nakiri;
 Boom* boom;
 Quadtree* quadtree;
-vector<Trap*> tp;
 Trigger trigg;
 Map* map;
-Cannon* cannon;
 Star* star;
 
 class CSampleKeyHander : public CKeyEventHandler
@@ -88,10 +86,6 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
 	case DIK_R:
-		for (int i = 0; i < 8; i++)
-		{
-			tp[i]->Reset();
-		}
 		Map::GetInstance()->MapReset();
 		break;
 	case DIK_T:
@@ -213,7 +207,7 @@ void LoadResource() {
 
 	CTextures* textures = CTextures::GetInstance();
 	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255, 0, 255));
-	textures->Add(ID_MAP_2, L"Resource//NES - Gimmick Mr Gimmick - Stage 2.png", D3DCOLOR_XRGB(54,168,167));
+	textures->Add(ID_MAP_2, L"Resource//NES - Gimmick Mr Gimmick - Stage 2.png", D3DCOLOR_XRGB(54, 168, 167));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
 	textures->Add(ID_NAKIRI_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_NAKIRI_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro(1).png", D3DCOLOR_XRGB(0, 0, 255));
@@ -225,11 +219,17 @@ void LoadResource() {
 	
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
+	LPDIRECT3DTEXTURE9 texMap2 = textures->Get(ID_MAP_2);
 	LPDIRECT3DTEXTURE9 charge = textures->Get(ID_CHARGE_STAR);
 
 	for (int j = 0; j < 23; j++) {
 		for (int i = 0; i < 14; i++) {
 			sprites->Add(j * 14 + i + 1000, 2 + i * 34, 2 + j * 34, (i + 1) * 34, (j + 1) * 34, texMap1);
+		}
+	}
+	for (int j = 0; j < 15; j++) {
+		for (int i = 0; i < 33; i++) {
+			sprites->Add(j * 33 + i + 19188310, i * 32, j * 32, (i + 1) * 32, (j + 1) * 32, texMap2);
 		}
 	}
 
@@ -365,53 +365,59 @@ void LoadResource() {
 		for (int i = 0; i < 14; i++) {
 			ani = new CAnimation(100);
 			ani->Add(j * 14 + i + 1000);
-			animations->Add(j * 14 + i, ani);
+			animations->Add(j * 14 + i + ID_MAP_1, ani);
 		}
 	}
-	
+	for (int j = 0; j < 15; j++) {
+		for (int i = 0; i < 33; i++) {
+			ani = new CAnimation(100);
+			ani->Add(j * 33 + i + 19188310);
+			animations->Add(j * 33 + i + ID_MAP_2, ani);
+		}
+	}
 
 	ani = new CAnimation(100);
 	ani->Add(1132);
 	ani->Add(1133);
 	ani->Add(1134);
 	ani->Add(1135);
-	animations->Add(135, ani);
+	animations->Add(135 + ID_MAP_1, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(1156);
 	ani->Add(1155);
 	ani->Add(1154);
 	ani->Add(1157);
-	animations->Add(156, ani);
-	animations->Add(155, ani);
+	animations->Add(156 + ID_MAP_1, ani);
+	animations->Add(155 + ID_MAP_1, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(1140);
 	ani->Add(1141);
 	ani->Add(1142);
 	ani->Add(1143);
-	animations->Add(141, ani);
+	animations->Add(141 + ID_MAP_1, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(1168);
 	ani->Add(1170);
 	ani->Add(1196);
 	ani->Add(1198);
-	animations->Add(168, ani);
+	animations->Add(168 + ID_MAP_1, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(1169);
 	ani->Add(1171);
 	ani->Add(1197);
 	ani->Add(1199);
-	animations->Add(169, ani);
+	animations->Add(169 + ID_MAP_1, ani);
 
 	ani = new CAnimation(100);
 	ani->Add(1182);
 	ani->Add(1184);
 	ani->Add(1210);
 	ani->Add(1212);
-	animations->Add(182, ani);
+	animations->Add(182 + ID_MAP_1, ani);
 
 	ani = new CAnimation(60);
 	for (int i = 0; i < 18; i++)
@@ -437,7 +443,7 @@ void LoadResource() {
 	ani->Add(1185);
 	ani->Add(1211);
 	ani->Add(1213);
-	animations->Add(183, ani);
+	animations->Add(183 + ID_MAP_1, ani);
 
 
 	//	thac nuoc
@@ -449,7 +455,7 @@ void LoadResource() {
 	ani->Add(1186);
 	ani->Add(1200);
 	ani->Add(1214);
-	animations->Add(172, ani);
+	animations->Add(172 + ID_MAP_1, ani);
 
 	ani = new CAnimation(500);
 	ani->Add(10000);
@@ -517,9 +523,9 @@ void LoadResource() {
 	ani->Add(12401);
 	animations->Add(CANNON_ANI, ani);
 
-	cannon = new Cannon();
+	/*cannon = new Cannon();
 	cannon->AddAnimation(CANNON_ANI);
-	cannon->SetPosition(2336, 1280);
+	cannon->SetPosition(2336, 1280);*/
 	
 	ani = new CAnimation(10);
 	ani->Add(12345);
@@ -615,24 +621,6 @@ void LoadResource() {
 	ani = new CAnimation(100);
 	ani->Add(11007);
 	animations->Add(BOOM_ANI_DIE_LEFT, ani);
-
-	Trap* _trap;
-	//tp.push_back(_trap);
-	//_trap = new Trap();
-	//tp.push_back(_trap);
-	for (int i = 0; i < 8; i++)
-	{
-		_trap = new Trap();
-		tp.push_back(_trap);
-	}
-	tp[0]->SetPosition(864 * 2, 416 * 2);
-	tp[1]->SetPosition(816 * 2, 416 * 2);
-	tp[2]->SetPosition(1696, 1216);
-	tp[3]->SetPosition(1760, 1216);
-	tp[4]->SetPosition(1824, 1216);
-	tp[5]->SetPosition(1888, 1216);
-	tp[6]->SetPosition(2016, 1216);
-	tp[7]->SetPosition(2080, 1216);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
 
@@ -652,6 +640,9 @@ void LoadMap(string MapFile) {
 	ifstream ifs{ MapFile };
 	json jsonfile = json::parse(ifs);
 
+	MapTile.clear();
+	MapObj.clear();
+	objects.clear();
 
 	vector<vector<int>> r_map;
 	vector<int> lineMapTile;
@@ -661,7 +652,7 @@ void LoadMap(string MapFile) {
 	int w = jsonfile["layers"][0]["width"], h = jsonfile["layers"][0]["height"];
 	for (int i = 0; i < r_map[0].size(); i++) {
 		 {
-			lineMapTile.push_back(r_map[0][i] - 1);
+			lineMapTile.push_back(r_map[0][i] - 1 + Map::GetInstance()->idMap);
 			vector<int> a = vector<int>();
 			lineMapObj.push_back(a);
 			if (lineMapTile.size() == w) {
@@ -730,6 +721,9 @@ void LoadMap(string MapFile) {
 		}
 		else if (type == "15") {
 			style = trigger_Enemies;
+		}
+		else if (type == "18") {
+			style = teleport_map2;
 		}
 		else if (id == 1412)
 		{
@@ -856,7 +850,13 @@ void LoadMap(string MapFile) {
 
 		if (style == trigger_Trap) 
 		{
+			vector<Trap*> tp = Map::GetInstance()->tpMap_1;
+
 			Trigger* trigg = new Trigger();
+			trigg->type = style;
+			trigg->SetPosition(p);
+			trigg->SetWidthHeight(w, h);
+
 			if (id == 1824)
 				trigg->setTrap(tp[0]);
 			if (id == 1823)
@@ -873,7 +873,8 @@ void LoadMap(string MapFile) {
 				trigg->setTrap(tp[6]);
 			if (id == 1855 || id == 1856)
 				trigg->setTrap(tp[7]);
-			Obj(trigg, i, style, p, w, h);
+			//Obj(trigg, i, style, p, w, h);
+			Map::GetInstance()->AddTrigger(trigg);
 		}
 		else if (style == trigger_Enemies) {
 			Trigger* trigg = new Trigger();
@@ -904,6 +905,8 @@ void LoadMap(string MapFile) {
 		}
 		else {
 			Brick* brick = new Brick();
+			if (style == teleport_map2)
+				brick->SetPenetrable(true);
 			Obj(brick, i, style, p, w, h);
 		}
 	}
@@ -944,7 +947,17 @@ void Render()
 	d3ddv->Present(NULL, NULL, NULL, NULL);
 }
 
-
+void ChangeMap() {
+	Map::GetInstance()->MapReset();
+	if (Map::GetInstance()->idMap == ID_MAP_1) {
+		Map::GetInstance()->idMap = ID_MAP_2;
+		LoadMap(PATH_MAP_2);
+	}
+	else {
+		Map::GetInstance()->idMap = ID_MAP_1;
+		LoadMap(PATH_MAP_1);
+	}
+}
 
 void setCam(float x, float y) {
 	int ox = (int)CGame::GetInstance()->GetCamPos_x();
@@ -978,7 +991,7 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 
 	if(obj->type != g_star)
 		_coObj->push_back(nakiri);
-	_coObj->push_back(cannon);
+	//_coObj->push_back(cannon);
 	//coObj->push_back(boom);
 	_coObj->push_back(star);
 	Map::GetInstance()->updateMap(cx, cy, tf, br);
@@ -992,16 +1005,11 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 void Update(DWORD dt) {
 	float cx, cy;
 
-	UpdateObj(cannon, dt);
+	//UpdateObj(cannon, dt);
 
 	UpdateObj(star, dt);
 
 	//UpdateObj(spBoom, dt);
-
-	for (int i = 0; i < 8; i++)
-	{
-		UpdateObj(tp[i], dt);
-	}
 
 	coObj->clear();
 
@@ -1017,20 +1025,16 @@ void Update(DWORD dt) {
 	Map::GetInstance()->updateMap(cx, cy, tf, br);
 	Map::GetInstance()->updateMapObject(coObj);
 
-	for (int i = 0; i < cannon->bullets.size(); i++)
-		cannon->bullets[i]->Update(dt);
+	/*for (int i = 0; i < cannon->bullets.size(); i++)
+		cannon->bullets[i]->Update(dt);*/
 
 	coObj->push_back(nakiri);
-	coObj->push_back(cannon);
+	//coObj->push_back(cannon);
 	coObj->push_back(star);
-	for (int i = 0; i < 8; i++)
-	{
-		coObj->push_back(tp[i]);
-	}
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
-		if (coObj->at(i)->type == g_boom || coObj->at(i)->type == sp_boom || coObj->at(i)->type == g_worm) {
+		if (coObj->at(i)->type == g_boom || coObj->at(i)->type == sp_boom || coObj->at(i)->type == g_worm || coObj->at(i)->type == trap) {
 			UpdateObj(coObj->at(i), dt);
 			continue;
 		}
@@ -1040,9 +1044,9 @@ void Update(DWORD dt) {
 			continue;
 		if (coObj->at(i)->type == main_c)
 			continue;
-		if (coObj->at(i)->type == trap)
-			continue;
 		if (coObj->at(i)->type == trigger_Enemies)
+			continue;
+		if (coObj->at(i)->type == trigger_Trap)
 			continue;
 		coObj->at(i)->Update(dt, coObj);
 	}
@@ -1087,18 +1091,19 @@ void Render_Map() {
 
 
 
-	for (int i = 0; i < cannon->bullets.size(); i++)
-		cannon->bullets[i]->Render();
+	/*for (int i = 0; i < cannon->bullets.size(); i++)
+		cannon->bullets[i]->Render();*/
 	for (int i = 0; i < coObj->size(); i++) {
 		//coObj->at(i)->RenderBoundingBox();
 		coObj->at(i)->Render();
 	}
-	for (int i = 0; i < 8; i++)
+	/*for (int i = 0; i < 8; i++)
 	{
 		tp[i]->Render();
-	}
+	}*/
 	star->Render();
-	cannon->Render();
+	//cannon->Render();
+
 	/*for (int i = 0; i < objects.size(); i++) {
 		objects[i]->Render();
 	}*/
@@ -1132,6 +1137,11 @@ int Run()
 			frameStart = now;
 
 			game->ProcessKeyboard();
+
+			if (Map::GetInstance()->ChangeMap) {
+				ChangeMap();
+				Map::GetInstance()->ChangeMap = false;
+			}
 
 			Update(dt);
 
@@ -1201,12 +1211,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	keyHandler = new CSampleKeyHander();
 	game->InitKeyboard(keyHandler);
 
-	
 
 	lx = ly = 0;
 
 	LoadResource();
-	LoadMap("Maps\\map1.json");
+
+	Map::GetInstance()->idMap = ID_MAP_1;
+
+	LoadMap(PATH_MAP_1);
 
 	star = new Star();
 	

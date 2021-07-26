@@ -5,6 +5,7 @@
 void Trigger::Reset()
 {
 	isTrigg = false;
+	enable = true;
 	if(trap != NULL)
 		trap->Reset();
 	if (!enemies->empty()) {

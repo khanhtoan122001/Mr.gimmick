@@ -17,7 +17,7 @@ class GameObject;
 typedef GameObject* LPGAMEOBJECT;
 
 enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left, g_boom,
-	slide_right, spike, trap, trigger_Trap, move_brick, g_cannon, g_star, thorns, up_y, trigger_Enemies, sp_boom, g_worm,
+	slide_right, spike, trap, trigger_Trap, move_brick, g_cannon, g_star, thorns, up_y, trigger_Enemies, sp_boom, g_worm, teleport_map2,
 	tunnel, tunnel1, tunnel1_end, tunnel1_1, tunnel1_1_end , corner_1_1, corner_1_2, tunnel2, tunnel2_end,
 	tunnel3, tunnel3_end, tunnel3_1, tunnel3_1_end, tunnel4, tunnel4_end, tunnel4_1, tunnel4_1_end, tunnel5, tunnel5_end, tunnel5_1, tunnel5_1_end,
 	corner_3_1, corner_3_2, corner_3_3, corner_3_4, corner_4_1, corner_4_2, corner_5_1, corner_5_2};

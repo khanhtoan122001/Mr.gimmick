@@ -299,6 +299,14 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					return;
 				}
 				break;
+			case teleport_map2:
+			{
+				Map::GetInstance()->ChangeMap = true;
+				this->SetPosition(SWAP_POINT_MAP_2);
+				vx = vy = 0;
+				return;
+			}
+			break;
 			case thorns:
 				if (e->t > 0) {
 					int stage = Map::GetInstance()->Stage;
@@ -626,7 +634,7 @@ void Nakiri::SetState(int state)
 		else if (doubleJump) {
 			if (this->count == 1) {
 				vy = -NAKIRI_MAX_JUMP_SPEED;
-				this->count = 2;
+				//this->count = 2;
 			}
 		}
 		break;

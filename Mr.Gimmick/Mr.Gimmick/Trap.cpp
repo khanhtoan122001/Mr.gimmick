@@ -31,6 +31,7 @@ void Trap::Reset()
 	x = start_x;
 	y = start_y;
 	vx = vy = 0;
+	enable = true;
 }
 
 void Trap::Fall()
