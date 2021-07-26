@@ -85,8 +85,10 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		nakiri->SetState(NAKIRI_STATE_JUMP);
 		break;
 	case DIK_R:
-		tp[0]->Reset();
-		tp[1]->Reset();
+		for (int i = 0; i < 8; i++)
+		{
+			tp[i]->Reset();
+		}
 		break;
 	case DIK_T:
 		nakiri->doubleJump = !nakiri->doubleJump;
@@ -552,13 +554,23 @@ void LoadResource() {
 	ani->Add(11007);
 	animations->Add(BOOM_ANI_DIE_LEFT, ani);
 
-	Trap* _trap = new Trap();
-	tp.push_back(_trap);
-	_trap = new Trap();
-	tp.push_back(_trap);
-
+	Trap* _trap;
+	//tp.push_back(_trap);
+	//_trap = new Trap();
+	//tp.push_back(_trap);
+	for (int i = 0; i < 8; i++)
+	{
+		_trap = new Trap();
+		tp.push_back(_trap);
+	}
 	tp[0]->SetPosition(864 * 2, 416 * 2);
 	tp[1]->SetPosition(816 * 2, 416 * 2);
+	tp[2]->SetPosition(1696, 1216);
+	tp[3]->SetPosition(1760, 1216);
+	tp[4]->SetPosition(1824, 1216);
+	tp[5]->SetPosition(1888, 1216);
+	tp[6]->SetPosition(2016, 1216);
+	tp[7]->SetPosition(2080, 1216);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
 
@@ -683,8 +695,8 @@ void LoadMap(string MapFile) {
 		}
 		else if (id == 1455)
 		{
-			style = corner_1_1;//éo chạy nhá t thua nha
-		}//đer coi
+			style = corner_1_1;
+		}
 		else if (id == 1829)
 		{
 			style = tunnel2;
@@ -773,7 +785,7 @@ void LoadMap(string MapFile) {
 		{
 			style = corner_5_2;
 		} 
-		else// thay ngu ngu chua do m dùng id :v t noi no bay bay nay` à đến đó thì tắt trọng lực gì nữa k, no bay tu trong ong r
+		else
 			style = normal_brick;
 		
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
@@ -787,6 +799,18 @@ void LoadMap(string MapFile) {
 				trigg->setTrap(tp[0]);
 			if (id == 1823)
 				trigg->setTrap(tp[1]);
+			if (id == 1847)
+				trigg->setTrap(tp[2]);
+			if (id == 1848)
+				trigg->setTrap(tp[3]);
+			if (id == 1849)
+				trigg->setTrap(tp[4]);
+			if (id == 1851 || id == 1852)
+				trigg->setTrap(tp[5]);
+			if (id == 1853 || id == 1854)
+				trigg->setTrap(tp[6]);
+			if (id == 1855 || id == 1856)
+				trigg->setTrap(tp[7]);
 			Obj(trigg, i, style, p, w, h);
 		}
 		else if (style == trigger_Enemies) {
@@ -902,7 +926,7 @@ void Update(DWORD dt) {
 
 	UpdateObj(star, dt);
 
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		UpdateObj(tp[i], dt);
 	}
@@ -927,8 +951,10 @@ void Update(DWORD dt) {
 	coObj->push_back(nakiri);
 	coObj->push_back(cannon);
 	coObj->push_back(star);
-	coObj->push_back(tp[0]);
-	coObj->push_back(tp[1]);
+	for (int i = 0; i < 8; i++)
+	{
+		coObj->push_back(tp[i]);
+	}
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
@@ -994,7 +1020,7 @@ void Render_Map() {
 		coObj->at(i)->RenderBoundingBox();
 		//coObj->at(i)->Render();
 	}*/
-	for (int i = 0; i < 2; i++)
+	for (int i = 0; i < 8; i++)
 	{
 		tp[i]->Render();
 	}
