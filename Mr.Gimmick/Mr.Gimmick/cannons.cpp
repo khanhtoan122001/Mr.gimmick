@@ -112,12 +112,12 @@ void Cannon::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	loop += dt;
 	if (loop >= TIME_FIRE) {
 		if (bullets.empty()) {
-			Bullet* bullet = new Bullet();
+			/*Bullet* bullet = new Bullet();
 			bullet->AddAnimation(BULLET_ANI);
 			bullet->SetWidthHeight(32, 32);
 			bullet->SetPosition(x, y);
 			bullet->SetSpeed(0.05, 0);
-			bullets.push_back(bullet);
+			bullets.push_back(bullet);*/
 		}
 		loop = 0;
 	}

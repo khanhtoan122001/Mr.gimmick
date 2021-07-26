@@ -116,8 +116,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	 		x0 += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 			y0 += min_ty * dy + ny * 0.4f;
 
-			if (ny == -1)
+			if (ny == -1) {
 				canJump = true;
+				this->count = 0;
+			}
 
 			if (nx != 0) // ok buoc 1 :v
 				vx = 0;
@@ -152,8 +154,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						// block 
 						x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 						y0 += min_ty * dy + ny * 0.6f;
-						if (ny == -1)
+						if (ny == -1) {
 							canJump = true;
+							this->count = 0;
+						}
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
 						star->penetrable = true;
@@ -171,8 +175,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						// block 
 						x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 						y0 += min_ty * dy + ny * 0.6f;
-						if (ny == -1)
+						if (ny == -1) {
 							canJump = true;
+							this->count = 0;
+						}
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
 						star->penetrable = false;
@@ -264,7 +270,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					}
 				}
 				break;
-			case trigger:
+			case trigger_Trap:
 				if (e->t > 0)
 				{
 					Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
@@ -274,24 +280,10 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				break;
 			case g_boom:
 				if (e->t > 0) {
-					Boom* boom = dynamic_cast<Boom*>(e->obj);
-					boom->penetrable = true;
-					float min_tx, min_ty, nx = 0, ny;
-					this->ny = 0;
-
-					x0 = x;
-					y0 = y;
-
-					FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny);
-
-					// block 
-					x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
-					y0 += min_ty * dy + ny * 0.6f;
-					if (ny == -1)
-						canJump = true;
-					if (nx != 0) vx = 0;
-					if (ny != 0) vy = 0;
-					boom->penetrable = false;
+					//StartUntouchable();
+					state = NAKIRI_STATE_STUN;
+					//stun_time = 0;
+					return;
 				}
 				break;
 			case thorns:
@@ -438,8 +430,14 @@ void Nakiri::SetState(int state)
 		nx = -1;
 		break;
 	case NAKIRI_STATE_JUMP:
-		if(canJump)
+		if (canJump) {
 			vy = -NAKIRI_MAX_JUMP_SPEED;
+			this->count = 1;
+		}
+		else if (doubleJump) {
+			if(this->count == 1)
+				vy = -NAKIRI_MAX_JUMP_SPEED;
+		}
 		break;
 	case NAKIRI_STATE_STAND:
 		{

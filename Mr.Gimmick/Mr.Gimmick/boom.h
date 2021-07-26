@@ -15,7 +15,7 @@
 #define BOOM_STATE_DIE 7955
 #define BOOM_STATE_NONE 5324
 
-#define BOOM_WALK_SPEED 0
+#define BOOM_WALK_SPEED 0.15
 
 class Boom : public GameObject
 {
@@ -33,5 +33,8 @@ public:
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	void Hide();
+	virtual void SetPosition(Point p);
+	virtual void SetPosition(float x, float y);
+	void Reset();
 };
 

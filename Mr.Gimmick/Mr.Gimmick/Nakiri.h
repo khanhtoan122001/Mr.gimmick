@@ -37,6 +37,7 @@ class Nakiri : public GameObject
 	int untouchable;
 	DWORD untouchable_start;
 	int stun_time = 0;
+	int count = 0;
 
 
 	float start_x;			// initial position of Mario at scene
@@ -45,6 +46,7 @@ public:
 	bool tunning = false;
 	bool tunning_rev = false;
 	bool canJump = true;
+	bool doubleJump = false;
 	static Nakiri* GetInstance();
 	Nakiri();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);

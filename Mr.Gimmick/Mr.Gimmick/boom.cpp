@@ -9,11 +9,29 @@ Boom::Boom()
 	this->AddAnimation(BOOM_ANI_WALK_LEFT);
 	this->AddAnimation(BOOM_ANI_DIE_RIGHT);
 	this->AddAnimation(BOOM_ANI_DIE_LEFT);
-	penetrable = false;
+	penetrable = true;
 	type = g_boom;
 	state = BOOM_STATE_NONE;
 }
-
+void Boom::SetPosition(Point p)
+{
+	GameObject::SetPosition(p);
+	start_x = p.x; start_y = p.y;
+}
+void Boom::Reset()
+{
+	x = start_x;
+	y = start_y;
+	vx = vy = 0;
+	state = BOOM_STATE_NONE;
+	Hide();
+}
+void Boom::SetPosition(float x, float y)
+{
+	GameObject::SetPosition(x, y);
+	start_x = x;
+	start_y = y;
+}
 void Boom::Render()
 {
 	
@@ -136,13 +154,13 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				case slide_left:
 				{
 					if (e->t > 0 && e->ny == -1)
-						x0 -= 3.0f;
+						x0 -= 2.0f;
 					break;
 				}
 				case slide_right:
 				{
 					if (e->t > 0 && e->ny == -1)
-						x0 += 3.0f;
+						x0 += 2.0f;
 					break;
 				}
 				case trap:
@@ -154,8 +172,8 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (e->t > 0)
 					{
 						if (dx == 0) {
-							x0 -= NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-							y0 += NAKIRI_GRAVITY * dt;
+							x0 -= NAKIRI_GRAVITY * dt * 2 * ((float)e->obj->width / (float)e->obj->height);
+							y0 += NAKIRI_GRAVITY * dt * 2;
 						}
 						if (dx > 0) {
 							y0 -= 0.028 * dt;
@@ -169,8 +187,8 @@ void Boom::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				case diagonal_right:
 					if (e->t > 0) {
 						if (dx == 0) {
-							x0 += NAKIRI_GRAVITY * dt * ((float)e->obj->width / (float)e->obj->height);
-							y0 += NAKIRI_GRAVITY * dt;
+							x0 += NAKIRI_GRAVITY * dt * 2 *((float)e->obj->width / (float)e->obj->height);
+							y0 += NAKIRI_GRAVITY * dt * 2;
 						}
 						if (dx > 0) {
 							ny = 0;

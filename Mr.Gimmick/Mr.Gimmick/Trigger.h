@@ -5,9 +5,13 @@
 class Trigger : public Brick
 {
 	Trap* trap;
+	vector<LPGAMEOBJECT> enemies;
 public: 
+	bool isTrigg = false;
+	void Reset();
 	void setTrap(Trap* trap) { this->trap = trap; }
 	Trap* getTrap() { return trap; }
-	Trigger() { Brick::Brick(); trap = NULL; }
+	void setEnemies(LPGAMEOBJECT e) { enemies.push_back(e); }
+	Trigger();
 };
 

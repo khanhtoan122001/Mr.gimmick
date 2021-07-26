@@ -88,6 +88,9 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 		tp[0]->Reset();
 		tp[1]->Reset();
 		break;
+	case DIK_T:
+		nakiri->doubleJump = !nakiri->doubleJump;
+		break;
 	case DIK_S:
 		if (star->canPress) {
 			if(!star->isComplete && star->canShot)
@@ -644,7 +647,7 @@ void LoadMap(string MapFile) {
 			style = trap;
 		}
 		else if (type == "8") {
-			style = trigger;
+			style = trigger_Trap;
 		}
 		else if (type == "9") {
 			style = move_brick;
@@ -654,6 +657,9 @@ void LoadMap(string MapFile) {
 		}
 		else if (type == "14") {
 			style = up_y;
+		}
+		else if (type == "15") {
+			style = trigger_Enemies;
 		}
 		else if (id == 1412)
 		{
@@ -690,15 +696,17 @@ void LoadMap(string MapFile) {
 		int w = jsonfile["layers"][1]["objects"][i]["width"];
 		int h = jsonfile["layers"][1]["objects"][i]["height"];
 
-		if (style == trigger) 
+		if (style == trigger_Trap) 
 		{
 			Trigger* trigg = new Trigger();
-			trigg->SetPenetrable(true);
 			if (id == 1824)
 				trigg->setTrap(tp[0]);
 			if (id == 1823)
 				trigg->setTrap(tp[1]);
 			Obj(trigg, i, style, p, w, h);
+		}
+		else if (style == trigger_Enemies) {
+
 		}
 		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end)
 		{
