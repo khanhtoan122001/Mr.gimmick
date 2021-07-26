@@ -1,68 +1,67 @@
-#include "Worm.h"
+#include "BossM1.h"
 #include "Star.h"
 #include "boom.h"
 
-Worm::Worm()
+BossM1::BossM1()
 {
 	//vx = 0.8f;
-	this->AddAnimation(WORM_ANI_WALK_RIGHT);
-	this->AddAnimation(WORM_ANI_WALK_LEFT);
-	this->AddAnimation(WORM_ANI_DIE);
+	this->AddAnimation(BOSS_M1_ANI_STAND);
+	/*this->AddAnimation(WORM_ANI_WALK_LEFT);
+	this->AddAnimation(WORM_ANI_DIE);*/
 	penetrable = true;
-	type = g_worm;
-	this->SetWidthHeight(48, 30);
-	vx = 0.08f;
+	type = boss_m1;
+	this->SetWidthHeight(64, 64);
+	vx = vy = 0.0f;
 	state = BOOM_STATE_NONE;
 }
-void Worm::SetPosition(Point p)
+void BossM1::SetPosition(Point p)
 {
 	GameObject::SetPosition(p);
 	start_x = p.x; start_y = p.y;
 }
-void Worm::Reset()
+void BossM1::Reset()
 {
 	x = start_x;
 	y = start_y;
+	hp = 3;
 	vy = 0;
 	vx = 0.08f;
 	enable = true;
 	state = BOOM_STATE_NONE;
 	//Hide();
 }
-void Worm::SetPosition(float x, float y)
+void BossM1::SetPosition(float x, float y)
 {
 	GameObject::SetPosition(x, y);
 	start_x = x;
 	start_y = y;
 }
-void Worm::Render()
+void BossM1::Render()
 {
 	float _x = CGame::GetInstance()->GetCamPos_x();
 	float _y = CGame::GetInstance()->GetCamPos_y();
 
 	if (_x < x + width && x + width < _x + GAME_PLAY_WIDTH * BRICK_WIDTH && _y < y && y < _y + GAME_PLAY_HEIGHT * BRICK_HEIGHT) {
-		if (vx > 0)
-			animations[0]->Render((int)x, (int)y);
-		else animations[1]->Render((int)x, (int)y);
+		animations[0]->Render((int)x, (int)y);
 	}
 	else if (state == BOOM_STATE_DIE)
-		animations[2]->Render((int)x, (int)y);
+		animations[0]->Render((int)x, (int)y);
 }
 
-Rect Worm::GetBoundingBox()
+Rect BossM1::GetBoundingBox()
 {
-	return Rect(Point(x, y), BOOM_WIDTH - 0.5, BOOM_HEIGHT - 0.5);
+	return Rect(Point(x, y), width - 0.5, height - 0.5);
 }
 
-void Worm::GetBoundingBox(float& l, float& t, float& r, float& b)
+void BossM1::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	l = x;
 	t = y;
-	r = x + BOOM_WIDTH;
-	b = y + BOOM_HEIGHT;
+	r = x + width;
+	b = y + height;
 }
 
-void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
+void BossM1::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 {
 	if (x + width >= maxx || x <= minx) {
 		vx *= -1;
@@ -135,7 +134,7 @@ void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			for (UINT i = 0; i < coEvents.size(); i++) {
 				LPCOLLISIONEVENT e = coEvents[i];
 				int style = e->obj->getType();
-				if (style == g_star || style == thorns || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5_end || style == tunnel5_1)
+				if (style == thorns || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5_end || style == tunnel5_1)
 				{
 					//this->Hide();
 					state = BOOM_STATE_DIE;
@@ -144,6 +143,17 @@ void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				}
 				switch (style)
 				{
+				case g_star:
+				{
+					if(e->obj->state != STAR_EXPLOSIVE)
+						hp--;
+					if (hp == 0) {
+						state = BOOM_STATE_DIE;
+						vx = 0;
+						return;
+					}
+				}
+				break;
 				case slide_left:
 				{
 					if (e->t > 0 && e->ny == -1)
@@ -239,12 +249,12 @@ void Worm::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	}
 }
 
-void Worm::Hide()
+void BossM1::Hide()
 {
 	x = y = -9999;
 }
 
-void Worm::Appear()
+void BossM1::Appear()
 {
 	x = start_x;
 	y = start_y;

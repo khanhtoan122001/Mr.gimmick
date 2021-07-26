@@ -22,6 +22,7 @@
     <ClCompile Include="Tunnel.cpp" />
     <ClCompile Include="Super_Boom.cpp" />
     <ClCompile Include="Worm.cpp" />
+    <ClCompile Include="BossM1.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="boom.h" />
@@ -44,5 +45,6 @@
     <ClInclude Include="Tunnel.h" />
     <ClInclude Include="Super_Boom.h" />
     <ClInclude Include="Worm.h" />
+    <ClInclude Include="BossM1.h" />
   </ItemGroup>
 </Project>

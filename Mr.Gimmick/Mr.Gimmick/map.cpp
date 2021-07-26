@@ -11,6 +11,7 @@ void Map::updateObj()
 {
 	//listObj->clear();
 	if (idMap == ID_MAP_1) {
+		
 		for (int i = 0; i < 8; i++)
 		{
 			if (tpMap_1[i]->enable) {
@@ -77,6 +78,11 @@ void Map::updateObj()
 			break;
 		case 7:
 		{
+			if (boss1->enable) {
+				listObj->push_back(boss1);
+				boss1->enable = false;
+			}
+
 			Rect rect(this->tf, this->br);
 			for (int i = 0; i < TriggEnemiesM1->size(); i++) {
 				if (rect.isIn(TriggEnemiesM1->at(i)->GetPos())) {
@@ -110,6 +116,9 @@ Map::Map()
 	this->listMoveBrick = new vector<LPGAMEOBJECT>();
 	this->TriggEnemiesM1 = new vector<Trigger*>();
 	this->listObj = new vector<LPGAMEOBJECT>();
+
+	boss1 = new BossM1();
+	boss1->SetPosition(2176, 160);
 
 	Trap* _trap;
 	//tp.push_back(_trap);
@@ -347,5 +356,6 @@ void Map::MapReset()
 	for (int i = 0; i < TriggTrapM1->size(); i++) {
 		TriggTrapM1->at(i)->Reset();
 	}
+	boss1->Reset();
 }
 
