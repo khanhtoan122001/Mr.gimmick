@@ -50,7 +50,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			state = NAKIRI_STATE_STAND;
 			stun_time = 0;
 		}
-		return;
+		vx = 0;
+		//return;
 	}
 
 	GameObject::Update(dt);
@@ -549,7 +550,7 @@ void Nakiri::Render()
 			if (vx == 0)
 			{
 				if (nx >= 0) animations[6]->Render(x - 4, y - 19);
-				else animations[7]->Render(x - 4 + 32, y - 19);
+				else animations[7]->Render(x - 3 + 32, y - 15);
 			}
 			else if (vx > 0)
 				animations[6]->Render(x - 4, y - 19);

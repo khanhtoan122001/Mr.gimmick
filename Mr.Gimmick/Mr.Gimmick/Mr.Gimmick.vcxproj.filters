@@ -1,123 +1,46 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="boom.cpp" />
+    <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="cannons.cpp" />
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="line.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="map.cpp" />
+    <ClCompile Include="Nakiri.cpp" />
+    <ClCompile Include="Point.cpp" />
+    <ClCompile Include="Quadtree.cpp" />
+    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="Star.cpp" />
+    <ClCompile Include="Textures.cpp" />
+    <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="Trigger.cpp" />
+    <ClCompile Include="Tunnel.cpp" />
+    <ClCompile Include="Super_Boom.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Textures.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Brick.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Nakiri.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Quadtree.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Rect.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Point.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="line.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Trap.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Trigger.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boom.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="map.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cannons.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-    <ClCompile Include="tunnel.cpp">
-    <ClCompile Include="Tunnel.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Textures.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Brick.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Nakiri.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Quadtree.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Rect.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Point.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="line.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Trap.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Trigger.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boom.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="cannons.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-    <ClInclude Include="Tunnel.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="boom.h" />
+    <ClInclude Include="Brick.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="cannons.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="line.h" />
+    <ClInclude Include="map.h" />
+    <ClInclude Include="Nakiri.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="Quadtree.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="Star.h" />
+    <ClInclude Include="Textures.h" />
+    <ClInclude Include="Trap.h" />
+    <ClInclude Include="Trigger.h" />
+    <ClInclude Include="Tunnel.h" />
+    <ClInclude Include="Super_Boom.h" />
   </ItemGroup>
 </Project>
