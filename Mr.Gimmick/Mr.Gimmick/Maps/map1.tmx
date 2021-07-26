@@ -146,7 +146,7 @@
   <object id="1447" type="0" x="1728" y="640" width="32" height="64"/>
   <object id="1448" type="0" x="1760" y="576" width="62" height="128"/>
   <object id="1450" type="0" x="1824" y="706.667" width="96" height="62"/>
-  <object id="1451" type="0" x="1920" y="706" width="64" height="62"/>
+  <object id="1451" type="0" x="1920" y="706" width="62" height="62"/>
   <object id="1452" type="0" x="1890.33" y="608" width="125.667" height="62"/>
   <object id="1453" type="0" x="1984" y="480" width="64" height="32"/>
   <object id="1454" type="0" x="2016" y="512" width="32" height="128"/>
@@ -186,7 +186,7 @@
   <object id="1496" type="13" x="1664" y="1090" width="64" height="62"/>
   <object id="1497" type="0" x="1728" y="1024" width="128" height="64"/>
   <object id="1499" type="0" x="1920" y="928" width="96" height="64"/>
-  <object id="1500" type="0" x="1920" y="768" width="60.5" height="96"/>
+  <object id="1500" type="0" x="1920" y="768" width="62" height="96"/>
   <object id="1501" type="0" x="2016" y="768" width="32" height="96"/>
   <object id="1502" type="0" x="2016" y="864" width="32" height="96"/>
   <object id="1503" type="0" x="1824" y="768" width="96" height="64"/>
@@ -421,7 +421,7 @@
   <object id="1825" x="1952" y="672" width="32" height="32"/>
   <object id="1826" x="1888" y="672" width="32" height="32"/>
   <object id="1827" x="1984" y="800" width="32" height="32"/>
-  <object id="1828" x="1984" y="864" width="32" height="32"/>
+  <object id="1828" x="1984" y="832" width="32" height="32"/>
   <object id="1829" x="1088" y="1056" width="32" height="32"/>
   <object id="1830" x="1088" y="1248" width="32" height="32"/>
   <object id="1831" x="4000" y="1440" width="32" height="32"/>

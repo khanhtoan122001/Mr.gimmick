@@ -20,10 +20,10 @@
 #define STAGE_7_MAP_TF Point(64,0)
 #define STAGE_7_MAP_BR Point(127,11)
 
-#define SWAP_POINT_STAGE_1 Point(96,576)
-#define SWAP_POINT_STAGE_2_3 Point(1984,864)
-#define SWAP_POINT_STAGE_5_6 Point(3616,1344)
-#define SWAP_POINT_STAGE_7 Point(3904,256)
+#define SWAP_POINT_STAGE_1 Point(96,576+16)
+#define SWAP_POINT_STAGE_2_3 Point(1984,864 +16)
+#define SWAP_POINT_STAGE_5_6 Point(3616,1344+16)
+#define SWAP_POINT_STAGE_7 Point(3904,256+16)
 
 #include "GameObject.h"
 #include "Trigger.h"
