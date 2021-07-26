@@ -229,6 +229,18 @@ Map::Map()
 	mbrick->miny = 192 + 32;
 
 	this->listMoveBrick->push_back(mbrick);
+	
+	/*mbrick = new Brick();
+	mbrick->SetStyle(move_brick);
+	mbrick->SetWidthHeight(64, 32);
+	mbrick->AddAnimation(MOVE_BRICK_ANI);
+	mbrick->SetPosition(3680, 1408);
+	mbrick->SetSpeed(0.1, 0.0);
+	mbrick->maxx = 3808;
+	mbrick->minx = 3680;
+	mbrick->maxy = 1408;
+	mbrick->miny = 1408;
+	this->listMoveBrick->push_back(mbrick);*/
 	Stage = 0;
 }
 
