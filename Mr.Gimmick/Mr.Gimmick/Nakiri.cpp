@@ -1,4 +1,4 @@
-﻿#include "Nakiri.h"
+#include "Nakiri.h"
 #include <algorithm>
 #include <assert.h>
 #include "Game.h"
@@ -121,22 +121,9 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				this->count = 0;
 			}
 
-			if (tunning && nx != 0) {
-				vx = 0; //clgt sao no lai la normal kìa wtf cai gi normal
-			}
-
 			if (nx != 0) // ok buoc 1 :v
 				vx = 0;
-			//tunning với tunning_rev khac gi nhau di len va di xuong
 			if (ny != 0) vy = 0;
-		}
-
-		if (tunning && vx == 0) {
-			//v cho nhanh
-			// van de la tai sao no k tinh va cham kia
-			//no va cham voi cai nao do roi bi vx = 0 trước khi vấp cục đấy
-			// co cai nao lam vx=0 dc a`
-			//bí ẩn của vũ trụ (;
 		}
 
 		/*x = (int)x + 0.0001f;
@@ -326,7 +313,6 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					tunning = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
 					vx = 0.06f;
-					//return; ok gg
 				}
 				//else 
 					//tunning = false;
@@ -360,174 +346,6 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
 					vy = -0.3f;
 				}
-				break;
-			case tunnel1_1_end:
-				if (e->t != -1.0 && tunning_rev)
-				{
-					tunning_rev = false;
-				}
-				break;
-			case tunnel2:
-				if (e->t != -1.0 && !tunning_rev)
-				{
-					tunning = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vy = 0.3f;
-				}
-				break;
-			case tunnel2_end:
-				if (e->t != -1.0 && tunning)
-				{
-					tunning = false;
-				}
-				break;
-			case tunnel3:
-				if (e->t != -1.0 && !tunning_rev)
-				{
-					tunning = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
-				}
-				break;
-			case tunnel3_1:
-				if (e->t != -1.0 && !tunning)
-				{
-					tunning_rev = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
-				}
-				break;
-			case tunnel3_end:
-				if (e->t != -1.0 && tunning)
-				{
-					tunning = false;
-				}
-				break;
-			case tunnel3_1_end:
-				if (e->t != -1.0 && tunning_rev)
-				{
-					tunning_rev = false;
-				}
-				break;
-			case corner_3_1:
-				if (e->t != -1.0)
-					if (tunning)
-					{
-						vx = 0;
-						vy = -0.3f;
-					}
-				break;
-			case corner_3_2:
-				if (e->t != -1.0)
-					if (tunning)
-					{
-						vx = -0.06f;
-						vy = 0;
-					}
-				break;
-			case corner_3_3:
-				if (e->t != -1.0)
-					if (tunning_rev)
-					{
-						vx = 0;
-						vy = 0.3f;
-					}
-				break;
-			case corner_3_4:
-				if (e->t != -1.0)
-					if (tunning_rev)
-					{
-						vy = 0;
-						vx = -0.06f;
-					}
-				break;
-			case tunnel4:
-				if (e->t != -1.0 && !tunning_rev)
-				{
-					tunning = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vy = -0.3f;
-				}
-				break;
-			case tunnel4_end:
-				if (e->t != -1.0 && tunning)
-				{
-					tunning = false;
-				}
-				break;
-			case tunnel4_1:
-				if (e->t != -1.0 && !tunning)
-				{
-					tunning_rev = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = -0.06f;
-				}
-				break;
-			case tunnel4_1_end:
-				if (e->t != -1.0 && tunning_rev)
-				{
-					tunning_rev = false;
-				}
-				break;
-			case corner_4_1:
-				if (e->t != -1.0)
-					if (tunning)
-					{
-						vy = 0;
-						vx = 0.06f;
-					}
-				break;
-			case corner_4_2:
-				if (e->t != -1.0)
-					if (tunning_rev)
-					{
-						vx = 0;
-						vy = 0.3f;
-					}
-				break;
-			case tunnel5:
-				if (e->t != -1.0 && !tunning_rev)
-				{
-					tunning = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vy = -0.3f;
-				}
-				break;
-			case tunnel5_1:
-				if (e->t != -1.0 && !tunning)
-				{
-					tunning_rev = true;
-					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
-				}
-				break;
-			case tunnel5_end:
-				if (e->t != -1.0 && tunning)
-				{
-					tunning = false;
-				}
-				break;
-			case tunnel5_1_end:
-				if (e->t != -1.0 && tunning_rev)
-				{
-					tunning_rev = false;
-				}
-				break;
-			case corner_5_1:
-				if (e->t != -1.0)
-					if (tunning)
-					{
-						vy = 0;
-						vx = -0.06f;
-					}
-				break;
-			case corner_5_2:
-				if (e->t != -1.0)
-					if (tunning_rev)
-					{
-						vx = 0;
-						vy = 0.3f;
-					}
 				break;
 			default:
 				break;
