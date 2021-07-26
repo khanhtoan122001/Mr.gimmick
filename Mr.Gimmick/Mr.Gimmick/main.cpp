@@ -1,4 +1,4 @@
-#include <windows.h>
+﻿#include <windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
 #include <fstream>
@@ -618,11 +618,12 @@ void LoadMap(string MapFile) {
 		int des = -1;
 		string type = jsonfile["layers"][1]["objects"][i]["type"];
 		int id = jsonfile["layers"][1]["objects"][i]["id"];
-		if (type == "0")
-		{
-			style = normal_brick;
-		}
-		else if (type == "1") {
+		//if (type == "0")
+		//{
+		//	style = normal_brick;
+		//}// hay do cai nay chắc v
+		//else
+		if (type == "1") {
 			style = diagonal_left;
 		}
 		else if (type == "2") {
@@ -659,19 +660,19 @@ void LoadMap(string MapFile) {
 		{
 			style = (tunnel);
 		}
-		else if (id == 1628)
+		else if (id == 1825)
 		{
 			style = tunnel1;
 		}
-		else if (id == 1631)
+		else if (id == 1828)
 		{
 			style = tunnel1_end;
 		}
-		else if (id == 1629)
+		else if (id == 1827)
 		{
 			style = tunnel1_1;
 		}
-		else if (id == 1632)
+		else if (id == 1826)
 		{
 			style = tunnel1_1_end;
 		}
@@ -681,9 +682,97 @@ void LoadMap(string MapFile) {
 		}
 		else if (id == 1455)
 		{
-			style = corner_1_1;
+			style = corner_1_1;//éo chạy nhá t thua nha
+		}//đer coi
+		else if (id == 1829)
+		{
+			style = tunnel2;
 		}
-		else
+		else if (id == 1830)
+		{
+			style = tunnel2_end;
+		}
+		else if (id == 1831)
+		{
+			style = tunnel3;
+		}
+		else if (id == 1834)
+		{
+			style = tunnel3_end;
+		}
+		else if (id == 1833)
+		{
+			style = tunnel3_1;
+		}
+		else if (id == 1832)
+		{
+			style = tunnel3_1_end;
+		}
+		else if (id == 1715)
+		{
+			style = corner_3_1;
+		}
+		else if (id == 1718)
+		{
+			style = corner_3_2;
+		}
+		else if (id == 1717)
+		{
+			style = corner_3_3;
+		}
+		else if (id == 1707)
+		{
+			style = corner_3_4;
+		}
+		else if (id == 1836)
+		{
+			style = tunnel4;
+		}
+		else if (id == 1838)
+		{
+			style = tunnel4_end;
+		}
+		else if (id == 1837) 
+		{
+			style = tunnel4_1;
+		}
+		else if (id == 1835)
+		{
+			style = tunnel4_1_end;
+		}
+		else if (id == 1758)
+		{
+			style = corner_4_1;
+		}
+		else if (id == 1761)
+		{
+			style = corner_4_2;
+		}
+		else if (id == 1843)
+		{
+			style = tunnel5;
+		}
+		else if (id == 1845)
+		{
+			style = tunnel5_end;
+		}
+		else if (id == 1844)
+		{
+			style = tunnel5_1;
+		}
+		else if (id == 1842)
+		{
+			style = tunnel5_1_end;
+		}
+		else if (id == 1769)
+		{
+			style = corner_5_1;
+		}
+		else if (id == 1768)
+		{
+			style = corner_5_2;
+		} 
+		else// thay ngu ngu chua do m dùng id :v t noi no bay bay nay` à đến đó thì tắt trọng lực gì nữa k, no bay tu trong ong r
 			style = normal_brick;
 		
 		Point p = Point(jsonfile["layers"][1]["objects"][i]["x"], jsonfile["layers"][1]["objects"][i]["y"]);
@@ -700,7 +789,7 @@ void LoadMap(string MapFile) {
 				trigg->setTrap(tp[1]);
 			Obj(trigg, i, style, p, w, h);
 		}
-		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end)
+		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5 || style == tunnel5_end || style == tunnel5_1)
 		{
 			Tunnel* tunnel = new Tunnel();
 			tunnel->SetPenetrable(true);
