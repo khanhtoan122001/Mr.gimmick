@@ -17,7 +17,8 @@ class GameObject;
 typedef GameObject* LPGAMEOBJECT;
 
 enum Style {normal_brick, diagonal_left, diagonal_right, main_c, slide_left, g_boom,
-	slide_right, spike, trap, trigger, move_brick, g_cannon, g_star, tunnel, tunnel1, tunnel1_end, tunnel1_1, tunnel1_1_end , corner_1_1, corner_1_2, tunnel2, tunnel2_end};
+	slide_right, spike, trap, trigger, move_brick, g_cannon, g_star, thorns, up_y,
+	tunnel, tunnel1, tunnel1_end, tunnel1_1, tunnel1_1_end , corner_1_1, corner_1_2, tunnel2, tunnel2_end};
 
 struct CCollisionEvent;
 typedef CCollisionEvent* LPCOLLISIONEVENT;
@@ -79,6 +80,7 @@ public:
 
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
+	void SetPosition(Point p) { this->x = p.x, this->y = p.y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void SetWidthHeight(int w, int h) { this->width = w; this->height = h; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }

@@ -60,7 +60,7 @@ CGame* game;
 Nakiri* nakiri;
 Boom* boom;
 Quadtree* quadtree;
-Trap tp[2];
+vector<Trap*> tp;
 Trigger trigg;
 Map* map;
 Cannon* cannon;
@@ -83,6 +83,10 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 	{
 	case DIK_SPACE:
 		nakiri->SetState(NAKIRI_STATE_JUMP);
+		break;
+	case DIK_R:
+		tp[0]->Reset();
+		tp[1]->Reset();
 		break;
 	case DIK_S:
 		if (star->canPress) {
@@ -286,6 +290,18 @@ void LoadResource() {
 	sprites->Add(10006, 158, 48, 95*2, 86, texNakiriR);
 	sprites->Add(10007, 198, 48, 115*2, 86, texNakiriR);
 
+	sprites->Add(18000, 4, 143, 41, 194, texNakiriR);
+	sprites->Add(18001, 41, 143, 86, 194, texNakiriR);
+	sprites->Add(18002, 84, 143, 129, 194, texNakiriR);
+	sprites->Add(18003, 129, 143, 174, 194, texNakiriR);
+	sprites->Add(18004, 188, 143, 233, 194, texNakiriR);
+	sprites->Add(18005, 240, 143, 285, 194, texNakiriR);
+	sprites->Add(18006, 294, 143, 339, 194, texNakiriR);
+	sprites->Add(18007, 340, 143, 385, 194, texNakiriR);
+	sprites->Add(18008, 393, 143, 438, 194, texNakiriR);
+	sprites->Add(18009, 435, 143, 480, 194, texNakiriR);
+	sprites->Add(18010, 477, 143, 522, 194, texNakiriR);
+
 	sprites->Add(10016, 2*2, 46*2, 18*2, 70*2, texNakiriR);
 
 
@@ -439,6 +455,11 @@ void LoadResource() {
 	ani->Add(12507);
 	animations->Add(BULLET_ANI, ani);
 
+	ani = new CAnimation(100);
+	for (int i = 0; i < 11; i++)
+		ani->Add(18000 + i);
+	animations->Add(NAKIRI_ANI_STUN_RIGHT, ani);
+
 	ani = new CAnimation(500);
 	ani->Add(10008);
 	ani->Add(10009);
@@ -467,12 +488,9 @@ void LoadResource() {
 	ani->Add(12346);
 	ani->Add(12347);
 	ani->Add(12348);
-	animations->Add(TRAP_NORMAL, ani);
+	animations->Add(TRAP_NORMAL_ANI, ani);
 
-	tp[0].SetPosition(864 * 2, 416 * 2);
-	tp[1].SetPosition(816 * 2, 416 * 2);
-	tp[0].AddAnimation(TRAP_NORMAL);
-	tp[1].AddAnimation(TRAP_NORMAL);
+	
 
 
 	nakiri = Nakiri::GetInstance();
@@ -518,6 +536,14 @@ void LoadResource() {
 	boom = new Boom();
 	boom->SetPosition(1440, 704 - 64);
 	objects.push_back(boom);
+
+	Trap* _trap = new Trap();
+	tp.push_back(_trap);
+	_trap = new Trap();
+	tp.push_back(_trap);
+
+	tp[0]->SetPosition(864 * 2, 416 * 2);
+	tp[1]->SetPosition(816 * 2, 416 * 2);
 }
 void Obj(GameObject* brick, int i, Style style, Point p, int w, int h) {
 
@@ -606,6 +632,12 @@ void LoadMap(string MapFile) {
 		else if (type == "9") {
 			style = move_brick;
 		}
+		else if (type == "13") {
+			style = thorns;
+		}
+		else if (type == "14") {
+			style = up_y;
+		}
 		else if (id == 1412)
 		{
 			style = (tunnel);
@@ -645,8 +677,10 @@ void LoadMap(string MapFile) {
 		{
 			Trigger* trigg = new Trigger();
 			trigg->SetPenetrable(true);
-			if(des >= 0)
-				trigg->setTrap(&tp[des]);
+			if (id == 1824)
+				trigg->setTrap(tp[0]);
+			if (id == 1823)
+				trigg->setTrap(tp[1]);
 			Obj(trigg, i, style, p, w, h);
 		}
 		else if (style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end)
@@ -654,6 +688,11 @@ void LoadMap(string MapFile) {
 			Tunnel* tunnel = new Tunnel();
 			tunnel->SetPenetrable(true);
 			Obj(tunnel, i, style, p, w, h);
+		}
+		else if(style == up_y) {
+			Brick* brick = new Brick();
+			brick->SetPenetrable(true);
+			Obj(brick, i, style, p, w, h);
 		}
 		else {
 			Brick* brick = new Brick();
@@ -751,6 +790,11 @@ void Update(DWORD dt) {
 
 	UpdateObj(star, dt);
 
+	for (int i = 0; i < 2; i++)
+	{
+		UpdateObj(tp[i], dt);
+	}
+
 	coObj->clear();
 
 	UpdateActObj(nakiri->GetPos());
@@ -772,6 +816,8 @@ void Update(DWORD dt) {
 	coObj->push_back(cannon);
 	coObj->push_back(boom);
 	coObj->push_back(star);
+	coObj->push_back(tp[0]);
+	coObj->push_back(tp[1]);
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
@@ -783,13 +829,10 @@ void Update(DWORD dt) {
 			continue;
 		if (coObj->at(i)->type == main_c)
 			continue;
+		if (coObj->at(i)->type == trap)
+			continue;
 		coObj->at(i)->Update(dt, coObj);
 	}
-	for (int i = 0; i < 2; i++)
-	{
-		tp[i].Update(dt, coObj);
-	}
-
 
 	nakiri->Update(dt, coObj);
 
@@ -839,7 +882,7 @@ void Render_Map() {
 	}*/
 	for (int i = 0; i < 2; i++)
 	{
-		tp[i].Render();
+		tp[i]->Render();
 	}
 	star->Render();
 	cannon->Render();

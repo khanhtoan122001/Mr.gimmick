@@ -9,6 +9,7 @@
 #include "boom.h"
 #include <winuser.h>
 #include "Tunnel.h"
+#include "map.h"
 Nakiri* Nakiri::__instance = NULL;
 
 Nakiri::Nakiri()
@@ -26,12 +27,13 @@ Nakiri::Nakiri()
 	this->AddAnimation(NAKIRI_ANI_WALKING_LEFT);
 	this->AddAnimation(NAKIRI_ANI_JUMP_RIGHT);
 	this->AddAnimation(NAKIRI_ANI_JUMP_LEFT);
+	this->AddAnimation(NAKIRI_ANI_STUN_RIGHT);
 }
 
 Nakiri* Nakiri::GetInstance()
 {
 	if (__instance == NULL)
-		__instance = new Nakiri();
+		__instance = new Nakiri(); 
 	return __instance;
 }
 
@@ -40,6 +42,15 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 	dx = dy = 0;
 
 	float x0 = x, y0 = y;
+
+	if (state == NAKIRI_STATE_STUN) {
+		stun_time += dt;
+		if (stun_time >= STUN_TIME) {
+			state = NAKIRI_STATE_STAND;
+			stun_time = 0;
+		}
+		return;
+	}
 
 	GameObject::Update(dt);
 
@@ -90,6 +101,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (dx > 0) ny = 1;
 					else if (dx < 0) ny = -1;
 					else ny = nx == 0 ? 1 : nx;
+					canJump = false;
 				}
 			}
 			else ny = 0;
@@ -102,6 +114,9 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			// block 
 	 		x0 += min_tx * dx + nx * 0.4f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 			y0 += min_ty * dy + ny * 0.4f;
+
+			if (ny == -1)
+				canJump = true;
 
 			if (nx != 0) // ok buoc 1 :v
 				vx = 0;
@@ -136,7 +151,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						// block 
 						x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 						y0 += min_ty * dy + ny * 0.6f;
-
+						if (ny == -1)
+							canJump = true;
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
 						star->penetrable = true;
@@ -154,7 +170,8 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 						// block 
 						x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 						y0 += min_ty * dy + ny * 0.6f;
-
+						if (ny == -1)
+							canJump = true;
 						if (nx != 0) vx = 0;
 						if (ny != 0) vy = 0;
 						star->penetrable = false;
@@ -163,6 +180,11 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			}
 
 			break;
+			case up_y:
+				if (e->t > 0 && e->ny == 1) {
+					y0 -= 32;
+				}
+				break;
 			case slide_left:
 			{
 				if (e->t > 0 && e->ny == -1)
@@ -177,8 +199,12 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 			}
 			case trap:
 			{
-				if (e->t > 0)
-					StartUntouchable();
+				if (e->t > 0) {
+					//StartUntouchable();
+					state = NAKIRI_STATE_STUN;
+					//stun_time = 0;
+					return;
+				}
 				break;
 			}
 			case diagonal_left:
@@ -242,7 +268,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					Trigger* trigg = dynamic_cast<Trigger*>(e->obj);
 					if (trigg->getTrap() != NULL)
-						trigg->getTrap()->SetSpeed(0, 0.02);
+						trigg->getTrap()->Fall();
 				}
 				break;
 			case g_boom:
@@ -260,10 +286,26 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					// block 
 					x0 += min_tx * dx + nx * 0.6f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame
 					y0 += min_ty * dy + ny * 0.6f;
-
+					if (ny == -1)
+						canJump = true;
 					if (nx != 0) vx = 0;
 					if (ny != 0) vy = 0;
 					boom->penetrable = false;
+				}
+				break;
+			case thorns:
+				if (e->t > 0) {
+					int stage = Map::GetInstance()->Stage;
+					if (stage == 1)
+						this->SetPosition(SWAP_POINT_STAGE_1);
+					if (stage == 2 || stage == 3)
+						this->SetPosition(SWAP_POINT_STAGE_2_3);
+					if (stage == 5 || stage == 6)
+						this->SetPosition(SWAP_POINT_STAGE_5_6);
+					if (stage == 7)
+						this->SetPosition(SWAP_POINT_STAGE_7);
+					this->Reset();
+					return;
 				}
 				break;
 			/*case tunnel:
@@ -339,6 +381,10 @@ bool check(Rect r, int vx, int vy, Rect obj, int& nx, int& ny, int dt) {
 
 void Nakiri::Render()
 {
+	if (state == NAKIRI_STATE_STUN) {
+		animations[6]->Render(x - 4, y - 19);
+		return;
+	}
 	int ani = NAKIRI_ANI_STAND_RIGHT;
 	if (ny == 0)
 		if (vx == 0)
@@ -361,7 +407,10 @@ void Nakiri::Render()
 
 void Nakiri::SetState(int state)
 {
-	GameObject::SetState(state);
+	if (this->state == NAKIRI_STATE_STUN) 
+		return;
+	int _state = this->state;
+ 	GameObject::SetState(state);
 	switch (state)
 	{
 	case NAKIRI_STATE_WALKING_RIGHT:
@@ -373,7 +422,8 @@ void Nakiri::SetState(int state)
 		nx = -1;
 		break;
 	case NAKIRI_STATE_JUMP:
-		vy = -NAKIRI_MAX_JUMP_SPEED;
+		if(canJump)
+			vy = -NAKIRI_MAX_JUMP_SPEED;
 		break;
 	case NAKIRI_STATE_STAND:
 		{
@@ -386,6 +436,7 @@ void Nakiri::SetState(int state)
 
 void Nakiri::Reset()
 {
+	vx = vy = 0;
 }
 
 void Nakiri::GetBoundingBox(float& l, float& t, float& r, float& b)

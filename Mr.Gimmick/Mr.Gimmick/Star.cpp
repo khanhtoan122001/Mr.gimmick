@@ -69,10 +69,12 @@ void Star::Shot()
 	float _nx = Nakiri::GetInstance()->nx;
 	float _vx = Nakiri::GetInstance()->vx;
 	float _vy = Nakiri::GetInstance()->vy;
-	if (_nx >= 0)
+	if (_nx > 0)
 		this->SetSpeed(0.25 + _vx, -0.03 + _vy);
 	if (_nx < 0)
 		this->SetSpeed(-0.25 + _vx, -0.03 + _vy);
+	if (_nx == 0)
+		this->SetSpeed(0.4, -0.2);
 }
 
 void Star::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -177,6 +179,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						nakiri->penetrable = false;
 
 						if (e->ny == 1) {
+							nakiri->canJump = true;
 							nakiri->x += min_tx * dx;
 							nakiri->y += min_ty * dy;
 						}
@@ -204,6 +207,11 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						y0 += min_ty * dy + ny * 0.8f;
 
 						boom->penetrable = false;
+					}
+					else if (e->obj->getType() == thorns) {
+						state = STAR_EXPLOSIVE;
+						time_ex = 0;
+						return;
 					}
 					else {
 						x0 += min_tx * dx + nx * 0.8f;		// nx*0.4f : need to push out a bit to avoid overlapping next frame

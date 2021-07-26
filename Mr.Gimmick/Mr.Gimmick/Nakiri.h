@@ -8,6 +8,7 @@
 #define NAKIRI_STATE_JUMP 1503
 #define NAKIRI_STATE_UP 1504
 #define NAKIRI_STATE_DOWN 1505
+#define NAKIRI_STATE_STUN 651
 
 #define NAKIRI_WIDTH 32
 #define NAKIRI_HEIGHT 32
@@ -22,9 +23,12 @@
 #define NAKIRI_ANI_WALKING_RIGHT 1504
 #define NAKIRI_ANI_JUMP_RIGHT 1507
 #define NAKIRI_ANI_JUMP_LEFT 1508
+#define NAKIRI_ANI_STUN_LEFT 46514
+#define NAKIRI_ANI_STUN_RIGHT 98435
 
 #define NAKIRI_GRAVITY 0.002f
 #define NAKIRI_UNTOUCHABLE_TIME 5000
+#define STUN_TIME 1100
 
 class Nakiri : public GameObject
 {
@@ -32,6 +36,7 @@ class Nakiri : public GameObject
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
+	int stun_time = 0;
 
 
 	float start_x;			// initial position of Mario at scene
@@ -39,6 +44,7 @@ class Nakiri : public GameObject
 public:
 	bool tunning = false;
 	bool tunning_rev = false;
+	bool canJump = true;
 	static Nakiri* GetInstance();
 	Nakiri();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects = NULL);
