@@ -318,6 +318,18 @@ void LoadResource() {
 	sprites->Add(10014, 380*2, 24*2, 396*2, 43*2, texNakiriL);
 	sprites->Add(10015, 399*2, 24*2, 415*2, 43*2, texNakiriL);
 
+	sprites->Add(18020, 834 - 4, 143, 834 - 41, 194, texNakiriL);
+	sprites->Add(18021, 834 - 41, 143, 834 - 86, 194, texNakiriL);
+	sprites->Add(18022, 834 - 84, 143, 834 - 129, 194, texNakiriL);
+	sprites->Add(18023, 834 - 129, 143, 834 - 174, 194, texNakiriL);
+	sprites->Add(18024, 834 - 188, 143, 834 - 233, 194, texNakiriL);
+	sprites->Add(18025, 834 - 240, 143, 834 - 285, 194, texNakiriL);
+	sprites->Add(18026, 834 - 294, 143, 834 - 339, 194, texNakiriL);
+	sprites->Add(18027, 834 - 340, 143, 834 - 385, 194, texNakiriL);
+	sprites->Add(18028, 834 - 393, 143, 834 - 438, 194, texNakiriL);
+	sprites->Add(18029, 834 - 435, 143, 834 - 480, 194, texNakiriL);
+	sprites->Add(18030, 834 - 477, 143, 834 - 522, 194, texNakiriL);
+
 	sprites->Add(10017, 399*2, 46*2, 415*2, 70*2, texNakiriL);
 
 	//move_brick
@@ -459,6 +471,11 @@ void LoadResource() {
 	for (int i = 0; i < 11; i++)
 		ani->Add(18000 + i);
 	animations->Add(NAKIRI_ANI_STUN_RIGHT, ani);
+
+	ani = new CAnimation(100);
+	for (int i = 0; i < 11; i++)
+		ani->Add(18020 + i);
+	animations->Add(NAKIRI_ANI_STUN_LEFT, ani);
 
 	ani = new CAnimation(500);
 	ani->Add(10008);

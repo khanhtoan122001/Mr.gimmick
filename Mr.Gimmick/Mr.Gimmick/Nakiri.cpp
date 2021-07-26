@@ -28,6 +28,7 @@ Nakiri::Nakiri()
 	this->AddAnimation(NAKIRI_ANI_JUMP_RIGHT);
 	this->AddAnimation(NAKIRI_ANI_JUMP_LEFT);
 	this->AddAnimation(NAKIRI_ANI_STUN_RIGHT);
+	this->AddAnimation(NAKIRI_ANI_STUN_LEFT);
 }
 
 Nakiri* Nakiri::GetInstance()
@@ -382,7 +383,22 @@ bool check(Rect r, int vx, int vy, Rect obj, int& nx, int& ny, int dt) {
 void Nakiri::Render()
 {
 	if (state == NAKIRI_STATE_STUN) {
-		animations[6]->Render(x - 4, y - 19);
+		
+		if (ny == 0)
+			if (vx == 0)
+			{
+				if (nx >= 0) animations[6]->Render(x - 4, y - 19);
+				else animations[7]->Render(x - 4 + 32, y - 19);
+			}
+			else if (vx > 0)
+				animations[6]->Render(x - 4, y - 19);
+			else animations[7]->Render(x - 4 + 32, y - 19);
+		else {
+			if (ny > 0)
+				animations[6]->Render(x - 4, y - 19);
+			else
+				animations[7]->Render(x - 4 + 32, y - 19);
+		}
 		return;
 	}
 	int ani = NAKIRI_ANI_STAND_RIGHT;
