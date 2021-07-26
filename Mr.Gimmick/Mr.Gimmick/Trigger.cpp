@@ -9,5 +9,5 @@ Trigger::Trigger()
 {
 	trap = NULL;
 	penetrable = true;
-	enemies = vector<LPGAMEOBJECT>();
+	enemies = new vector<LPGAMEOBJECT>();
 }

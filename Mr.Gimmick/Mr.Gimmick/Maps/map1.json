@@ -3389,8 +3389,8 @@
                  "rotation":0,
                  "type":"8",
                  "visible":true,
-                 "width":8,
-                 "x":1664,
+                 "width":32,
+                 "x":1632,
                  "y":864
                 }, 
                 {
@@ -3400,55 +3400,11 @@
                  "rotation":0,
                  "type":"8",
                  "visible":true,
-                 "width":8,
-                 "x":1760,
+                 "width":32,
+                 "x":1728,
                  "y":864
                 }, 
                 {
-<<<<<<< HEAD
-                 "height":128,
-                 "id":1825,
-                 "name":"",
-                 "rotation":0,
-                 "type":"15",
-                 "visible":true,
-                 "width":8,
-                 "x":682,
-                 "y":512
-                }, 
-                {
-                 "height":128,
-                 "id":1826,
-                 "name":"",
-                 "rotation":0,
-                 "type":"15",
-                 "visible":true,
-                 "width":8,
-                 "x":682,
-                 "y":384
-                }, 
-                {
-                 "height":128,
-                 "id":1827,
-                 "name":"",
-                 "rotation":0,
-                 "type":"15",
-                 "visible":true,
-                 "width":8,
-                 "x":1738,
-                 "y":512
-                }, 
-                {
-                 "height":128,
-                 "id":1828,
-                 "name":"",
-                 "rotation":0,
-                 "type":"15",
-                 "visible":true,
-                 "width":8,
-                 "x":1738,
-                 "y":384
-=======
                  "height":32,
                  "id":1825,
                  "name":"",
@@ -3491,19 +3447,12 @@
                  "width":32,
                  "x":1984,
                  "y":864
->>>>>>> origin/toan_+2
                 }, 
                 {
                  "height":32,
                  "id":1829,
                  "name":"",
                  "rotation":0,
-<<<<<<< HEAD
-                 "type":"0",
-                 "visible":true,
-                 "width":96,
-                 "x":3776,
-=======
                  "type":"",
                  "visible":true,
                  "width":32,
@@ -3684,7 +3633,6 @@
                  "visible":true,
                  "width":128,
                  "x":3712,
->>>>>>> origin/toan_+2
                  "y":1408
                 }],
          "opacity":1,
@@ -3694,11 +3642,7 @@
          "y":0
         }],
  "nextlayerid":5,
-<<<<<<< HEAD
- "nextobjectid":1830,
-=======
  "nextobjectid":1847,
->>>>>>> origin/toan_+2
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.5.0",

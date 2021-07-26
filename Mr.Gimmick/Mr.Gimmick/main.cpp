@@ -499,7 +499,6 @@ void LoadResource() {
 	animations->Add(CANNON_ANI, ani);
 
 	cannon = new Cannon();
-	cannon->SetWidthHeight(32, 32);
 	cannon->AddAnimation(CANNON_ANI);
 	cannon->SetPosition(2336, 1280);
 	
@@ -841,7 +840,7 @@ void Render()
 
 		Render_Map();
 		nakiri->Render();
-		boom->Render();
+		//boom->Render();
 
 		spriteHandler->End();
 		d3ddv->EndScene();
@@ -886,7 +885,7 @@ void UpdateObj(GameObject* obj, DWORD dt) {
 	if(obj->type != g_star)
 		coObj->push_back(nakiri);
 	coObj->push_back(cannon);
-	coObj->push_back(boom);
+	//coObj->push_back(boom);
 	coObj->push_back(star);
 	Map::GetInstance()->updateMap(cx, cy, tf, br);
 	Map::GetInstance()->updateMapObject(coObj);

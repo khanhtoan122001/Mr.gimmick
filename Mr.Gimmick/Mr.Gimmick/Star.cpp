@@ -166,8 +166,9 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				for (int i = 0; i < coEvents.size(); i++) {
 					LPCOLLISIONEVENT e = coEvents[i];
 					//if (e->t <= 0) continue;
+					int style = e->obj->getType();
 
-					if (e->obj->getType() == main_c) {
+					if (style == main_c) {
 
 						Nakiri* nakiri = dynamic_cast<Nakiri*>(e->obj);
 						nakiri->penetrable = true;
@@ -185,17 +186,17 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						}
 
 					}
-					else if (e->obj->getType() == diagonal_left) {
+					else if (style == diagonal_left) {
 						if (vx > 0)
 							vx = -_vx * 0.8;
 						vy = -_vy * 0.7;
 					}
-					else if (e->obj->getType() == diagonal_right) {
+					else if (style == diagonal_right) {
 						if (vx < 0)
 							vx = -_vx * 0.8;
 						vy = -_vy * 0.7;
 					}
-					else if (e->obj->getType() == g_boom) {
+					else if (style == g_boom) {
 
 						Boom* boom = dynamic_cast<Boom*>(e->obj);
 						boom->penetrable = true;
@@ -208,7 +209,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 						boom->penetrable = false;
 					}
-					else if (e->obj->getType() == thorns) {
+					else if (style == thorns || style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5 || style == tunnel5_end || style == tunnel5_1) {
 						state = STAR_EXPLOSIVE;
 						time_ex = 0;
 						return;

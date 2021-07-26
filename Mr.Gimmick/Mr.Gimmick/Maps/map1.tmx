@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="128" height="101" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1830">
-=======
 <map version="1.5" tiledversion="1.5.0" orientation="orthogonal" renderorder="right-down" width="128" height="101" tilewidth="32" tileheight="32" infinite="0" nextlayerid="5" nextobjectid="1847">
->>>>>>> origin/toan_+2
  <editorsettings>
   <export target="map1.json" format="json"/>
  </editorsettings>
@@ -149,15 +145,9 @@
   <object id="1444" type="0" x="1568" y="704" width="64" height="64"/>
   <object id="1447" type="0" x="1728" y="640" width="32" height="64"/>
   <object id="1448" type="0" x="1760" y="576" width="62" height="128"/>
-<<<<<<< HEAD
-  <object id="1450" type="0" x="1824" y="706" width="96" height="62"/>
-  <object id="1451" type="0" x="1920.18" y="706" width="64" height="62"/>
-  <object id="1452" type="0" x="1890.33" y="608" width="125.667" height="59"/>
-=======
   <object id="1450" type="0" x="1824" y="706.667" width="96" height="62"/>
   <object id="1451" type="0" x="1920" y="706" width="64" height="62"/>
   <object id="1452" type="0" x="1890.33" y="608" width="125.667" height="62"/>
->>>>>>> origin/toan_+2
   <object id="1453" type="0" x="1984" y="480" width="64" height="32"/>
   <object id="1454" type="0" x="2016" y="512" width="32" height="128"/>
   <object id="1455" type="20" x="2016" y="640" width="32" height="128"/>
@@ -426,15 +416,6 @@
   <object id="1818" type="0" x="0" y="544" width="32" height="160"/>
   <object id="1819" type="13" x="2272" y="352" width="64" height="32"/>
   <object id="1820" type="14" x="1984" y="384" width="32" height="32"/>
-<<<<<<< HEAD
-  <object id="1823" type="8" x="1664" y="864" width="8" height="160"/>
-  <object id="1824" type="8" x="1760" y="864" width="8" height="160"/>
-  <object id="1825" type="15" x="682" y="512" width="8" height="128"/>
-  <object id="1826" type="15" x="682" y="384" width="8" height="128"/>
-  <object id="1827" type="15" x="1738" y="512" width="8" height="128"/>
-  <object id="1828" type="15" x="1738" y="384" width="8" height="128"/>
-  <object id="1829" type="0" x="3776" y="1408" width="96" height="32"/>
-=======
   <object id="1823" type="8" x="1632" y="864" width="32" height="160"/>
   <object id="1824" type="8" x="1728" y="864" width="32" height="160"/>
   <object id="1825" x="1952" y="672" width="32" height="32"/>
@@ -458,6 +439,5 @@
   <object id="1844" x="4000" y="288" width="32" height="32"/>
   <object id="1845" x="3936" y="288" width="32" height="32"/>
   <object id="1846" x="3712" y="1408" width="128" height="32"/>
->>>>>>> origin/toan_+2
  </objectgroup>
 </map>

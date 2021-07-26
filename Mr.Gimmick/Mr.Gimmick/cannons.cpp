@@ -3,6 +3,7 @@
 Cannon::Cannon()
 {
 	bullets = vector<LPGAMEOBJECT>();
+	this->SetWidthHeight(32, 32);
 	type = g_cannon;
 	loop = 0;
 }
