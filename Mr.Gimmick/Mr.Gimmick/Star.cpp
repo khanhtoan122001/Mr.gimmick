@@ -194,7 +194,7 @@ void Star::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						Boom* boom = dynamic_cast<Boom*>(e->obj);
 						
 					}
-					else if (style == sp_boom || style == thorns || style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5 || style == tunnel5_end || style == tunnel5_1) {
+					else if (style == boss_m1 || style == sp_boom || style == thorns || style == tunnel1 || style == tunnel1_end || style == tunnel1_1 || style == tunnel1_1_end || style == tunnel2 || style == tunnel2_end || style == tunnel3 || style == tunnel3_end || style == tunnel3_1 || style == tunnel3_1_end || style == tunnel4 || style == tunnel4_end || style == tunnel4_1 || style == tunnel4_1_end || style == tunnel5 || style == tunnel5_end || style == tunnel5_1) {
 						state = STAR_EXPLOSIVE;
 						time_ex = 0;
 						return;

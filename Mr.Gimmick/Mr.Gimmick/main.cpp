@@ -45,6 +45,7 @@
 
 #define BACKGROUND_COLOR D3DCOLOR_XRGB(255, 255, 200)
 
+#define ID_TEX_BOSS 962465
 
 #define SPRITE_WIDTH 16
 #define SPRITE_HEIGHT 16
@@ -209,6 +210,7 @@ void LoadResource() {
 	textures->Add(ID_MAP_1, L"Resource//NES - Gimmick Mr Gimmick - Stage 1.png", D3DCOLOR_XRGB(255, 0, 255));
 	textures->Add(ID_MAP_2, L"Resource//NES - Gimmick Mr Gimmick - Stage 2.png", D3DCOLOR_XRGB(54, 168, 167));
 	textures->Add(ID_MAP_7, L"Resource//NES - Gimmick Mr Gimmick - Stage 7.png", D3DCOLOR_XRGB(99, 30, 100));
+	textures->Add(ID_TEX_BOSS, L"Resource//NES - Gimmick Mr Gimmick - Bosses.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_NAKIRI_RIGHT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro.png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_NAKIRI_LEFT, L"Resource//NES - Gimmick Mr Gimmick - Yumetaro(1).png", D3DCOLOR_XRGB(0, 0, 255));
 	textures->Add(ID_TRAP, L"Resource//NES - Gimmick Mr Gimmick - Hazards and Interactables.png", D3DCOLOR_XRGB(203, 102, 185));
@@ -220,6 +222,7 @@ void LoadResource() {
 	CSprites* sprites = CSprites::GetInstance();
 	LPDIRECT3DTEXTURE9 texMap1 = textures->Get(ID_MAP_1);
 	LPDIRECT3DTEXTURE9 texMap2 = textures->Get(ID_MAP_2);
+	LPDIRECT3DTEXTURE9 texBoss = textures->Get(ID_TEX_BOSS);
 	LPDIRECT3DTEXTURE9 charge = textures->Get(ID_CHARGE_STAR);
 
 	for (int j = 0; j < 23; j++) {
@@ -232,6 +235,11 @@ void LoadResource() {
 			sprites->Add(j * 33 + i + 19188310, i * 32, j * 32, (i + 1) * 32, (j + 1) * 32, texMap2);
 		}
 	}
+
+	sprites->Add(30800, 10, 62, 74, 124, texBoss);
+	sprites->Add(30801, 82, 62, 146, 124, texBoss);
+	//sprites->Add(30802, 10, 62, 74, 124, texBoss);
+	//sprites->Add(30800, 10, 62, 74, 124, texBoss);
 
 	sprites->Add(20000, 5, 5, 243, 235, charge);
 	sprites->Add(20001, 251, 5, 489, 235, charge);
@@ -360,6 +368,11 @@ void LoadResource() {
 
 	CAnimations* animations = CAnimations::GetInstance();
 	LPANIMATION ani;
+
+	ani = new CAnimation(2000);
+	ani->Add(30800);
+	ani->Add(30801);
+	animations->Add(BOSS_M1_ANI_STAND, ani);
 
 	for (int j = 0; j < 23; j++) {
 		for (int i = 0; i < 14; i++) {
@@ -1034,7 +1047,7 @@ void Update(DWORD dt) {
 
 	for (int i = 0; i < coObj->size(); i++)
 	{
-		if (coObj->at(i)->type == g_boom || coObj->at(i)->type == sp_boom || coObj->at(i)->type == g_worm || coObj->at(i)->type == trap) {
+		if (coObj->at(i)->type == g_boom || coObj->at(i)->type == sp_boom || coObj->at(i)->type == g_worm || coObj->at(i)->type == trap || coObj->at(i)->type == boss_m1) {
 			UpdateObj(coObj->at(i), dt);
 			continue;
 		}

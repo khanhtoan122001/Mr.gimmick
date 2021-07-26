@@ -28,7 +28,7 @@
 #define SWAP_POINT_STAGE_3 Point(1088, 1312 - 16)
 #define SWAP_POINT_STAGE_5_6 Point(3616, 1344 + 16)
 #define SWAP_POINT_STAGE_6 Point(3872, 1024 - 16)
-#define SWAP_POINT_STAGE_7 Point(3904, 256 + 16)
+#define SWAP_POINT_STAGE_7 Point(2368, 256)
 
 #define SWAP_POINT_MAP_2 Point(128, 1312)
 
@@ -38,6 +38,7 @@
 
 #include "GameObject.h"
 #include "Trigger.h"
+#include "BossM1.h"
 
 class Map
 {
@@ -46,6 +47,7 @@ class Map
 	vector<LPGAMEOBJECT>* listMoveBrick;
 	vector<Trigger*>* TriggEnemiesM1;
 	vector<Trigger*>* TriggTrapM1 = new vector<Trigger*>();
+	BossM1* boss1;
 	void updateObj();
 	Point tf, br;
 
