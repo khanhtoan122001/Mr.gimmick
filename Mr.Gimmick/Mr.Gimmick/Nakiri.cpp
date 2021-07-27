@@ -340,7 +340,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					tunning = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
+					vx = 0.15f;
 					//return; ok gg
 				}
 				//else 
@@ -359,7 +359,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (tunning_rev)
 					{
 						vy = 0;
-						vx = -0.1f;
+						vx = -0.15f;
 					}
 				break;
 			case tunnel1_end:
@@ -401,7 +401,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					tunning = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
+					vx = 0.15f;
 				}
 				break;
 			case tunnel3_1:
@@ -409,7 +409,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					tunning_rev = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
+					vx = 0.15f;
 				}
 				break;
 			case tunnel3_end:
@@ -436,7 +436,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				if (e->t != -1.0)
 					if (tunning)
 					{
-						vx = -0.06f;
+						vx = -0.15f;
 						vy = 0;
 					}
 				break;
@@ -453,7 +453,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (tunning_rev)
 					{
 						vy = 0;
-						vx = -0.06f;
+						vx = -0.15f;
 					}
 				break;
 			case tunnel4:
@@ -475,7 +475,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					tunning_rev = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = -0.06f;
+					vx = -0.15f;
 				}
 				break;
 			case tunnel4_1_end:
@@ -489,7 +489,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (tunning)
 					{
 						vy = 0;
-						vx = 0.06f;
+						vx = 0.15f;
 					}
 				break;
 			case corner_4_2:
@@ -513,7 +513,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 				{
 					tunning_rev = true;
 					Tunnel* tunnel = dynamic_cast<Tunnel*>(e->obj);
-					vx = 0.06f;
+					vx = 0.15f;
 				}
 				break;
 			case tunnel5_end:
@@ -533,7 +533,7 @@ void Nakiri::Update(DWORD dt, vector<LPGAMEOBJECT>* colliable_objects)
 					if (tunning)
 					{
 						vy = 0;
-						vx = -0.06f;
+						vx = -0.15f;
 					}
 				break;
 			case corner_5_2:
