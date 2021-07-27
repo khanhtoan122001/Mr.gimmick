@@ -31,7 +31,7 @@ void Brick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL)
 	dx = dy = 0;
 
 	if (x >= maxx || x <= minx) {
-		vx *= -1;
+		vx *= -1; // vx = 0
 		//if (x > maxx) maxx = x;
 	}
 	if (y >= maxy || y <= miny)
